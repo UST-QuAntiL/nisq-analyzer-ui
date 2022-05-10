@@ -1,0 +1,5 @@
+/e2e/*
+src/polyfills.ts
+karma.conf.js
+generated/
+**/*.js
