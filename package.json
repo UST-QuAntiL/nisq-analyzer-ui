@@ -8,7 +8,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "eslint ./src --ext .js,.ts",
-    "lint-fix": "eslint ./src --fix --ext .js,.ts"
+    "lint-fix": "eslint ./src --fix --ext .js,.ts",
+    "gen-nisq": "ng-openapi-gen --input http://localhost:5010/nisq-analyzer/v3/api-docs -o generated/api-nisq",
+    "postgen": "prettier generated/ --write"
   },
   "private": true,
   "dependencies": {
@@ -52,6 +54,7 @@
     "karma-coverage": "~2.1.0",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
+    "ng-openapi-gen": "git+https://github.com/timniederhausen/ng-openapi-gen#af5c4278587c47999f3c9b48da158398736a7fed",
     "prettier": "^2.6.2",
     "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
