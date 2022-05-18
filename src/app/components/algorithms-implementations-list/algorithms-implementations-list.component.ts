@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
 import { ImplementationDto } from 'api-nisq/models/implementation-dto';
 import { Router } from '@angular/router';
+import { v4 as uuidv4 } from 'uuid';
 import { UtilService } from '../util/util.service';
 import { AddImplementationDialogComponent } from './dialogs/add-implementation-dialog/add-implementation-dialog.component';
 
@@ -21,6 +22,10 @@ export class AlgorithmsImplementationsListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getAlgorithmsAndImplementations();
+  }
+
+  getAlgorithmsAndImplementations(): void {
     this.nisqImplementationService.getImplementations().subscribe((impls) => {
       this.allImpls = impls.implementationDtos;
       this.allImpls.forEach((impl) => {
@@ -39,6 +44,36 @@ export class AlgorithmsImplementationsListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
+          debugger;
+          let algoId = uuidv4();
+          this.allImpls.forEach((impl) => {
+            if (impl.algorithmName === dialogResult.algorithmName) {
+              algoId = impl.implementedAlgorithm;
+            }
+          });
+
+          const implDto: ImplementationDto = {
+            id: null,
+            algorithmName: dialogResult.algorithmName,
+            implementedAlgorithm: algoId,
+            name: dialogResult.name,
+            language: dialogResult.language,
+            sdk: dialogResult.sdk,
+            fileLocation: dialogResult.contentLocation,
+            selectionRule: '',
+          };
+          this.nisqImplementationService
+            .createImplementation({
+              body: implDto,
+            })
+            .subscribe(() => {
+              this.getAlgorithmsAndImplementations();
+              this.utilService.callSnackBar(
+                'The implementation ' +
+                  dialogResult.name +
+                  ' was successfully created.'
+              );
+            });
         }
       });
   }

@@ -78,6 +78,7 @@ module.exports = {
         '@typescript-eslint/no-unsafe-call': 'warn',
         '@typescript-eslint/no-unsafe-return': 'warn',
         '@typescript-eslint/no-unsafe-argument': 'warn',
+        '@typescript-eslint/restrict-plus-operands': 'off',
         '@typescript-eslint/explicit-member-accessibility': [
             'off',
             {

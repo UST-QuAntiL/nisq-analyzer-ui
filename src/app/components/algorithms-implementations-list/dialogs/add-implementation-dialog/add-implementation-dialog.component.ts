@@ -71,8 +71,9 @@ export class AddImplementationDialogComponent implements OnInit {
       ]),
     });
 
-    this.sdk.setValue('qiskit');
-    this.language.setValue('openqasm');
+    this.sdk.setValue('Qiskit');
+    this.language.setValue('OpenQASM');
+    this.contentLocation.setValue('http://example.com/');
 
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.algorithmName = this.algorithmName.value;
