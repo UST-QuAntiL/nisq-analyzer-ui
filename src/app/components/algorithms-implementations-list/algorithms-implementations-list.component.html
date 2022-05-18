@@ -1,0 +1,14 @@
+<mat-accordion>
+    <mat-expansion-panel *ngFor="let algo of allAlgorithms">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                {{ algo }}
+            </mat-panel-title>
+            <mat-panel-description>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div *ngFor="let impl of allImpls" class="implNames" (click)="navigateToImplementation(impl)">
+            <p *ngIf="impl.algorithmName===algo">{{ impl.name }}</p>
+        </div>
+    </mat-expansion-panel>
+</mat-accordion>

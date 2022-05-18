@@ -1,0 +1,63 @@
+@use '~@angular/material/theming' as mat;
+
+html, body {
+  margin: 0;
+  height: 100vh;
+  font-family: Roboto, Arial, sans-serif;
+}
+
+.action-button-row {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.action-button-row button,
+.action-button-row a {
+  margin-right: 8px;
+}
+
+.mat-list-icon {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.input-field {
+  width: 100%;
+}
+
+@include mat.core();
+$qc-atlas-ui-primary: mat.define-palette(mat.$indigo-palette);
+$qc-atlas-ui-accent: mat.define-palette(mat.$gray-palette, A200, A100, A400);
+
+$qc-atlas-ui-warn: mat.define-palette(mat.$red-palette);
+
+$qc-atlas-ui-theme: mat.define-light-theme($qc-atlas-ui-primary, $qc-atlas-ui-accent, $qc-atlas-ui-warn);
+
+@include angular-material-theme($qc-atlas-ui-theme);
+
+.master-save-button {
+  position: fixed !important;
+  top: 50%;
+  right: 15px;
+  text-align: center;
+  float: left;
+  background: linear-gradient(to right, white 50%, mat.mat-color($qc-atlas-ui-primary) 50%);
+  background-size: 200% 100%;
+  background-position: left bottom;
+  margin-left: 10px;
+  transition: all 1s ease;
+  outline: 0 !important;
+}
+
+.master-save-button:hover {
+  background-position: right bottom;
+  color: white;
+}
+
+.master-save-icon {
+  color: mat.mat-color($qc-atlas-ui-primary);
+  transition: all 1s ease;
+}
+
+.master-save-button:hover .master-save-icon {
+  color: white;
+}

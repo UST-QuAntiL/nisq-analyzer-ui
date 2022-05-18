@@ -13,6 +13,7 @@ import { Option } from '../generics/property-input/select-input.component';
 })
 export class ImplementationSelectionCriteriaComponent implements OnInit {
   nisqImpl: ImplementationDto;
+  oldNisqImpl: ImplementationDto;
   sdks$: Observable<Option[]>;
   languages: Option[] = [
     { value: 'Qiskit', label: 'Qiskit' },
@@ -34,5 +35,23 @@ export class ImplementationSelectionCriteriaComponent implements OnInit {
           dto.sdkDtos.map((sdk) => ({ label: sdk.name, value: sdk.name }))
         )
       );
+    // this.nisqImplementationService
+    //   .getImplementations({ algoId: this.algo.id })
+    //   .subscribe((impls) => {
+    //     const foundImpl = impls.implementationDtos.find(
+    //       (i) => i.name === this.impl.name
+    //     );
+    //     if (foundImpl) {
+    //       this.nisqImpl = foundImpl;
+    //       this.oldNisqImpl = cloneDeep(foundImpl);
+    //       this.selection.clear();
+    //     } else {
+    //       this.createNisqImplementation();
+    //     }
+    //   });
   }
+
+  saveImplementation(): void {}
+
+  onCreateSoftwarePlatform(): void {}
 }

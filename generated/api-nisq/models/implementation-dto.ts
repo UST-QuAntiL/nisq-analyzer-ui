@@ -5,6 +5,7 @@ export type ImplementationDto = {
   id?: string;
   name?: string;
   implementedAlgorithm?: string;
+  algorithmName?: string;
   language?: string;
   selectionRule?: string;
   sdk?: string;

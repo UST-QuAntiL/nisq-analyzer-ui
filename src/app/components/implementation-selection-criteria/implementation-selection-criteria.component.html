@@ -1,1 +1,61 @@
-<p>implementation-selection-criteria works!</p>
+<h2>Required information for the NISQ Analyzer</h2>
+<div
+        *ngIf="!nisqImpl"
+        class="d-flex align-content-center justify-content-center"
+>
+    <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="nisqImpl">
+    <mat-card class="m-4">
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <app-text-input
+                        name="File Location"
+                        [value]="nisqImpl.fileLocation"
+                        (onChange)="nisqImpl.fileLocation = $event"
+                        (onSaveChanges)="saveImplementation()"
+                ></app-text-input>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <div class="row">
+                    <div class="sdkselect">
+                        <app-select-input
+                                name="SDK"
+                                [value]="nisqImpl.sdk"
+                                [choices]="sdks$ | async"
+                                (onChange)="nisqImpl.sdk = $event"
+                                (onSaveChanges)="saveImplementation()"
+                        ></app-select-input>
+                    </div>
+                    <div class=" newsdkbutton">
+                        <button
+                                mat-icon-button
+                                aria-label="Add new SDK"
+                                (click)="onCreateSoftwarePlatform()"
+                        >
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <app-select-input
+                        name="Language"
+                        [value]="nisqImpl.language"
+                        [choices]="languages"
+                        (onChange)="nisqImpl.language = $event"
+                        (onSaveChanges)="saveImplementation()"
+                ></app-select-input>
+            </div>
+        </div>
+    </mat-card>
+</div>
+
+<button
+        class="master-save-button"
+        mat-fab
+        (click)="saveImplementation()"
+>
+    <mat-icon class="master-save-icon">save</mat-icon>
+</button>
