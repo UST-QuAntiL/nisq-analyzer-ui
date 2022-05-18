@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+    <form [formGroup]="addImplementationFrom">
+        <mat-form-field class="input-field">
+            <mat-label>Name of implemented algorithm</mat-label>
+            <input id="algorithmName" formControlName="algorithmName" matInput required>
+        </mat-form-field>
+        <mat-form-field class="input-field">
+            <mat-label>Name of implementation</mat-label>
+            <input id="name" formControlName="name" matInput required>
+        </mat-form-field>
+        <mat-form-field class="input-field">
+            <mat-label>SDK</mat-label>
+            <mat-select formControlName="sdk">
+                <mat-option [value]="'qiskit'">Qiskit</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="input-field">
+            <mat-label>Language</mat-label>
+            <mat-select formControlName="language">
+                <mat-option [value]="'openqasm'">OpenQASM</mat-option>
+                <mat-option [value]="'qiskit'">Qiskit</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="input-field">
+            <mat-label>Content Location</mat-label>
+            <input id="contentLocation" formControlName="contentLocation" matInput required>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [disabled]="addImplementationFrom.invalid" [mat-dialog-close]="data">Ok
+    </button>
+</div>

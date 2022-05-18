@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ApiModule } from 'api-nisq/api.module';
 import { HttpClientModule } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -13,6 +13,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,6 +25,9 @@ import { QpuSelectionComponent } from './components/qpu-selection/qpu-selection.
 import { SelectInputComponent } from './components/generics/property-input/select-input.component';
 import { TextInputComponent } from './components/generics/property-input/text-input.component';
 import { AlgorithmsImplementationsListComponent } from './components/algorithms-implementations-list/algorithms-implementations-list.component';
+// eslint-disable-next-line max-len
+import { AddImplementationDialogComponent } from './components/algorithms-implementations-list/dialogs/add-implementation-dialog/add-implementation-dialog.component';
+import { UtilService } from './components/util/util.service';
 
 @NgModule({
   declarations: [
@@ -34,6 +39,7 @@ import { AlgorithmsImplementationsListComponent } from './components/algorithms-
     SelectInputComponent,
     TextInputComponent,
     AlgorithmsImplementationsListComponent,
+    AddImplementationDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,6 +49,7 @@ import { AlgorithmsImplementationsListComponent } from './components/algorithms-
     HttpClientModule,
     MatToolbarModule,
     MatIconModule,
+    MatSnackBarModule,
     MatButtonModule,
     MatTabsModule,
     MatSelectModule,
@@ -51,8 +58,10 @@ import { AlgorithmsImplementationsListComponent } from './components/algorithms-
     MatCardModule,
     MatInputModule,
     MatExpansionModule,
+    MatDialogModule,
+    ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [UtilService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

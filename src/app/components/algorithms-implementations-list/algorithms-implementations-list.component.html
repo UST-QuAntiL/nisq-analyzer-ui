@@ -1,3 +1,12 @@
+<div class="addImpl">
+    <button
+            mat-icon-button
+            aria-label="Add new implementation"
+            (click)="onCreateImplementation()"
+    >
+        <mat-icon>add</mat-icon>
+    </button>
+</div>
 <mat-accordion>
     <mat-expansion-panel *ngFor="let algo of allAlgorithms">
         <mat-expansion-panel-header>
