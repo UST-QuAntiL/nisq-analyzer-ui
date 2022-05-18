@@ -72,6 +72,11 @@ module.exports = {
         '@typescript-eslint/consistent-type-assertions': 'error',
         '@typescript-eslint/consistent-type-definitions': 'error',
         '@typescript-eslint/dot-notation': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'warn',
+        '@typescript-eslint/no-unsafe-assignment': 'warn',
+        '@typescript-eslint/restrict-template-expressions': 'warn',
+        '@typescript-eslint/no-unsafe-call': 'warn',
+        '@typescript-eslint/no-unsafe-return': 'warn',
         '@typescript-eslint/explicit-member-accessibility': [
             'off',
             {
@@ -79,15 +84,7 @@ module.exports = {
             },
         ],
         '@typescript-eslint/naming-convention': [
-            'error',
-            {
-                'selector': 'interface',
-                'format': ['PascalCase'],
-                'custom': {
-                    'regex': '^I[A-Z]',
-                    'match': true
-                }
-            },
+            'warn',
             {
                 'selector': 'variableLike',
                 'format': ['camelCase']
