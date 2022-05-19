@@ -4,7 +4,8 @@ import { ImplementationDto } from 'api-nisq/models/implementation-dto';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
 import { SdksService } from 'api-nisq/services/sdks.service';
 import { map } from 'rxjs/operators';
-import { Option } from '../generics/property-input/select-input.component';
+import { ActivatedRoute } from '@angular/router';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-implementation-selection-criteria',
@@ -12,9 +13,11 @@ import { Option } from '../generics/property-input/select-input.component';
   styleUrls: ['./implementation-selection-criteria.component.scss'],
 })
 export class ImplementationSelectionCriteriaComponent implements OnInit {
+  implId: string;
   nisqImpl: ImplementationDto;
   oldNisqImpl: ImplementationDto;
   sdks$: Observable<Option[]>;
+  inputChanged = false;
   languages: Option[] = [
     { value: 'Qiskit', label: 'Qiskit' },
     { value: 'OpenQASM', label: 'OpenQASM' },
@@ -24,10 +27,12 @@ export class ImplementationSelectionCriteriaComponent implements OnInit {
 
   constructor(
     private nisqImplementationService: ImplementationService,
-    private readonly sdkService: SdksService
+    private readonly sdkService: SdksService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.implId = this.route.snapshot.paramMap.get('implId');
     this.sdks$ = this.sdkService
       .getSdks()
       .pipe(
@@ -35,23 +40,41 @@ export class ImplementationSelectionCriteriaComponent implements OnInit {
           dto.sdkDtos.map((sdk) => ({ label: sdk.name, value: sdk.name }))
         )
       );
+    this.nisqImplementationService
+      .getImplementation({ implId: this.implId })
+      .subscribe((impl) => {
+        this.nisqImpl = impl;
+        this.oldNisqImpl = cloneDeep(impl);
+      });
     // this.nisqImplementationService
-    //   .getImplementations({ algoId: this.algo.id })
+    //   .getImplementations({ algoId: this.algoId })
     //   .subscribe((impls) => {
     //     const foundImpl = impls.implementationDtos.find(
-    //       (i) => i.name === this.impl.name
+    //       (i) => i.name === this.nisqImpl.name
     //     );
     //     if (foundImpl) {
     //       this.nisqImpl = foundImpl;
     //       this.oldNisqImpl = cloneDeep(foundImpl);
-    //       this.selection.clear();
     //     } else {
     //       this.createNisqImplementation();
     //     }
     //   });
   }
 
-  saveImplementation(): void {}
+  implementationChanged(): void {
+    this.inputChanged = true;
+  }
+
+  createNisqImplementation(): void {}
+
+  saveImplementation(): void {
+    this.inputChanged = false;
+  }
 
   onCreateSoftwarePlatform(): void {}
+}
+
+export interface Option {
+  value: string;
+  label: string;
 }

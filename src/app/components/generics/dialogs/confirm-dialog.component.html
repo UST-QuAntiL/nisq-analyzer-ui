@@ -1,0 +1,19 @@
+<div>
+    <mat-card id="title-container">
+        <h1 mat-dialog-title id="title">{{data.title}}</h1>
+    </mat-card>
+    <div mat-dialog-content id="content-container">{{data.message}}
+        <div *ngIf="data.data && data.variableName" class="list-content">
+            <mat-list>
+                <mat-list-item *ngFor="let item of data.data">
+                    - {{item[data.variableName]}}
+                </mat-list-item>
+            </mat-list>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div mat-dialog-actions class="d-flex justify-content-center">
+        <button mat-button color="warn" [mat-dialog-close]="data">{{data.yesButtonText}}</button>
+        <button mat-button (click)="onNoClick()">{{data.noButtonText}}</button>
+    </div>
+</div>

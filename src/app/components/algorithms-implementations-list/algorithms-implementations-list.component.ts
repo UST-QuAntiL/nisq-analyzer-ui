@@ -44,7 +44,6 @@ export class AlgorithmsImplementationsListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
-          debugger;
           let algoId = uuidv4();
           this.allImpls.forEach((impl) => {
             if (impl.algorithmName === dialogResult.algorithmName) {
@@ -79,12 +78,15 @@ export class AlgorithmsImplementationsListComponent implements OnInit {
   }
 
   navigateToImplementation(impl: ImplementationDto): void {
-    void this.router.navigate([
-      'algorithms',
-      impl.implementedAlgorithm,
-      'implementations',
-      impl.id,
-      'selection-criteria',
-    ]);
+    void this.router.navigate(
+      [
+        'algorithms',
+        impl.implementedAlgorithm,
+        'implementations',
+        impl.id,
+        'selection-criteria',
+      ],
+      { state: impl }
+    );
   }
 }

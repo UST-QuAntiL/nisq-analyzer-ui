@@ -1,0 +1,20 @@
+//@use "theme" as theme;
+
+.edit-icon {
+  cursor: pointer;
+  user-select: none;
+}
+
+.input-label {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+mat-form-field {
+  min-width: 100%;
+  line-height: normal;
+}
+
+textarea.mat-input-element {
+  padding: 0;
+  margin: 0;
+}
