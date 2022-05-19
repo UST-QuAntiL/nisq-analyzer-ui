@@ -5,7 +5,6 @@ import { ImplementationService } from 'api-nisq/services/implementation.service'
 import { SdksService } from 'api-nisq/services/sdks.service';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-implementation-selection-criteria',
@@ -15,7 +14,6 @@ import { cloneDeep } from 'lodash';
 export class ImplementationSelectionCriteriaComponent implements OnInit {
   implId: string;
   nisqImpl: ImplementationDto;
-  oldNisqImpl: ImplementationDto;
   sdks$: Observable<Option[]>;
   inputChanged = false;
   languages: Option[] = [
@@ -44,7 +42,6 @@ export class ImplementationSelectionCriteriaComponent implements OnInit {
       .getImplementation({ implId: this.implId })
       .subscribe((impl) => {
         this.nisqImpl = impl;
-        this.oldNisqImpl = cloneDeep(impl);
       });
     // this.nisqImplementationService
     //   .getImplementations({ algoId: this.algoId })
@@ -68,7 +65,11 @@ export class ImplementationSelectionCriteriaComponent implements OnInit {
   createNisqImplementation(): void {}
 
   saveImplementation(): void {
-    this.inputChanged = false;
+    this.nisqImplementationService
+      .updateImplementation({ implId: this.nisqImpl.id, body: this.nisqImpl })
+      .subscribe(() => {
+        this.inputChanged = false;
+      });
   }
 
   onCreateSoftwarePlatform(): void {}

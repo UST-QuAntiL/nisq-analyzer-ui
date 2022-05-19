@@ -28,13 +28,10 @@ import { AlgorithmsImplementationsListComponent } from './components/algorithms-
 // eslint-disable-next-line max-len
 import { AddImplementationDialogComponent } from './components/algorithms-implementations-list/dialogs/add-implementation-dialog/add-implementation-dialog.component';
 import { UtilService } from './components/util/util.service';
-import { ChangePageGuard } from './components/services/deactivation-guard';
-import { ConfirmDialogComponent } from './components/generics/dialogs/confirm-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ConfirmDialogComponent,
     NavigationComponent,
     PageNotFoundComponent,
     ImplementationSelectionCriteriaComponent,
@@ -64,7 +61,7 @@ import { ConfirmDialogComponent } from './components/generics/dialogs/confirm-di
     MatDividerModule,
     MatListModule,
   ],
-  providers: [UtilService, ChangePageGuard],
+  providers: [UtilService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
