@@ -3,8 +3,16 @@
   cursor: pointer;
 }
 
+.impls {
+  padding-left: 20px;
+}
+
 .noBorders {
   padding: 0;
   border: none;
   background: none;
+}
+
+.addImpl {
+  align-content: end;
 }

@@ -5,6 +5,9 @@ import { ImplementationService } from 'api-nisq/services/implementation.service'
 import { SdksService } from 'api-nisq/services/sdks.service';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
+import { SdkDto } from 'api-nisq/models/sdk-dto';
+import { UtilService } from '../util/util.service';
+import { CreateSdkDialogComponent } from './dialogs/create-sdk-dialog/create-sdk-dialog.component';
 
 @Component({
   selector: 'app-implementation-selection-criteria',
@@ -26,7 +29,8 @@ export class ImplementationSelectionCriteriaComponent implements OnInit {
   constructor(
     private nisqImplementationService: ImplementationService,
     private readonly sdkService: SdksService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -43,36 +47,61 @@ export class ImplementationSelectionCriteriaComponent implements OnInit {
       .subscribe((impl) => {
         this.nisqImpl = impl;
       });
-    // this.nisqImplementationService
-    //   .getImplementations({ algoId: this.algoId })
-    //   .subscribe((impls) => {
-    //     const foundImpl = impls.implementationDtos.find(
-    //       (i) => i.name === this.nisqImpl.name
-    //     );
-    //     if (foundImpl) {
-    //       this.nisqImpl = foundImpl;
-    //       this.oldNisqImpl = cloneDeep(foundImpl);
-    //     } else {
-    //       this.createNisqImplementation();
-    //     }
-    //   });
   }
 
   implementationChanged(): void {
     this.inputChanged = true;
   }
 
-  createNisqImplementation(): void {}
-
   saveImplementation(): void {
     this.nisqImplementationService
       .updateImplementation({ implId: this.nisqImpl.id, body: this.nisqImpl })
       .subscribe(() => {
         this.inputChanged = false;
+        this.utilService.callSnackBar(
+          'The changes on implementation ' +
+            this.nisqImpl.name +
+            ' were successfully stored.'
+        );
       });
   }
 
-  onCreateSoftwarePlatform(): void {}
+  onCreateSoftwarePlatform(): void {
+    this.utilService
+      .createDialog(CreateSdkDialogComponent, {
+        title: 'Add a new SDK',
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          const sdkDto: SdkDto = {
+            id: null,
+            name: dialogResult.name,
+          };
+          this.sdkService.createSdk({ body: sdkDto }).subscribe(
+            () => {
+              this.utilService.callSnackBar(
+                'Successfully created SDK "' + dialogResult.name + '".'
+              );
+              this.sdks$ = this.sdkService.getSdks().pipe(
+                map((dto) =>
+                  dto.sdkDtos.map((sdk) => ({
+                    label: sdk.name,
+                    value: sdk.name,
+                  }))
+                )
+              );
+            },
+
+            () => {
+              this.utilService.callSnackBar(
+                'Error! The SDK could not be created in NISQ Analyzer.'
+              );
+            }
+          );
+        }
+      });
+  }
 }
 
 export interface Option {

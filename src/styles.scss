@@ -78,3 +78,21 @@ $planqk-palette-accent: mat.define-palette($planqkred);
 $planqk-theme: mat.define-light-theme($planqk-palette-primary, $planqk-palette-accent);
 
 @include mat.all-component-themes($planqk-theme);
+
+.input-field {
+  width: 100%;
+}
+
+html, body {
+  margin: 0;
+  height: 100vh;
+  font-family: Roboto, Arial, sans-serif;
+}
+
+.content {
+  margin-inline: 1.5em;
+}
+
+.heading {
+  font-weight: 33
+}

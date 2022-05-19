@@ -61,3 +61,11 @@ $qc-atlas-ui-theme: mat.define-light-theme($qc-atlas-ui-primary, $qc-atlas-ui-ac
 .master-save-button:hover .master-save-icon {
   color: white;
 }
+
+.content {
+  margin-inline: 1.5em;
+}
+
+.heading {
+  font-weight: 33
+}

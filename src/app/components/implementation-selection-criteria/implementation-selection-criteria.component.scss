@@ -18,3 +18,11 @@ textarea.mat-input-element {
   padding: 0;
   margin: 0;
 }
+
+.newSdkButton {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 10%;
+  padding-right: 15px;
+}

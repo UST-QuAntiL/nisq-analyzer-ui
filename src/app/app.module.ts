@@ -28,6 +28,7 @@ import { AlgorithmsImplementationsListComponent } from './components/algorithms-
 // eslint-disable-next-line max-len
 import { AddImplementationDialogComponent } from './components/algorithms-implementations-list/dialogs/add-implementation-dialog/add-implementation-dialog.component';
 import { UtilService } from './components/util/util.service';
+import { CreateSdkDialogComponent } from './components/implementation-selection-criteria/dialogs/create-sdk-dialog/create-sdk-dialog.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { UtilService } from './components/util/util.service';
     QpuSelectionComponent,
     AlgorithmsImplementationsListComponent,
     AddImplementationDialogComponent,
+    CreateSdkDialogComponent,
   ],
   imports: [
     BrowserModule,
