@@ -79,13 +79,7 @@ export class AlgorithmsImplementationsListComponent implements OnInit {
 
   navigateToImplementation(impl: ImplementationDto): void {
     void this.router.navigate(
-      [
-        'algorithms',
-        impl.implementedAlgorithm,
-        'implementations',
-        impl.id,
-        'selection-criteria',
-      ],
+      ['algorithms', impl.implementedAlgorithm, 'implementations', impl.id],
       { state: impl }
     );
   }

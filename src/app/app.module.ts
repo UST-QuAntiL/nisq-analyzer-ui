@@ -22,24 +22,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { ImplementationSelectionCriteriaComponent } from './components/implementation-selection-criteria/implementation-selection-criteria.component';
-import { QpuSelectionComponent } from './components/qpu-selection/qpu-selection.component';
 import { AlgorithmsImplementationsListComponent } from './components/algorithms-implementations-list/algorithms-implementations-list.component';
 // eslint-disable-next-line max-len
-import { AddImplementationDialogComponent } from './components/algorithms-implementations-list/dialogs/add-implementation-dialog/add-implementation-dialog.component';
 import { UtilService } from './components/util/util.service';
-import { CreateSdkDialogComponent } from './components/implementation-selection-criteria/dialogs/create-sdk-dialog/create-sdk-dialog.component';
+import { ImplementationViewModule } from './components/implementation-view/implementation-view.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavigationComponent,
     PageNotFoundComponent,
-    ImplementationSelectionCriteriaComponent,
-    QpuSelectionComponent,
     AlgorithmsImplementationsListComponent,
-    AddImplementationDialogComponent,
-    CreateSdkDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,6 +40,7 @@ import { CreateSdkDialogComponent } from './components/implementation-selection-
     ApiModule.forRoot({ rootUrl: environment.NISQ_API_URL }),
     AppRoutingModule,
     HttpClientModule,
+    ImplementationViewModule,
     MatToolbarModule,
     MatIconModule,
     MatSnackBarModule,

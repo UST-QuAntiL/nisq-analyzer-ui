@@ -6,7 +6,7 @@ import { SdksService } from 'api-nisq/services/sdks.service';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { SdkDto } from 'api-nisq/models/sdk-dto';
-import { UtilService } from '../util/util.service';
+import { UtilService } from '../../util/util.service';
 import { CreateSdkDialogComponent } from './dialogs/create-sdk-dialog/create-sdk-dialog.component';
 
 @Component({
