@@ -1,0 +1,23 @@
+:host ::ng-deep .mat-horizontal-stepper-header-container {
+  display: none !important;
+}
+
+button.defineOwnPreferencesButton {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+mat-expansion-panel.advancedSettings {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.waitingLearning {
+  justify-content: center;
+  align-items: center;
+}
+

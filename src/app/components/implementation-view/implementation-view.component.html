@@ -1,10 +1,22 @@
-<mat-tab-group>
+<mat-tab-group *ngIf="impl">
     <mat-tab label="Selection-Criteria">
         <div>
-            <app-implementation-selection-criteria></app-implementation-selection-criteria>
+            <app-implementation-selection-criteria
+                    [impl]="impl"
+            >
+            </app-implementation-selection-criteria>
         </div>
     </mat-tab>
     <mat-tab label="QPU-Selection">
-        <app-qpu-selection></app-qpu-selection>
+        <app-qpu-selection
+                [impl]="impl"
+        >
+        </app-qpu-selection>
     </mat-tab>
 </mat-tab-group>
+<div
+        *ngIf="!impl"
+        class="d-flex align-content-center justify-content-center"
+>
+    <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+    <form [formGroup]="sensitivityAnalysisForm">
+        <p>To analyze the sensitivity of the ranking, defined weights are changed to a customizable range.</p>
+        <p><i>What is the maximum percentage each individual weight should be increased?</i></p>
+        <mat-form-field class="input-field">
+            <mat-label>Upper bound</mat-label>
+            <input id="upperBound" formControlName="upperBound" matInput type="number" required min="0">
+        </mat-form-field>
+        <p><i>What is the maximum percentage each individual weight should be decreased?</i></p>
+        <mat-form-field class="input-field">
+            <mat-label>Lower bound</mat-label>
+            <input id="lowerBound" formControlName="lowerBound" matInput type="number" required min="0">
+        </mat-form-field>
+        <p><i>How big should the weight steps be until the bounds are reached?</i></p>
+        <mat-form-field class="input-field">
+            <mat-label>Step size</mat-label>
+            <input id="stepSize" formControlName="stepSize" matInput type="number" required min="0">
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [disabled]="isRequiredDataMissing()" [mat-dialog-close]="data">Ok
+    </button>
+</div>
+

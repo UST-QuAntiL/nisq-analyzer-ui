@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ImplementationDto } from 'api-nisq/models/implementation-dto';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
@@ -15,7 +15,7 @@ import { CreateSdkDialogComponent } from './dialogs/create-sdk-dialog/create-sdk
   styleUrls: ['./implementation-selection-criteria.component.scss'],
 })
 export class ImplementationSelectionCriteriaComponent implements OnInit {
-  implId: string;
+  @Input() impl: ImplementationDto;
   nisqImpl: ImplementationDto;
   sdks$: Observable<Option[]>;
   inputChanged = false;
@@ -34,7 +34,6 @@ export class ImplementationSelectionCriteriaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.implId = this.route.snapshot.paramMap.get('implId');
     this.sdks$ = this.sdkService
       .getSdks()
       .pipe(
@@ -43,9 +42,9 @@ export class ImplementationSelectionCriteriaComponent implements OnInit {
         )
       );
     this.nisqImplementationService
-      .getImplementation({ implId: this.implId })
-      .subscribe((impl) => {
-        this.nisqImpl = impl;
+      .getImplementation({ implId: this.impl.id })
+      .subscribe((implDto) => {
+        this.nisqImpl = implDto;
       });
   }
 

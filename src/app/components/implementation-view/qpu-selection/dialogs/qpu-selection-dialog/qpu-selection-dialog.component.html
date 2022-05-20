@@ -1,0 +1,42 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+    <form [formGroup]="qpuSelectionFrom">
+        <mat-form-field class="input-field">
+            <mat-label>Vendor</mat-label>
+            <mat-select formControlName="vendor" (selectionChange)="onVendorChanged($event.value)" required>
+                <mat-option [value]="'IBMQ'">IBMQ</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="input-field">
+            <mat-label>Token</mat-label>
+            <input id="token" formControlName="token" matInput required>
+        </mat-form-field>
+        <mat-label>Select SDKs to be used for compilation:</mat-label>
+        <mat-form-field appearance="none" class="input-field">
+            <input matInput [hidden]="true">
+            <mat-checkbox *ngFor="let compiler of compilers.controls; index as i" class="example-margin"
+                          formArrayName="compilers"
+                          [checked]="checkIfCompilerSelected(compiler.value)"
+                          (change)="updateCompilerSelection(compiler.value, $event.checked)"
+                          color="primary">
+                {{compiler.value}}
+            </mat-checkbox>
+        </mat-form-field>
+        <mat-form-field appearance="none">
+            <input matInput [hidden]="true">
+            <mat-checkbox class="example-margin"
+                          formControlName="simulatorAllowed"
+                          [checked]="isSimulatorAllowed"
+                          (change)="setSimulatorAllowed($event.checked)"
+                          color="primary">
+                Include Simulators
+            </mat-checkbox>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [disabled]="isRequiredDataMissing() || ! checkIfCompilersPresent()" [mat-dialog-close]="data">Ok
+    </button>
+</div>
+

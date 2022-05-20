@@ -1,0 +1,120 @@
+<div *ngIf="prioritizationFrom">
+    <mat-horizontal-stepper
+            [linear]="false"
+            #matHorizontalStepper
+    >
+        <mat-step [editable]="true" label="Preferences">
+            <h1 mat-dialog-title>Prioritize Analysis Results</h1>
+            <div mat-dialog-content>
+                <form [formGroup]="preferenceForm">
+                    <p><b>Select predefined preferences</b>
+                        <mat-checkbox color="primary" [checked]="shortWaitingTimeEnabled"
+                                      (change)="setWaitingTimeEnabled($event.checked)">Short waiting time
+                        </mat-checkbox>
+                        <mat-checkbox color="primary" [checked]="stableExecutionResultsEnabled"
+                                      (change)="setStableExecutionResultsEnabled($event.checked)">Stable execution
+                            results
+                        </mat-checkbox>
+                        <mat-expansion-panel *ngIf="shortWaitingTimeEnabled || stableExecutionResultsEnabled"
+                                             (opened)="advancedSettingsOpen = true"
+                                             (closed)="advancedSettingsOpen = false"
+                                             class="advancedSettings">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Advanced settings
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <mat-form-field class="input-field">
+                                <mat-label>MCDA Method</mat-label>
+                                <mat-select formControlName="preferenceMcdaMethod"
+                                            (selectionChange)="setMcdaMethodPredefinedPreferences($event.value)">
+                                    <mat-option [value]="'topsis'">TOPSIS</mat-option>
+                                    <mat-option [value]="'promethee-II'">PROMETHEE II</mat-option>
+                                    <mat-option [value]="'electre-III'"
+                                                *ngIf="shortWaitingTimeEnabled && !stableExecutionResultsEnabled">
+                                        ELECTRE III
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="input-field" *ngIf="stableExecutionResultsEnabled">
+                                <mat-label>Weight Learning Method</mat-label>
+                                <mat-select formControlName="weightLearningMethod"
+                                            (selectionChange)="setWeightLearningMethodPredefinedPreferences($event.value)">
+                                    <mat-option [value]="'cobyla'">COBYLA</mat-option>
+                                    <mat-option [value]="'evolution-strategy'">Evolution Strategy</mat-option>
+                                    <mat-option [value]="'genetic-algorithm'">Genetic Algorithm
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </mat-expansion-panel>
+                    </p>
+                    <button
+                            mat-button
+                            color="primary"
+                            style="text-align:left"
+                            class="defineOwnPreferencesButton"
+                            (click)="resetPredefinedPreferences() && matHorizontalStepper.next()"
+                    >
+                        Or define individual metric weights
+                    </button>
+                    <div mat-dialog-actions>
+                        <button mat-button (click)="onNoClick()">Cancel</button>
+                        <div *ngIf="shortWaitingTimeEnabled && !stableExecutionResultsEnabled; else learnWeights">
+                            <button mat-button
+                                    [mat-dialog-close]="data"
+                            >Ok
+                            </button>
+                        </div>
+                        <ng-template #learnWeights>
+                            <button mat-button [mat-dialog-close]="data"
+                                    [disabled]="!shortWaitingTimeEnabled && !stableExecutionResultsEnabled">Ok
+                            </button>
+                        </ng-template>
+                    </div>
+                </form>
+            </div>
+        </mat-step>
+        <mat-step [editable]="true" label="OwnWeights">
+            <h1 mat-dialog-title>{{data.title}}</h1>
+            <div mat-dialog-content>
+                <form [formGroup]="prioritizationFrom">
+                    <mat-form-field class="input-field">
+                        <mat-label>MCDA Method</mat-label>
+                        <mat-select formControlName="mcdaMethod" (selectionChange)="onMcdaMethodChanged($event.value)">
+                            <mat-option [value]="'topsis'">TOPSIS</mat-option>
+                            <mat-option [value]="'promethee-II'">PROMETHEE II</mat-option>
+                            <mat-option [value]="'electre-III'">ELECTRE III</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <p>Assign points between 0 (low importance) and 100 (high importance) in the following to define the
+                        weighting of metrics.</p>
+                    <div formArrayName="criteriaAndValues">
+                        <div *ngFor="let criterion of criteriaNamesAndValues; let i = index" [formGroupName]="i">
+                            <mat-form-field class="input-field">
+                                <mat-label>{{ criterion.name }}</mat-label>
+                                <input
+                                        matInput
+                                        required
+                                        type="number"
+                                        min="0"
+                                        max="100"
+                                        pattern="^$|^([0-9]|[1-9][0-9]|[1][0][0])?"
+                                        [placeholder]="criterion.name"
+                                        [formControlName]="criterion.name"
+                                        (change)="onChangeEvent()"
+                                />
+                                <mat-error>Please enter a value between 0 and 100</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div mat-dialog-actions>
+                <button mat-button (click)="matHorizontalStepper.previous()">Back</button>
+                <button mat-button (click)="onNoClick()">Cancel</button>
+                <button mat-button [disabled]="prioritizationFrom.invalid" [mat-dialog-close]="data">Ok
+                </button>
+            </div>
+        </mat-step>
+    </mat-horizontal-stepper>
+</div>

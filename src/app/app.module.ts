@@ -17,6 +17,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -26,6 +27,7 @@ import { AlgorithmsImplementationsListComponent } from './components/algorithms-
 // eslint-disable-next-line max-len
 import { UtilService } from './components/util/util.service';
 import { ImplementationViewModule } from './components/implementation-view/implementation-view.module';
+import { QpuSelectionDialogComponent } from './components/implementation-view/qpu-selection/dialogs/qpu-selection-dialog/qpu-selection-dialog.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { ImplementationViewModule } from './components/implementation-view/imple
     NavigationComponent,
     PageNotFoundComponent,
     AlgorithmsImplementationsListComponent,
+    QpuSelectionDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,6 +59,7 @@ import { ImplementationViewModule } from './components/implementation-view/imple
     ReactiveFormsModule,
     MatDividerModule,
     MatListModule,
+    MatCheckboxModule,
   ],
   providers: [UtilService],
   bootstrap: [AppComponent],

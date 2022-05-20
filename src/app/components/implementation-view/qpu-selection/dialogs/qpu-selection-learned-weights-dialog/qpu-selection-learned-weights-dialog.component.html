@@ -1,0 +1,31 @@
+<div *ngIf="weightLearningForm">
+    <h1 mat-dialog-title>Learned Weights</h1>
+    <div mat-dialog-content>
+        <form [formGroup]="weightLearningForm">
+            <p>The learned weights are presented</p>
+            <div formArrayName="criteriaAndValues">
+                <div *ngFor="let criterion of criteriaNamesAndValues; let i = index" [formGroupName]="i">
+                    <div *ngIf="criterion.name !== 'queue-size'">
+                        <mat-form-field class="input-field">
+                            <mat-label>{{ criterion.name }}</mat-label>
+                            <input
+                                    matInput
+                                    required
+                                    type="number"
+                                    [placeholder]="criterion.name"
+                                    [formControlName]="criterion.name"
+                                    (change)="onChangeEvent()"
+                            />
+                            <mat-error>Please use float numbers as weights</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button (click)="onNoClick()">Cancel</button>
+        <button mat-button [mat-dialog-close]="data">Ok
+        </button>
+    </div>
+</div>

@@ -1,0 +1,151 @@
+.mat-table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: separate;
+}
+
+// table column width helper for mat-tables
+@for $index from 0 through 200 {
+  $size: $index * 2;
+
+  .table-column-#{$size} {
+    // flex: 0 1 #{$size}#{"px"};
+    min-width: #{$size}#{"px"};
+  }
+}
+
+.mat-cell,
+.mat-header-cell {
+  word-wrap: initial;
+  display: table-cell;
+  padding: 0px 10px;
+  line-break: unset;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.mat-row,
+.mat-header-row {
+  display: table-row;
+}
+
+tr.detail-row {
+  height: 0;
+}
+
+tr.element-row:not(.expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.element-row:not(.expanded-row):active {
+  background: #efefef;
+}
+
+.element-row td {
+  border-bottom-width: 0;
+}
+
+.element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.element-diagram {
+  min-width: 80px;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: 104px;
+}
+
+.element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.element-description {
+  padding: 16px;
+}
+
+.element-description-attribution {
+  opacity: 0.5;
+}
+
+.backend-column {
+  min-width: 200px !important;
+}
+
+.score-column {
+  min-width: 76px !important;
+}
+
+.value-column {
+  min-width: 85px;
+  text-align: center;
+}
+
+button-column {
+  text-align: center;
+}
+
+.action-column {
+  min-width: 125px;
+}
+
+.btn-wrapper {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.btn-wrapper > button {
+  margin-right: 10px;
+  width: 15em;
+}
+
+.mat-raised-button {
+  width: 10em;
+}
+
+:host ::ng-deep .mat-horizontal-stepper-header-container {
+  display: none !important;
+}
+
+.mat-spinner-buttons {
+  margin-left: 45px;
+}
+
+.mat-spinner-left {
+  margin-left: 10px;
+}
+
+.impls-required {
+  display: flex;
+  justify-content: center;
+}
+
+.spinner-wrapper {
+  display: flex;
+}
+
+.spinner-wrapper-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sensAnalysisResultsButton {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+}
+
+.link-icon {
+  vertical-align: middle;
+}
