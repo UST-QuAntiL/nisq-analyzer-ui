@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-qpu-selection-prioritization-dialog',
   templateUrl: './qpu-selection-prioritization-dialog.component.html',
-  styleUrls: ['./qpu-selection-prioritization-dialog.component.css'],
+  styleUrls: ['./qpu-selection-prioritization-dialog.component.scss'],
 })
 export class QpuSelectionPrioritizationDialogComponent implements OnInit {
   @ViewChild('matHorizontalStepper') matHorizontalStepper: MatStepper;
