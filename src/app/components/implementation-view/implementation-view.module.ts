@@ -14,6 +14,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSortModule } from '@angular/material/sort';
 import { AddImplementationDialogComponent } from '../algorithms-implementations-list/dialogs/add-implementation-dialog/add-implementation-dialog.component';
 import { CreateSdkDialogComponent } from './implementation-selection-criteria/dialogs/create-sdk-dialog/create-sdk-dialog.component';
 import { QpuSelectionComponent } from './qpu-selection/qpu-selection.component';
@@ -54,6 +55,7 @@ import { QpuSelectionPrioritizationDialogComponent } from './qpu-selection/dialo
     MatStepperModule,
     MatCheckboxModule,
     MatExpansionModule,
+    MatSortModule,
   ],
 })
 export class ImplementationViewModule {}
