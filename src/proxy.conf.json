@@ -1,0 +1,17 @@
+{
+  "/qc-catalog": {
+    "target": "https://platform.planqk.de",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/auth": {
+    "target": "https://platform.planqk.de",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/api": {
+    "target": "https://api.quantum-computing.ibm.com",
+    "secure": false,
+    "changeOrigin": true
+  }
+}
