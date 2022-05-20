@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,7 +7,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ApiModule } from 'api-nisq/api.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -18,6 +18,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,6 +29,8 @@ import { AlgorithmsImplementationsListComponent } from './components/algorithms-
 import { UtilService } from './components/util/util.service';
 import { ImplementationViewModule } from './components/implementation-view/implementation-view.module';
 import { QpuSelectionDialogComponent } from './components/implementation-view/qpu-selection/dialogs/qpu-selection-dialog/qpu-selection-dialog.component';
+import { AuthInterceptor } from './components/http-interceptors/auth-interceptor';
+import { initializeKeycloak } from './components/util/keycloak-init';
 
 @NgModule({
   declarations: [
@@ -44,6 +47,7 @@ import { QpuSelectionDialogComponent } from './components/implementation-view/qp
     AppRoutingModule,
     HttpClientModule,
     ImplementationViewModule,
+    KeycloakAngularModule,
     MatToolbarModule,
     MatIconModule,
     MatSnackBarModule,
@@ -61,7 +65,20 @@ import { QpuSelectionDialogComponent } from './components/implementation-view/qp
     MatListModule,
     MatCheckboxModule,
   ],
-  providers: [UtilService],
+  providers: [
+    UtilService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService],
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

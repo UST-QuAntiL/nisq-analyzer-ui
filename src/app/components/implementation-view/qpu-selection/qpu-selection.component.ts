@@ -38,6 +38,7 @@ import { RootService } from 'api-nisq/services/root.service';
 import { HttpClient } from '@angular/common/http';
 import { XmcdaCriteriaService } from 'api-nisq/services/xmcda-criteria.service';
 import { UtilService } from '../../util/util.service';
+import { PlanqkPlatformLoginService } from '../../services/planqk-platform-login.service';
 import { QpuSelectionDialogComponent } from './dialogs/qpu-selection-dialog/qpu-selection-dialog.component';
 // eslint-disable-next-line max-len
 import { QpuSelectionSensitivityAnalysisDialogComponent } from './dialogs/qpu-selection-sensitivity-analysis-dialog/qpu-selection-sensitivity-analysis-dialog.component';
@@ -143,7 +144,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
     private qpuSelectionService: QpuSelectionResultService,
     private http: HttpClient,
     private nisqAnalyzerRootService: RootService,
-    // private planqkService: PlanqkPlatformLoginService,
+    private planqkService: PlanqkPlatformLoginService,
     private mcdaService: XmcdaCriteriaService
   ) {}
 
@@ -204,8 +205,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
         if (dialogResult) {
           this.analyzerJob = undefined;
           this.jobReady = false;
-          // refreshToken = this.planqkService.getRefreshToken();
-          refreshToken = null;
+          refreshToken = this.planqkService.getRefreshToken();
           const providerTokens = {};
           providerTokens[dialogResult.vendor] = dialogResult.token;
 

@@ -4,6 +4,11 @@ import { ImplementationDto } from 'api-nisq/models/implementation-dto';
 import { Router } from '@angular/router';
 import { v4 as uuidv4 } from 'uuid';
 import { UtilService } from '../util/util.service';
+import { PlanqkPlatformLoginService } from '../services/planqk-platform-login.service';
+import {
+  PlanqkPlatformImplementationDto,
+  PlanqkPlatformService,
+} from '../services/planqk-platform.service';
 import { AddImplementationDialogComponent } from './dialogs/add-implementation-dialog/add-implementation-dialog.component';
 
 @Component({
@@ -18,7 +23,9 @@ export class AlgorithmsImplementationsListComponent implements OnInit {
   constructor(
     private nisqImplementationService: ImplementationService,
     private router: Router,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private planqkPlatformLoginService: PlanqkPlatformLoginService,
+    private planqkPlatformService: PlanqkPlatformService
   ) {}
 
   ngOnInit(): void {
@@ -26,13 +33,47 @@ export class AlgorithmsImplementationsListComponent implements OnInit {
   }
 
   getAlgorithmsAndImplementations(): void {
-    this.nisqImplementationService.getImplementations().subscribe((impls) => {
-      this.allImpls = impls.implementationDtos;
-      this.allImpls.forEach((impl) => {
-        if (impl.algorithmName !== null) {
-          this.allAlgorithms.add(impl.algorithmName);
-        }
-      });
+    this.planqkPlatformLoginService.isLoggedIn().subscribe((isLoggedIn) => {
+      if (isLoggedIn) {
+        // get all algorithms
+        // store in all algorithms
+        // get for each their names
+        // get impls
+
+        const planqkImplList: PlanqkPlatformImplementationDto[] = [];
+        this.planqkPlatformService
+          .getImplementationsOfPlanqkPlatform()
+          .subscribe((plankImpls) => {
+            plankImpls.content.map((planqkImpl) =>
+              planqkImplList.push(planqkImpl)
+            );
+            console.log(planqkImplList);
+            planqkImplList.forEach((planqkImpl) => {
+              // if (
+              //   !impls.implementationDtos.find(
+              //     (i) => i.name === planqkImpl.name
+              //   )
+              // ) {
+              // wenn nicht in DB dann füge hinzu
+              // dabei muss aber noch der Name des Algos rausgefunden werden
+              // und schließlich die alle impls speichern
+              // AUF DIE DER NUTZER TATSÄCHLICH ZUGRIFF HAT, evtl doch mit Algo anfangen?
+              // wie nur die algo/impls anzeigen, in seinem kontext (planqk)
+              // }
+            });
+          });
+      } else {
+        this.nisqImplementationService
+          .getImplementations()
+          .subscribe((impls) => {
+            this.allImpls = impls.implementationDtos;
+            this.allImpls.forEach((impl) => {
+              if (impl.algorithmName !== null) {
+                this.allAlgorithms.add(impl.algorithmName);
+              }
+            });
+          });
+      }
     });
   }
 
