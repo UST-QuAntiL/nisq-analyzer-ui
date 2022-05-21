@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UtilService } from '../util/util.service';
 import { PlanqkPlatformLoginService } from '../services/planqk-platform-login.service';
 import {
+  PlanqkPlatformAlgorithmDto,
   PlanqkPlatformImplementationDto,
   PlanqkPlatformService,
 } from '../services/planqk-platform.service';
@@ -17,8 +18,9 @@ import { AddImplementationDialogComponent } from './dialogs/add-implementation-d
   styleUrls: ['./algorithms-implementations-list.component.scss'],
 })
 export class AlgorithmsImplementationsListComponent implements OnInit {
+  allAlgorithms = new Map<string, Set<ImplementationDto>>();
+  isLoggedIn = false;
   allImpls: ImplementationDto[] = [];
-  allAlgorithms = new Set<string>();
 
   constructor(
     private nisqImplementationService: ImplementationService,
@@ -34,42 +36,60 @@ export class AlgorithmsImplementationsListComponent implements OnInit {
 
   getAlgorithmsAndImplementations(): void {
     this.planqkPlatformLoginService.isLoggedIn().subscribe((isLoggedIn) => {
+      this.isLoggedIn = isLoggedIn;
       if (isLoggedIn) {
-        // get all algorithms
-        // store in all algorithms
-        // get for each their names
-        // get impls
-
         const planqkImplList: PlanqkPlatformImplementationDto[] = [];
+        const planqkAlgoList: PlanqkPlatformAlgorithmDto[] = [];
         this.planqkPlatformService
           .getImplementationsOfPlanqkPlatform()
           .subscribe((plankImpls) => {
             plankImpls.content.map((planqkImpl) =>
               planqkImplList.push(planqkImpl)
             );
-            console.log(planqkImplList);
-            planqkImplList.forEach((planqkImpl) => {
-              // if (
-              //   !impls.implementationDtos.find(
-              //     (i) => i.name === planqkImpl.name
-              //   )
-              // ) {
-              // wenn nicht in DB dann füge hinzu
-              // dabei muss aber noch der Name des Algos rausgefunden werden
-              // und schließlich die alle impls speichern
-              // AUF DIE DER NUTZER TATSÄCHLICH ZUGRIFF HAT, evtl doch mit Algo anfangen?
-              // wie nur die algo/impls anzeigen, in seinem kontext (planqk)
-              // }
-            });
+            this.planqkPlatformService
+              .getAlgorithmsOfPlanqkPlatform()
+              .subscribe((planqkAlgos) => {
+                planqkAlgos.content.map((planqkAlgo) =>
+                  planqkAlgoList.push(planqkAlgo)
+                );
+                planqkAlgoList.forEach((planqkAlgo) => {
+                  planqkImplList.forEach((planqkImpl) => {
+                    if (planqkAlgo.id === planqkImpl.implementedAlgorithmId) {
+                      const implDto: ImplementationDto = {
+                        id: planqkImpl.id,
+                        name: planqkImpl.name,
+                        implementedAlgorithm: planqkImpl.implementedAlgorithmId,
+                        sdk: planqkImpl.technology,
+                        language: planqkImpl.version,
+                        fileLocation: '',
+                        selectionRule: '',
+                      };
+                      if (this.allAlgorithms.has(planqkAlgo.name)) {
+                        this.allAlgorithms.get(planqkAlgo.name).add(implDto);
+                      } else {
+                        let newSet = new Set<ImplementationDto>();
+                        newSet = newSet.add(implDto);
+                        this.allAlgorithms.set(planqkAlgo.name, newSet);
+                      }
+                    }
+                  });
+                });
+              });
           });
       } else {
         this.nisqImplementationService
           .getImplementations()
           .subscribe((impls) => {
             this.allImpls = impls.implementationDtos;
-            this.allImpls.forEach((impl) => {
+            impls.implementationDtos.forEach((impl) => {
               if (impl.algorithmName !== null) {
-                this.allAlgorithms.add(impl.algorithmName);
+                if (this.allAlgorithms.has(impl.algorithmName)) {
+                  this.allAlgorithms.get(impl.algorithmName).add(impl);
+                } else {
+                  let newSet = new Set<ImplementationDto>();
+                  newSet = newSet.add(impl);
+                  this.allAlgorithms.set(impl.algorithmName, newSet);
+                }
               }
             });
           });

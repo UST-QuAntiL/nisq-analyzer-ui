@@ -1,7 +1,7 @@
 <div class="content">
     <h2 class="heading">Algorithms</h2>
     <mat-card>
-        <div class="addImpl">
+        <div class="addImpl" *ngIf="!isLoggedIn">
             <button
                     mat-icon-button
                     aria-label="Add new implementation"
@@ -11,18 +11,18 @@
             </button>
         </div>
         <mat-accordion>
-            <mat-expansion-panel *ngFor="let algo of allAlgorithms">
+            <mat-expansion-panel *ngFor="let algo of allAlgorithms | keyvalue">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
-                        {{ algo }}
+                        {{ algo.key }}
                     </mat-panel-title>
                     <mat-panel-description>
                     </mat-panel-description>
                 </mat-expansion-panel-header>
                 <div class="impls">
                     <h4>Implementations</h4>
-                    <div *ngFor="let impl of allImpls" class="implNames" (click)="navigateToImplementation(impl)">
-                        <p *ngIf="impl.algorithmName===algo">{{ impl.name }}</p>
+                    <div *ngFor="let impl of algo.value" class="implNames" (click)="navigateToImplementation(impl)">
+                        <p>{{ impl.name }}</p>
                     </div>
                 </div>
             </mat-expansion-panel>

@@ -27,4 +27,8 @@ export class PlanqkPlatformLoginService {
   public logoutFromPlanqkPlatform(): void {
     this.keycloak.logout();
   }
+
+  public getUserName(): void {
+    this.keycloak.getUsername();
+  }
 }

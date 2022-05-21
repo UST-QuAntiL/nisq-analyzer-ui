@@ -119,8 +119,27 @@ export interface PlanqkPlatformPageImplementationDto {
 
 export interface PlanqkPlatformImplementationDto {
   id: string;
-  implementedAlgorithm?: string;
+  implementedAlgorithmId?: string;
   name: string;
   technology?: string;
   version?: string;
+}
+
+export interface PlanqkPlatformPageAlgorithmDto {
+  totalPages?: number;
+  totalElements?: number;
+  first?: boolean;
+  pageable?: Pageable;
+  size?: number;
+  content?: PlanqkPlatformAlgorithmDto[];
+  number?: number;
+  sort?: Sort;
+  numberOfElements?: number;
+  last?: boolean;
+  empty?: boolean;
+}
+
+export interface PlanqkPlatformAlgorithmDto {
+  id: string;
+  name: string;
 }
