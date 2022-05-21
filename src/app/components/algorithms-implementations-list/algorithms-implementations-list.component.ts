@@ -61,7 +61,11 @@ export class AlgorithmsImplementationsListComponent implements OnInit {
                         implementedAlgorithm: planqkImpl.implementedAlgorithmId,
                         sdk: planqkImpl.technology,
                         language: planqkImpl.version,
-                        fileLocation: '',
+                        fileLocation:
+                          this.getFileLocationOfPlanQKImplementation(
+                            planqkImpl.implementedAlgorithmId,
+                            planqkImpl.id
+                          ),
                         selectionRule: '',
                       };
                       if (this.allAlgorithms.has(planqkAlgo.name)) {
@@ -95,6 +99,34 @@ export class AlgorithmsImplementationsListComponent implements OnInit {
           });
       }
     });
+  }
+
+  getFileLocationOfPlanQKImplementation(
+    algoId: string,
+    implId: string
+  ): string {
+    const fileIdsList: string[] = [];
+
+    // TODO: currently file handling is different on the platform than in the QC Atlas. Thus, file access API is
+    // not generated
+    this.planqkPlatformService
+      .getImplementationFileIdOfPlanqkPlatform(algoId, implId)
+      .subscribe((files) => {
+        files.content.map((file) => fileIdsList.push(file.id));
+        if (fileIdsList.length > 0) {
+          return (
+            'https://platform.planqk.de/qc-catalog/algorithms/' +
+            algoId +
+            '/implementations/' +
+            implId +
+            '/files/' +
+            // TODO: currently assuming first file is the one to be analyzed and executed
+            fileIdsList[0] +
+            '/content'
+          );
+        }
+      });
+    return '';
   }
 
   onCreateImplementation(): void {
