@@ -3,11 +3,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { ImplementationDto } from 'api-nisq/models/implementation-dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilService {
+  implementation: ImplementationDto;
   timeOut = 3000;
   ibmqQueueSizeUrl = '/api/Backends/<backendName>/queue/status?';
 
@@ -81,6 +83,14 @@ export class UtilService {
   getIBMQBackendState(backendName: string): Observable<QiskitBackendState> {
     const url = this.ibmqQueueSizeUrl.replace(/<backendName>/g, backendName);
     return this.http.get<QiskitBackendState>(url);
+  }
+
+  public getImplementationFromComponent(): ImplementationDto {
+    return this.implementation;
+  }
+
+  public setImplementationForComponent(impl: ImplementationDto): void {
+    this.implementation = impl;
   }
 }
 

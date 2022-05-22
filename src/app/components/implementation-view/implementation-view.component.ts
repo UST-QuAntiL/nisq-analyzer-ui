@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ImplementationDto } from 'api-nisq/models/implementation-dto';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
+import { UtilService } from '../util/util.service';
 
 @Component({
   templateUrl: './implementation-view.component.html',
@@ -13,16 +14,12 @@ export class ImplementationViewComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private implementationService: ImplementationService
+    private router: Router,
+    private implementationService: ImplementationService,
+    private utilSerice: UtilService
   ) {}
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe(({ algoId, implId }) => {
-      this.implementationService
-        .getImplementation({ implId })
-        .subscribe((impl) => {
-          this.impl = impl;
-        });
-    });
+    this.impl = this.utilSerice.getImplementationFromComponent();
   }
 }
