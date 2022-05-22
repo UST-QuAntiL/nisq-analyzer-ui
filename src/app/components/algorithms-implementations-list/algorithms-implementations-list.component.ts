@@ -55,20 +55,22 @@ export class AlgorithmsImplementationsListComponent implements OnInit {
             // FIXME
             this.sdkService.getSdks().subscribe((sdks) => {
               planqkImplList.forEach((planqkImpl) => {
-                if (planqkImpl.technology.toLowerCase().includes('qiskit')) {
-                  planqkImpl.technology = 'Qiskit';
-                }
-                const availableSdk = sdks.sdkDtos.find(
-                  (sdk) =>
-                    sdk.name.toLowerCase() ===
-                    planqkImpl.technology.toLowerCase()
-                );
-                if (!availableSdk) {
-                  const sdkBody: SdkDto = {
-                    id: null,
-                    name: planqkImpl.technology,
-                  };
-                  this.sdkService.createSdk({ body: sdkBody }).subscribe();
+                if (planqkImpl.technology) {
+                  if (planqkImpl.technology.toLowerCase().includes('qiskit')) {
+                    planqkImpl.technology = 'Qiskit';
+                  }
+                  const availableSdk = sdks.sdkDtos.find(
+                    (sdk) =>
+                      sdk.name.toLowerCase() ===
+                      planqkImpl.technology.toLowerCase()
+                  );
+                  if (!availableSdk) {
+                    const sdkBody: SdkDto = {
+                      id: null,
+                      name: planqkImpl.technology,
+                    };
+                    this.sdkService.createSdk({ body: sdkBody }).subscribe();
+                  }
                 }
               });
             });
