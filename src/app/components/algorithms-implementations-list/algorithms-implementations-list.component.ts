@@ -52,6 +52,7 @@ export class AlgorithmsImplementationsListComponent implements OnInit {
             plankImpls.content.map((planqkImpl) =>
               planqkImplList.push(planqkImpl)
             );
+
             this.planqkPlatformService
               .getAlgorithmsOfPlanqkPlatform()
               .subscribe((planqkAlgos) => {
@@ -61,26 +62,51 @@ export class AlgorithmsImplementationsListComponent implements OnInit {
                 planqkAlgoList.forEach((planqkAlgo) => {
                   planqkImplList.forEach((planqkImpl) => {
                     if (planqkAlgo.id === planqkImpl.implementedAlgorithmId) {
-                      const implDto: ImplementationDto = {
-                        id: planqkImpl.id,
-                        name: planqkImpl.name,
-                        implementedAlgorithm: planqkImpl.implementedAlgorithmId,
-                        sdk: planqkImpl.technology,
-                        language: planqkImpl.version,
-                        fileLocation:
-                          this.getFileLocationOfPlanQKImplementation(
-                            planqkImpl.implementedAlgorithmId,
-                            planqkImpl.id
-                          ),
-                        selectionRule: '',
-                      };
-                      if (this.allAlgorithms.has(planqkAlgo.name)) {
-                        this.allAlgorithms.get(planqkAlgo.name).add(implDto);
-                      } else {
-                        let newSet = new Set<ImplementationDto>();
-                        newSet = newSet.add(implDto);
-                        this.allAlgorithms.set(planqkAlgo.name, newSet);
-                      }
+                      const fileIdsList: string[] = [];
+                      let fileLocation = '';
+
+                      // TODO: currently file handling is different on the platform than in the QC Atlas. Thus, file access API is
+                      // not generated
+                      this.planqkPlatformService
+                        .getImplementationFileIdOfPlanqkPlatform(
+                          planqkImpl.implementedAlgorithmId,
+                          planqkImpl.id
+                        )
+                        .subscribe((files) => {
+                          files.content.map((file) =>
+                            fileIdsList.push(file.id)
+                          );
+                          if (fileIdsList.length > 0) {
+                            fileLocation =
+                              'https://platform.planqk.de/qc-catalog/algorithms/' +
+                              planqkImpl.implementedAlgorithmId +
+                              '/implementations/' +
+                              planqkImpl.id +
+                              '/files/' +
+                              // TODO: currently assuming first file is the one to be analyzed and executed
+                              fileIdsList[0] +
+                              '/content';
+                            const implDto: ImplementationDto = {
+                              id: planqkImpl.id,
+                              name: planqkImpl.name,
+                              implementedAlgorithm:
+                                planqkImpl.implementedAlgorithmId,
+                              sdk: planqkImpl.technology,
+                              language: planqkImpl.version,
+                              fileLocation,
+                              selectionRule: '',
+                            };
+                            if (this.allAlgorithms.has(planqkAlgo.name)) {
+                              this.allAlgorithms
+                                .get(planqkAlgo.name)
+                                .add(implDto);
+                            } else {
+                              let newSet = new Set<ImplementationDto>();
+                              newSet = newSet.add(implDto);
+                              this.allAlgorithms.set(planqkAlgo.name, newSet);
+                            }
+                          }
+                        });
                     }
                   });
                 });
@@ -105,34 +131,6 @@ export class AlgorithmsImplementationsListComponent implements OnInit {
           });
       }
     });
-  }
-
-  getFileLocationOfPlanQKImplementation(
-    algoId: string,
-    implId: string
-  ): string {
-    const fileIdsList: string[] = [];
-
-    // TODO: currently file handling is different on the platform than in the QC Atlas. Thus, file access API is
-    // not generated
-    this.planqkPlatformService
-      .getImplementationFileIdOfPlanqkPlatform(algoId, implId)
-      .subscribe((files) => {
-        files.content.map((file) => fileIdsList.push(file.id));
-        if (fileIdsList.length > 0) {
-          return (
-            'https://platform.planqk.de/qc-catalog/algorithms/' +
-            algoId +
-            '/implementations/' +
-            implId +
-            '/files/' +
-            // TODO: currently assuming first file is the one to be analyzed and executed
-            fileIdsList[0] +
-            '/content'
-          );
-        }
-      });
-    return '';
   }
 
   onCreateImplementation(): void {
