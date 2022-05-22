@@ -18,23 +18,37 @@
                                 (ngModelChange)="implementationChanged()"
                                 matInput
                                 (keydown.enter)="saveImplementation()"
+                                [disabled]="isLoggedIn"
                         />
                     </mat-form-field>
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="row">
                         <div class="sdkselect">
-                            <mat-form-field>
-                                <mat-label class="input-label">SDK</mat-label>
-                                <mat-select [(ngModel)]="nisqImpl.sdk" (ngModelChange)="implementationChanged()">
-                                    <mat-option *ngFor="let sdk of sdks$ | async" [value]="sdk.value">{{
-                                        sdk.label
-                                        }}</mat-option>
-                                </mat-select>
+                            <mat-form-field *ngIf="isLoggedIn; else selectableSdk">
+                                <mat-label class="input-label">Technology (SDK)</mat-label>
+                                <input
+                                        type="text"
+                                        [(ngModel)]="nisqImpl.sdk"
+                                        matInput
+                                        disabled
+                                />
                             </mat-form-field>
+                            <ng-template #selectableSdk>
+                                <mat-form-field>
+                                    <mat-label class="input-label">SDK</mat-label>
+                                    <mat-select [disabled]="isLoggedIn" [(ngModel)]="nisqImpl.sdk"
+                                                (ngModelChange)="implementationChanged()">
+                                        <mat-option *ngFor="let sdk of sdks$ | async" [value]="sdk.value">{{
+                                            sdk.label
+                                            }}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </ng-template>
                         </div>
                         <div class="newSdkButton">
                             <button
+                                    *ngIf="!isLoggedIn"
                                     mat-icon-button
                                     aria-label="Add new SDK"
                                     (click)="onCreateSoftwarePlatform()"
@@ -46,14 +60,24 @@
 
                 </div>
                 <div class="col-lg-6 col-md-12">
-                    <mat-form-field>
+                    <mat-form-field *ngIf="isLoggedIn; else selectableLanguage">
+                        <mat-label class="input-label">Language (Version)</mat-label>
+                        <input
+                                type="text"
+                                [(ngModel)]="nisqImpl.language"
+                                matInput
+                                disabled
+                        />
+                    </mat-form-field>
+                    <ng-template #selectableLanguage>
                         <mat-label class="input-label">Language</mat-label>
-                        <mat-select [(ngModel)]="nisqImpl.language" (ngModelChange)="implementationChanged()">
+                        <mat-select [disabled]="isLoggedIn" [(ngModel)]="nisqImpl.language"
+                                    (ngModelChange)="implementationChanged()">
                             <mat-option *ngFor="let language of languages" [value]="language.value">{{
                                 language.label
                                 }}</mat-option>
                         </mat-select>
-                    </mat-form-field>
+                    </ng-template>
                 </div>
             </div>
         </mat-card>
@@ -61,7 +85,7 @@
 
     <button
             class="master-save-button"
-            *ngIf="inputChanged"
+            *ngIf="inputChanged && !isLoggedIn"
             mat-fab
             (click)="saveImplementation()"
     >

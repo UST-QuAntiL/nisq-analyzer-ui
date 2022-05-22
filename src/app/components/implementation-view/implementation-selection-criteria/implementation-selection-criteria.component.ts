@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { SdkDto } from 'api-nisq/models/sdk-dto';
 import { UtilService } from '../../util/util.service';
+import { PlanqkPlatformLoginService } from '../../services/planqk-platform-login.service';
 import { CreateSdkDialogComponent } from './dialogs/create-sdk-dialog/create-sdk-dialog.component';
 
 @Component({
@@ -19,6 +20,7 @@ export class ImplementationSelectionCriteriaComponent implements OnInit {
   nisqImpl: ImplementationDto;
   sdks$: Observable<Option[]>;
   inputChanged = false;
+  isLoggedIn = true;
   languages: Option[] = [
     { value: 'Qiskit', label: 'Qiskit' },
     { value: 'OpenQASM', label: 'OpenQASM' },
@@ -30,22 +32,24 @@ export class ImplementationSelectionCriteriaComponent implements OnInit {
     private nisqImplementationService: ImplementationService,
     private readonly sdkService: SdksService,
     private route: ActivatedRoute,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private planqkLoginService: PlanqkPlatformLoginService
   ) {}
 
   ngOnInit(): void {
-    this.sdks$ = this.sdkService
-      .getSdks()
-      .pipe(
-        map((dto) =>
-          dto.sdkDtos.map((sdk) => ({ label: sdk.name, value: sdk.name }))
-        )
-      );
-    this.nisqImplementationService
-      .getImplementation({ implId: this.impl.id })
-      .subscribe((implDto) => {
-        this.nisqImpl = implDto;
-      });
+    this.planqkLoginService.isLoggedIn().subscribe((loggedIn) => {
+      this.isLoggedIn = loggedIn;
+      if (!this.isLoggedIn) {
+        this.sdks$ = this.sdkService
+          .getSdks()
+          .pipe(
+            map((dto) =>
+              dto.sdkDtos.map((sdk) => ({ label: sdk.name, value: sdk.name }))
+            )
+          );
+      }
+      this.nisqImpl = this.impl;
+    });
   }
 
   implementationChanged(): void {
