@@ -97,7 +97,7 @@ export class AddImplementationDialogComponent implements OnInit {
   }
 }
 
-interface DialogData {
+export interface DialogData {
   title: string;
   algorithmName: string;
   name: string;
