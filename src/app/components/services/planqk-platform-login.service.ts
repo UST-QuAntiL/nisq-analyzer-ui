@@ -28,7 +28,7 @@ export class PlanqkPlatformLoginService {
     this.keycloak.logout();
   }
 
-  public getUserName(): void {
-    this.keycloak.getUsername();
+  public getUserSub(): string {
+    return this.keycloak.getKeycloakInstance().tokenParsed['sub'];
   }
 }
