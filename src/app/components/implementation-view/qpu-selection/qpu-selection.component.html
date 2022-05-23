@@ -95,7 +95,7 @@
                         >
                             Back
                         </button>
-                        <button *ngIf="jobReady && analyzerResults.length !== 0 && !loadingLearnWeights && !learnedWeightsReady"
+                        <button *ngIf="jobReady && analyzerResults.length !== 0 && !loadingLearnWeights && !learnedWeightsReady && !isLoggedIn"
                                 mat-raised-button
                                 type="button"
                                 color="primary"
@@ -150,13 +150,13 @@
                             <span>Sensitivity Analysis Results <mat-icon class="link-icon">open_in_new</mat-icon></span>
                         </button>
                     </div>
-                    <div *ngIf="analyzerJob">
-                        <h3>QPU Analysis Job from {{ analyzerJob.time }}</h3>
-                        <div *ngIf="!qpuCheckFinished" class="spinner-wrapper">
-                            <span><i>Check if QPU data is up-to-date</i></span>
-                            <mat-spinner class="mat-spinner-left" [diameter]="20"></mat-spinner>
-                        </div>
-                    </div>
+                    <!--                    <div *ngIf="analyzerJob">-->
+                    <!--                        <h3>QPU Analysis Job from {{ analyzerJob.time }}</h3>-->
+                    <!--                        <div *ngIf="!qpuCheckFinished" class="spinner-wrapper">-->
+                    <!--                            <span><i>Check if QPU data is up-to-date</i></span>-->
+                    <!--                            <mat-spinner class="mat-spinner-left" [diameter]="20"></mat-spinner>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
                     <div
                             *ngIf="jobReady && analyzerResults && analyzerResults.length === 0"
                             class="d-flex align-content-center justify-content-center py-5"

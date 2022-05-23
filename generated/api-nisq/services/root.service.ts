@@ -360,6 +360,7 @@ export class RootService extends BaseService {
     circuitLanguage: string;
     tokens: {};
     circuitName?: string;
+    userId?: string;
     compilers?: Array<string>;
     body: { circuit?: Blob };
   }): Observable<StrictHttpResponse<QpuSelectionJobDto>> {
@@ -374,6 +375,7 @@ export class RootService extends BaseService {
       rb.query('circuitLanguage', params.circuitLanguage, {});
       rb.query('tokens', params.tokens, {});
       rb.query('circuitName', params.circuitName, {});
+      rb.query('userId', params.userId, {});
       rb.query('compilers', params.compilers, {});
 
       rb.body(params.body, 'multipart/form-data');
@@ -407,6 +409,7 @@ export class RootService extends BaseService {
     circuitLanguage: string;
     tokens: {};
     circuitName?: string;
+    userId?: string;
     compilers?: Array<string>;
     body: { circuit?: Blob };
   }): Observable<QpuSelectionJobDto> {
@@ -432,6 +435,7 @@ export class RootService extends BaseService {
     circuitLanguage: string;
     tokens: {};
     circuitName?: string;
+    userId?: string;
     compilers?: Array<string>;
     body: QpuSelectionDto;
   }): Observable<StrictHttpResponse<QpuSelectionJobDto>> {
@@ -446,6 +450,7 @@ export class RootService extends BaseService {
       rb.query('circuitLanguage', params.circuitLanguage, {});
       rb.query('tokens', params.tokens, {});
       rb.query('circuitName', params.circuitName, {});
+      rb.query('userId', params.userId, {});
       rb.query('compilers', params.compilers, {});
 
       rb.body(params.body, 'application/xml');
@@ -479,6 +484,7 @@ export class RootService extends BaseService {
     circuitLanguage: string;
     tokens: {};
     circuitName?: string;
+    userId?: string;
     compilers?: Array<string>;
     body: QpuSelectionDto;
   }): Observable<QpuSelectionJobDto> {
@@ -504,6 +510,7 @@ export class RootService extends BaseService {
     circuitLanguage: string;
     tokens: {};
     circuitName?: string;
+    userId?: string;
     compilers?: Array<string>;
     body: QpuSelectionDto;
   }): Observable<StrictHttpResponse<QpuSelectionJobDto>> {
@@ -518,6 +525,7 @@ export class RootService extends BaseService {
       rb.query('circuitLanguage', params.circuitLanguage, {});
       rb.query('tokens', params.tokens, {});
       rb.query('circuitName', params.circuitName, {});
+      rb.query('userId', params.userId, {});
       rb.query('compilers', params.compilers, {});
 
       rb.body(params.body, 'application/json');
@@ -551,6 +559,7 @@ export class RootService extends BaseService {
     circuitLanguage: string;
     tokens: {};
     circuitName?: string;
+    userId?: string;
     compilers?: Array<string>;
     body: QpuSelectionDto;
   }): Observable<QpuSelectionJobDto> {

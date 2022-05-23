@@ -35,15 +35,16 @@ export class QpuSelectionResultService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getQpuSelectionResults$Response(params?: {}): Observable<
-    StrictHttpResponse<QpuSelectionResultListDto>
-  > {
+  getQpuSelectionResults$Response(params?: {
+    userId?: string;
+  }): Observable<StrictHttpResponse<QpuSelectionResultListDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       QpuSelectionResultService.GetQpuSelectionResultsPath,
       'get'
     );
     if (params) {
+      rb.query('userId', params.userId, {});
     }
     return this.http
       .request(
@@ -68,7 +69,9 @@ export class QpuSelectionResultService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getQpuSelectionResults(params?: {}): Observable<QpuSelectionResultListDto> {
+  getQpuSelectionResults(params?: {
+    userId?: string;
+  }): Observable<QpuSelectionResultListDto> {
     return this.getQpuSelectionResults$Response(params).pipe(
       map(
         (r: StrictHttpResponse<QpuSelectionResultListDto>) =>
@@ -90,15 +93,16 @@ export class QpuSelectionResultService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getQpuSelectionJobs$Response(params?: {}): Observable<
-    StrictHttpResponse<QpuSelectionJobListDto>
-  > {
+  getQpuSelectionJobs$Response(params?: {
+    userId?: string;
+  }): Observable<StrictHttpResponse<QpuSelectionJobListDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       QpuSelectionResultService.GetQpuSelectionJobsPath,
       'get'
     );
     if (params) {
+      rb.query('userId', params.userId, {});
     }
     return this.http
       .request(
@@ -123,7 +127,9 @@ export class QpuSelectionResultService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getQpuSelectionJobs(params?: {}): Observable<QpuSelectionJobListDto> {
+  getQpuSelectionJobs(params?: {
+    userId?: string;
+  }): Observable<QpuSelectionJobListDto> {
     return this.getQpuSelectionJobs$Response(params).pipe(
       map(
         (r: StrictHttpResponse<QpuSelectionJobListDto>) =>
@@ -148,6 +154,7 @@ export class QpuSelectionResultService extends BaseService {
    */
   getQpuSelectionJob$Response(params: {
     resId: string;
+    userId?: string;
   }): Observable<StrictHttpResponse<QpuSelectionJobDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -156,6 +163,7 @@ export class QpuSelectionResultService extends BaseService {
     );
     if (params) {
       rb.path('resId', params.resId, {});
+      rb.query('userId', params.userId, {});
     }
     return this.http
       .request(
@@ -182,6 +190,7 @@ export class QpuSelectionResultService extends BaseService {
    */
   getQpuSelectionJob(params: {
     resId: string;
+    userId?: string;
   }): Observable<QpuSelectionJobDto> {
     return this.getQpuSelectionJob$Response(params).pipe(
       map(
@@ -206,6 +215,7 @@ export class QpuSelectionResultService extends BaseService {
    */
   getQpuSelectionResult$Response(params: {
     resId: string;
+    userId?: string;
   }): Observable<StrictHttpResponse<QpuSelectionResultDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -214,6 +224,7 @@ export class QpuSelectionResultService extends BaseService {
     );
     if (params) {
       rb.path('resId', params.resId, {});
+      rb.query('userId', params.userId, {});
     }
     return this.http
       .request(
@@ -240,6 +251,7 @@ export class QpuSelectionResultService extends BaseService {
    */
   getQpuSelectionResult(params: {
     resId: string;
+    userId?: string;
   }): Observable<QpuSelectionResultDto> {
     return this.getQpuSelectionResult$Response(params).pipe(
       map(

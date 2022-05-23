@@ -7,4 +7,5 @@ export type QpuSelectionDto = {
   tokens?: {};
   refreshToken?: string;
   circuitName?: string;
+  userId?: string;
 };

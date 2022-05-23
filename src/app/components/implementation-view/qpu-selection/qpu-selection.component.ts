@@ -136,6 +136,8 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   learnedWeightsReady = false;
   usedShortWaitingTime: boolean;
   usedStableExecutionResults: boolean;
+  userId: string;
+  isLoggedIn = false;
 
   constructor(
     private utilService: UtilService,
@@ -149,22 +151,51 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.analyzerJobs$ = this.sort$
-      .pipe(
-        switchMap((sort) =>
-          this.qpuSelectionService.getQpuSelectionJobs({
-            sort,
-          })
-        )
-      )
-      .pipe(
-        map((dto) =>
-          dto.qpuSelectionJobList.filter(
-            (analysisJob) => analysisJob.circuitName === this.impl.name
+    this.planqkService.isLoggedIn().subscribe((isLoggedIn) => {
+      this.isLoggedIn = isLoggedIn;
+      if (isLoggedIn) {
+        this.userId = this.planqkService.getUserSub();
+        this.analyzeColumns = [
+          'qpu',
+          'provider',
+          'compiler',
+          'analyzedWidth',
+          'analyzedDepth',
+          'analyzedMultiQubitGateDepth',
+          'analyzedTotalNumberOfOperations',
+          'analyzedNumberOfSingleQubitGates',
+          'analyzedNumberOfMultiQubitGates',
+          'analyzedNumberOfMeasurementOperations',
+          'avgSingleQubitGateError',
+          'avgMultiQubitGateError',
+          'avgSingleQubitGateTime',
+          'avgMultiQubitGateTime',
+          'avgReadoutError',
+          't1',
+          't2',
+          'lengthQueue',
+          'execution',
+        ];
+      } else {
+        this.userId = null;
+      }
+      this.analyzerJobs$ = this.sort$
+        .pipe(
+          switchMap((sort) =>
+            this.qpuSelectionService.getQpuSelectionJobs({
+              userId: this.userId,
+            })
           )
         )
-      );
-    this.refreshNisqImpl();
+        .pipe(
+          map((dto) =>
+            dto.qpuSelectionJobList.filter(
+              (analysisJob) => analysisJob.circuitName === this.impl.name
+            )
+          )
+        );
+      this.refreshNisqImpl();
+    });
   }
 
   ngAfterViewInit(): void {
@@ -217,6 +248,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
             tokens: providerTokens,
             refreshToken,
             circuitName: this.nisqImpl.name,
+            userId: this.userId,
           };
           this.nisqAnalyzerRootService
             .selectQpuForCircuitFile1$Json({
@@ -227,6 +259,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
               tokens: providerTokens,
               body: qpuSelectionDto,
               compilers: dialogResult.selectedCompilers,
+              userId: this.userId,
             })
             .subscribe((job) => {
               this.analyzerJob = job;
@@ -243,6 +276,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
                   switchMap(() =>
                     this.qpuSelectionService.getQpuSelectionJob({
                       resId: this.analyzerJob.id,
+                      userId: this.userId,
                     })
                   )
                 )
@@ -272,7 +306,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
 
   showAnalysisResult(analysisJob: QpuSelectionJobDto): boolean {
     this.qpuSelectionService
-      .getQpuSelectionJob({ resId: analysisJob.id })
+      .getQpuSelectionJob({ resId: analysisJob.id, userId: this.userId })
       .subscribe((jobResult) => {
         this.jobReady = jobResult.ready;
         this.analyzerJob = jobResult;
@@ -294,7 +328,9 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
     this.results = undefined;
     this.executedAnalyseResult = analysisResult;
     this.qpuSelectionService
-      .executeQpuSelectionResult({ resId: analysisResult.id })
+      .executeQpuSelectionResult({
+        resId: analysisResult.id,
+      })
       .subscribe(
         (results) => {
           if (results.status === 'FAILED' || results.status === 'FINISHED') {
@@ -325,7 +361,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
 
   hasExecutionResult(analysisResult: QpuSelectionResultDto): void {
     this.qpuSelectionService
-      .getQpuSelectionResult({ resId: analysisResult.id })
+      .getQpuSelectionResult({ resId: analysisResult.id, userId: this.userId })
       .subscribe((result) => {
         this.executionResultsAvailable[analysisResult.id] = !!Object.keys(
           result._links
@@ -342,7 +378,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
       return;
     }
     this.qpuSelectionService
-      .getQpuSelectionResult({ resId: analysisResult.id })
+      .getQpuSelectionResult({ resId: analysisResult.id, userId: this.userId })
       .subscribe((result) => {
         const key = Object.keys(result._links).find((k) =>
           k.startsWith('execute-')
@@ -357,14 +393,23 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   }
 
   refreshNisqImpl(): void {
-    this.implementationService
-      .getImplementations({ algoId: this.impl.implementedAlgorithm })
-      .subscribe((impls) => {
-        const foundImpl = impls.implementationDtos.find(
-          (i) => i.name === this.impl.name
-        );
-        this.nisqImpl = foundImpl;
-      });
+    this.planqkService.isLoggedIn().subscribe((isLoggedIn) => {
+      this.isLoggedIn = isLoggedIn;
+      if (isLoggedIn) {
+        this.nisqImpl = this.impl;
+        this.userId = this.planqkService.getUserSub();
+      } else {
+        this.implementationService
+          .getImplementations({ algoId: this.impl.implementedAlgorithm })
+          .subscribe((impls) => {
+            const foundImpl = impls.implementationDtos.find(
+              (i) => i.name === this.impl.name
+            );
+            this.nisqImpl = foundImpl;
+            this.userId = null;
+          });
+      }
+    });
   }
 
   prioritize(): void {

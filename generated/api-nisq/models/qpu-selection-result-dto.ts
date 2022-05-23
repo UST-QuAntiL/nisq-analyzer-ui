@@ -28,5 +28,6 @@ export type QpuSelectionResultDto = {
   transpiledLanguage?: string;
   circuitName?: string;
   qpuSelectionJobId?: string;
+  userId?: string;
   _links?: Links;
 };

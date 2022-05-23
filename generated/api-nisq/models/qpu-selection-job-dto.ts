@@ -7,5 +7,6 @@ export type QpuSelectionJobDto = {
   time?: string;
   circuitName?: string;
   ready?: boolean;
+  userId?: string;
   _links?: Links;
 };
