@@ -174,7 +174,6 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
           't1',
           't2',
           'lengthQueue',
-          'execution',
         ];
       } else {
         this.userId = null;
