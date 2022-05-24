@@ -35,7 +35,7 @@ module.exports = {
         'prefer-arrow',
     ],
     rules: {
-        'prettier/prettier': 'error',
+        'prettier/prettier': 'off',
         '@typescript-eslint/adjacent-overload-signatures': 'error',
         '@typescript-eslint/array-type': [
             'error',
@@ -109,7 +109,7 @@ module.exports = {
         '@typescript-eslint/no-empty-function': 'off',
         '@typescript-eslint/no-empty-interface': 'error',
         '@typescript-eslint/no-explicit-any': 'warn',
-        '@typescript-eslint/no-inferrable-types': 'error',
+        '@typescript-eslint/no-inferrable-types': 'off',
         '@typescript-eslint/no-misused-new': 'error',
         '@typescript-eslint/no-namespace': 'error',
         '@typescript-eslint/no-parameter-properties': 'off',
@@ -131,7 +131,7 @@ module.exports = {
         ],
         '@typescript-eslint/type-annotation-spacing': 'error',
         '@typescript-eslint/unified-signatures': 'error',
-        'arrow-body-style': 'error',
+        'arrow-body-style': 'off',
         'arrow-parens': ['off', 'always'],
         'brace-style': ['error', '1tbs'],
         camelcase: 'off',
