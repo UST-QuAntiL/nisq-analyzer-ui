@@ -9,10 +9,10 @@
         </mat-form-field>
         <mat-form-field class="input-field">
             <mat-label>Token</mat-label>
-            <input id="token" formControlName="token" matInput required>
+            <input id="token" formControlName="token" matInput>
         </mat-form-field>
-        <mat-label>Select SDKs to be used for compilation:</mat-label>
-        <mat-form-field appearance="none" class="input-field">
+        <mat-label *ngIf="!data.isLoggedIn">Select SDKs to be used for compilation:</mat-label>
+        <mat-form-field appearance="none" class="input-field" *ngIf="!data.isLoggedIn">
             <input matInput [hidden]="true">
             <mat-checkbox *ngFor="let compiler of compilers.controls; index as i" class="example-margin"
                           formArrayName="compilers"

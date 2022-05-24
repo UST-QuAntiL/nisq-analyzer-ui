@@ -62,7 +62,6 @@ export class QpuSelectionDialogComponent implements OnInit {
       ]),
       token: new FormControl(this.data.token, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required,
         Validators.maxLength(255),
       ]),
       compilers: new FormArray([]),
@@ -77,7 +76,11 @@ export class QpuSelectionDialogComponent implements OnInit {
       this.data.vendor = this.vendor.value;
       this.data.simulatorAllowed = this.simulatorAllowed.value;
       this.data.token = this.token.value;
-      this.data.selectedCompilers = this.selectedCompilers;
+      if (this.data.isLoggedIn) {
+        this.data.selectedCompilers = ['qiskit'];
+      } else {
+        this.data.selectedCompilers = this.selectedCompilers;
+      }
     });
   }
 
@@ -87,7 +90,6 @@ export class QpuSelectionDialogComponent implements OnInit {
 
   isRequiredDataMissing(): boolean {
     return this.vendor.errors?.required;
-    return this.token.errors?.required;
   }
 
   onVendorChanged(value: string): void {
@@ -145,6 +147,7 @@ export class QpuSelectionDialogComponent implements OnInit {
 
 interface DialogData {
   title: string;
+  isLoggedIn: boolean;
   vendor: string;
   simulatorAllowed: boolean;
   token: string;

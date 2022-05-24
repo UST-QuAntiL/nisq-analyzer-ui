@@ -230,6 +230,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
     this.utilService
       .createDialog(QpuSelectionDialogComponent, {
         title: 'Start QPU-Selection-Analysis',
+        isLoggedIn: this.isLoggedIn,
       })
       .afterClosed()
       .subscribe((dialogResult) => {
@@ -238,7 +239,11 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
           this.jobReady = false;
           refreshToken = this.planqkService.getRefreshToken();
           const providerTokens = {};
-          providerTokens[dialogResult.vendor] = dialogResult.token;
+          if (dialogResult.token) {
+            providerTokens[dialogResult.vendor] = dialogResult.token;
+          } else {
+            providerTokens[dialogResult.vendor] = '';
+          }
 
           const qpuSelectionDto: QpuSelectionDto = {
             simulatorsAllowed: dialogResult.simulatorAllowed,
