@@ -1,18 +1,36 @@
-.implNames {
-  padding-left: 20px;
-  cursor: pointer;
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.add-btn {
+  max-height: 3rem;
 }
 
 .impls {
-  padding-left: 20px;
+  padding-left: 2rem;
+}
+
+.impl-name {
+  font-weight: 600;
+  margin-right: 1em;
+}
+
+.impl-sdk, .impl-lang {
+  font-weight: 300;
+  margin-right: 0.8em;
 }
 
 .noBorders {
   padding: 0;
   border: none;
   background: none;
-}
-
-.addImpl {
-  align-content: end;
 }

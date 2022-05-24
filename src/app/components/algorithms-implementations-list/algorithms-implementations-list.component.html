@@ -1,31 +1,33 @@
 <div class="content">
-    <h2 class="heading">Algorithms</h2>
-    <mat-card>
-        <div class="addImpl" *ngIf="!isLoggedIn">
-            <button
-                    mat-icon-button
-                    aria-label="Add new implementation"
-                    (click)="onCreateImplementation()"
-            >
-                <mat-icon>add</mat-icon>
-            </button>
-        </div>
-        <mat-accordion>
-            <mat-expansion-panel *ngFor="let algo of allAlgorithms | keyvalue">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        {{ algo.key }}
-                    </mat-panel-title>
-                    <mat-panel-description>
-                    </mat-panel-description>
-                </mat-expansion-panel-header>
-                <div class="impls">
-                    <h4>Implementations</h4>
-                    <div *ngFor="let impl of algo.value" class="implNames" (click)="navigateToImplementation(impl)">
-                        <p>{{ impl.name }}</p>
-                    </div>
-                </div>
-            </mat-expansion-panel>
-        </mat-accordion>
-    </mat-card>
+  <div class="header">
+    <h2 class="heading">Algorithm Implementations</h2>
+    <div class="button-group">
+      <button class="add-btn" mat-button (click)="onCreateImplementation()" *ngIf="!isLoggedIn">
+        Add Implementation
+        <mat-icon aria-hidden="true">add</mat-icon>
+      </button>
+      <button mat-icon-button (click)="refreshAlgorithms()" aria-label="refresh algorithm list"><mat-icon>refresh</mat-icon></button>
+    </div>
+  </div>
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let algo of allAlgorithms | async; trackBy: trackAlgorithmsBy">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ algo.name }}
+        </mat-panel-title>
+        <mat-panel-description>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="impls">
+        <h4>Implementations</h4>
+        <mat-nav-list>
+          <a mat-list-item *ngFor="let impl of algo.implementations; trackBy: trackImplementationsBy" [routerLink]="['/algorithms', impl.implementedAlgorithm, 'implementations', impl.id]">
+            <span class="impl-name">{{ impl.name }}</span>
+            <span class="impl-sdk">SDK: {{ impl.sdk }}</span>
+            <span class="impl-lang">Language: {{ impl.language }}</span>
+          </a>
+        </mat-nav-list>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
 </div>

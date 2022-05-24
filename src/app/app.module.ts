@@ -25,12 +25,12 @@ import { AppComponent } from './app.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { AlgorithmsImplementationsListComponent } from './components/algorithms-implementations-list/algorithms-implementations-list.component';
-// eslint-disable-next-line max-len
 import { UtilService } from './components/util/util.service';
 import { ImplementationViewModule } from './components/implementation-view/implementation-view.module';
 import { QpuSelectionDialogComponent } from './components/implementation-view/qpu-selection/dialogs/qpu-selection-dialog/qpu-selection-dialog.component';
 import { AuthInterceptor } from './components/http-interceptors/auth-interceptor';
 import { initializeKeycloak } from './components/util/keycloak-init';
+import { AlgorithmsService } from './components/util/algorithms.service';
 
 @NgModule({
   declarations: [
@@ -67,6 +67,7 @@ import { initializeKeycloak } from './components/util/keycloak-init';
   ],
   providers: [
     UtilService,
+    AlgorithmsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
