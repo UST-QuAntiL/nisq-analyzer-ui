@@ -242,7 +242,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
           if (dialogResult.token) {
             providerTokens[dialogResult.vendor] = dialogResult.token;
           } else {
-            providerTokens[dialogResult.vendor] = '';
+            providerTokens[dialogResult.vendor] = ' ';
           }
 
           const qpuSelectionDto: QpuSelectionDto = {
@@ -329,7 +329,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   }
 
   execute(analysisResult: QpuSelectionResultDto): void {
-    let token = '';
+    let token = ' ';
     this.utilService
       .createDialog(QpuSelectionExecutionDialogComponent, {
         title: 'Enter your token for the vendor: ' + analysisResult.provider,
