@@ -47,6 +47,7 @@ import {
   DialogData,
   QpuSelectionPrioritizationDialogComponent,
 } from './dialogs/qpu-selection-prioritization-dialog/qpu-selection-prioritization-dialog.component';
+import { QpuSelectionExecutionDialogComponent } from './dialogs/qpu-selection-execution-dialog/qpu-selection-execution-dialog.component';
 
 @Component({
   selector: 'app-qpu-selection',
@@ -323,39 +324,58 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   }
 
   execute(analysisResult: QpuSelectionResultDto): void {
-    this.loadingResults[analysisResult.id] = true;
-    this.results = undefined;
-    this.executedAnalyseResult = analysisResult;
-    this.qpuSelectionService
-      .executeQpuSelectionResult({
-        resId: analysisResult.id,
+    let token = '';
+    this.utilService
+      .createDialog(QpuSelectionExecutionDialogComponent, {
+        title: 'Enter your token for the vendor: ' + analysisResult.provider,
       })
-      .subscribe(
-        (results) => {
-          if (results.status === 'FAILED' || results.status === 'FINISHED') {
-            this.results = results;
-          } else {
-            interval(1000)
-              .pipe(
-                exhaustMap(() =>
-                  this.http.get<ExecutionResultDto>(results._links['self'].href)
-                ),
-                first(
-                  (value) =>
-                    value.status === 'FAILED' || value.status === 'FINISHED'
-                )
-              )
-              .subscribe((finalResult) => (this.results = finalResult));
-          }
-          this.utilService.callSnackBar(
-            'Successfully started execution "' + results.id + '".'
-          );
-          this.hasExecutionResult(analysisResult);
-        },
-        () => {
-          this.utilService.callSnackBar('Error! Could not start execution.');
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult.token) {
+          token = dialogResult.token;
         }
-      );
+        this.loadingResults[analysisResult.id] = true;
+        this.results = undefined;
+        this.executedAnalyseResult = analysisResult;
+        this.qpuSelectionService
+          .executeQpuSelectionResult({
+            resId: analysisResult.id,
+            token,
+          })
+          .subscribe(
+            (results) => {
+              if (
+                results.status === 'FAILED' ||
+                results.status === 'FINISHED'
+              ) {
+                this.results = results;
+              } else {
+                interval(1000)
+                  .pipe(
+                    exhaustMap(() =>
+                      this.http.get<ExecutionResultDto>(
+                        results._links['self'].href
+                      )
+                    ),
+                    first(
+                      (value) =>
+                        value.status === 'FAILED' || value.status === 'FINISHED'
+                    )
+                  )
+                  .subscribe((finalResult) => (this.results = finalResult));
+              }
+              this.utilService.callSnackBar(
+                'Successfully started execution "' + results.id + '".'
+              );
+              this.hasExecutionResult(analysisResult);
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Could not start execution.'
+              );
+            }
+          );
+      });
   }
 
   hasExecutionResult(analysisResult: QpuSelectionResultDto): void {

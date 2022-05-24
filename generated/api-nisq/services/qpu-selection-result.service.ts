@@ -277,6 +277,7 @@ export class QpuSelectionResultService extends BaseService {
    */
   executeQpuSelectionResult$Response(params: {
     resId: string;
+    token: string;
   }): Observable<StrictHttpResponse<ExecutionResultDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -285,6 +286,7 @@ export class QpuSelectionResultService extends BaseService {
     );
     if (params) {
       rb.path('resId', params.resId, {});
+      rb.query('token', params.token, {});
     }
     return this.http
       .request(
@@ -311,6 +313,7 @@ export class QpuSelectionResultService extends BaseService {
    */
   executeQpuSelectionResult(params: {
     resId: string;
+    token: string;
   }): Observable<ExecutionResultDto> {
     return this.executeQpuSelectionResult$Response(params).pipe(
       map(

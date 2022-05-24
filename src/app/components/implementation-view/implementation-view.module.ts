@@ -26,6 +26,7 @@ import { QpuSelectionSensitivityAnalysisDialogComponent } from './qpu-selection/
 import { QpuSelectionLearnedWeightsDialogComponent } from './qpu-selection/dialogs/qpu-selection-learned-weights-dialog/qpu-selection-learned-weights-dialog.component';
 // eslint-disable-next-line max-len
 import { QpuSelectionPrioritizationDialogComponent } from './qpu-selection/dialogs/qpu-selection-prioritization-dialog/qpu-selection-prioritization-dialog.component';
+import { QpuSelectionExecutionDialogComponent } from './qpu-selection/dialogs/qpu-selection-execution-dialog/qpu-selection-execution-dialog.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { QpuSelectionPrioritizationDialogComponent } from './qpu-selection/dialo
     QpuSelectionSensitivityAnalysisDialogComponent,
     QpuSelectionLearnedWeightsDialogComponent,
     QpuSelectionPrioritizationDialogComponent,
+    QpuSelectionExecutionDialogComponent,
   ],
   imports: [
     MatFormFieldModule,
