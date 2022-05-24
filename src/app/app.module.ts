@@ -6,7 +6,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ApiModule } from 'api-nisq/api.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
@@ -19,51 +18,53 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
-import { environment } from '../environments/environment';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { AlgorithmsImplementationsListComponent } from './components/algorithms-implementations-list/algorithms-implementations-list.component';
 import { UtilService } from './components/util/util.service';
-import { ImplementationViewModule } from './components/implementation-view/implementation-view.module';
-import { QpuSelectionDialogComponent } from './components/implementation-view/qpu-selection/dialogs/qpu-selection-dialog/qpu-selection-dialog.component';
 import { AuthInterceptor } from './components/http-interceptors/auth-interceptor';
 import { initializeKeycloak } from './components/util/keycloak-init';
 import { AlgorithmsService } from './components/util/algorithms.service';
+// eslint-disable-next-line max-len
+import { AddImplementationDialogComponent } from './components/algorithms-implementations-list/dialogs/add-implementation-dialog/add-implementation-dialog.component';
+import { ImplementationViewModule } from './components/implementation-view/implementation-view.module';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AddImplementationDialogComponent,
     NavigationComponent,
     PageNotFoundComponent,
     AlgorithmsImplementationsListComponent,
-    QpuSelectionDialogComponent,
   ],
   imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    ApiModule.forRoot({ rootUrl: environment.NISQ_API_URL }),
+    // NisqApi.forRoot({ rootUrl: environment.NISQ_API_URL }),
     AppRoutingModule,
+    BrowserAnimationsModule,
+    BrowserModule,
+    FormsModule,
     HttpClientModule,
     ImplementationViewModule,
     KeycloakAngularModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatSnackBarModule,
     MatButtonModule,
-    MatTabsModule,
-    MatSelectModule,
-    FormsModule,
-    MatProgressSpinnerModule,
     MatCardModule,
-    MatInputModule,
-    MatExpansionModule,
-    MatDialogModule,
-    ReactiveFormsModule,
-    MatDividerModule,
-    MatListModule,
     MatCheckboxModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatProgressSpinnerModule,
+    MatSelectModule,
+    MatSnackBarModule,
+    MatTabsModule,
+    MatToolbarModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
   ],
   providers: [
     UtilService,
