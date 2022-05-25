@@ -65,11 +65,13 @@ export class AlgorithmsService implements OnDestroy {
     this.algorithmListSubject.unsubscribe();
   }
 
-  public getImplementationList() {
+  public getImplementationList(): Observable<ImplementationDto[]> {
     return this.implementationListSubject.asObservable();
   }
 
-  public getImplementation(implementationId: string) {
+  public getImplementation(
+    implementationId: string
+  ): Observable<ImplementationDto> {
     return (
       this.implementationListSubject
         .asObservable()
@@ -78,8 +80,17 @@ export class AlgorithmsService implements OnDestroy {
     );
   }
 
-  public getAlgorithmList() {
+  public getAlgorithmList(): Observable<AlgorithmDto[]> {
     return this.algorithmListSubject.asObservable();
+  }
+
+  public getAlgorithm(algorithmId: string): Observable<AlgorithmDto> {
+    return (
+      this.algorithmListSubject
+        .asObservable()
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        .pipe(map((algos) => algos.find((a) => a.id === algorithmId)))
+    );
   }
 
   public updateAlgorithms(): void {
