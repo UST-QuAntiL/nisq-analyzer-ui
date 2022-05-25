@@ -19,10 +19,26 @@ textarea.mat-input-element {
   margin: 0;
 }
 
+.sdk-select-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.sdkselect {
+  flex-grow: 1;
+}
+
 .newSdkButton {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  width: 10%;
-  padding-right: 15px;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding: 1rem;
 }

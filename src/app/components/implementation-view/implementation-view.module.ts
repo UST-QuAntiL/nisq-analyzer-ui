@@ -15,6 +15,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSortModule } from '@angular/material/sort';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDividerModule } from '@angular/material/divider';
+import { RouterModule } from '@angular/router';
 import { ImplementationSelectionCriteriaComponent } from './implementation-selection-criteria/implementation-selection-criteria.component';
 import { ImplementationViewComponent } from './implementation-view.component';
 import { CreateSdkDialogComponent } from './implementation-selection-criteria/dialogs/create-sdk-dialog/create-sdk-dialog.component';
@@ -56,8 +58,10 @@ import { QpuSelectionDialogComponent } from './qpu-selection/dialogs/qpu-selecti
     MatStepperModule,
     MatTableModule,
     MatTabsModule,
+    MatDividerModule,
     ReactiveFormsModule,
     MatProgressSpinnerModule,
+    RouterModule,
   ],
   exports: [
     ImplementationViewComponent,
