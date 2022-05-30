@@ -19,6 +19,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { ApiModule } from 'api-nisq/api.module';
+import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
@@ -65,6 +67,7 @@ import { ImplementationViewModule } from './components/implementation-view/imple
     MatToolbarModule,
     ReactiveFormsModule,
     MatFormFieldModule,
+    ApiModule.forRoot({ rootUrl: environment.NISQ_API_URL }),
   ],
   providers: [
     UtilService,
