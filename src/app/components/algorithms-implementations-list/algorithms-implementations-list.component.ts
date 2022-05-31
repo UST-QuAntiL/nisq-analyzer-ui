@@ -5,14 +5,14 @@ import { Router } from '@angular/router';
 import { v4 as uuidv4 } from 'uuid';
 import { SdksService } from 'api-nisq/services/sdks.service';
 import { SdkDto } from 'api-nisq/models/sdk-dto';
+import { Observable } from 'rxjs';
 import { UtilService } from '../util/util.service';
 import { PlanqkPlatformLoginService } from '../services/planqk-platform-login.service';
+import { AlgorithmDto, AlgorithmsService } from '../util/algorithms.service';
 import {
   AddImplementationDialogComponent,
   DialogData,
 } from './dialogs/add-implementation-dialog/add-implementation-dialog.component';
-import { AlgorithmDto, AlgorithmsService } from '../util/algorithms.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-algorithms-implementations-list',
@@ -21,7 +21,7 @@ import { Observable } from 'rxjs';
 })
 export class AlgorithmsImplementationsListComponent implements OnInit {
   allAlgorithms: Observable<AlgorithmDto[]>;
-  isLoggedIn: boolean = false;
+  isLoggedIn = false;
   allImpls: ImplementationDto[] = [];
 
   constructor(
@@ -30,17 +30,21 @@ export class AlgorithmsImplementationsListComponent implements OnInit {
     private router: Router,
     private utilService: UtilService,
     private algorithms: AlgorithmsService,
-    private planqkPlatformLoginService: PlanqkPlatformLoginService,
+    private planqkPlatformLoginService: PlanqkPlatformLoginService
   ) {}
 
   ngOnInit(): void {
     this.algorithms.updateAlgorithms();
     this.allAlgorithms = this.algorithms.getAlgorithmList();
-    this.planqkPlatformLoginService.isLoggedIn().subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
+    this.planqkPlatformLoginService
+      .isLoggedIn()
+      .subscribe((isLoggedIn) => (this.isLoggedIn = isLoggedIn));
   }
 
   refreshAlgorithms() {
-    this.planqkPlatformLoginService.isLoggedIn().subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
+    this.planqkPlatformLoginService
+      .isLoggedIn()
+      .subscribe((isLoggedIn) => (this.isLoggedIn = isLoggedIn));
     this.algorithms.updateAlgorithms();
   }
 

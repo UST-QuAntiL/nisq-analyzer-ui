@@ -20,9 +20,7 @@ export class ImplementationViewComponent implements OnInit {
   ngOnInit() {
     this.algorithms.updateAlgorithms(); // TODO optimize this better
     this.impl = this.activatedRoute.params.pipe(
-      mergeMap(params => {
-        return this.algorithms.getImplementation(params.implId);
-      })
+      mergeMap((params) => this.algorithms.getImplementation(params.implId))
     );
   }
 }
