@@ -13,7 +13,7 @@
     <mat-expansion-panel *ngFor="let algo of allAlgorithms | async; trackBy: trackAlgorithmsBy">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          {{ algo.name }}
+          {{ algo.name ? algo.name : 'Algorithm' }}
         </mat-panel-title>
         <mat-panel-description>
         </mat-panel-description>
@@ -23,8 +23,8 @@
         <mat-nav-list>
           <a mat-list-item *ngFor="let impl of algo.implementations; trackBy: trackImplementationsBy" [routerLink]="['/algorithms', impl.implementedAlgorithm, 'implementations', impl.id]">
             <span class="impl-name">{{ impl.name }}</span>
-            <span class="impl-sdk">SDK: {{ impl.sdk }}</span>
-            <span class="impl-lang">Language: {{ impl.language }}</span>
+            <span class="impl-sdk">SDK: {{ impl.sdk ? impl.sdk : '–' }}</span>
+            <span class="impl-lang">Language: {{ impl.language ? impl.language :'–' }}</span>
           </a>
         </mat-nav-list>
       </div>
