@@ -1,13 +1,25 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Observable, BehaviorSubject, take, Subscription, map, mergeMap, toArray, from } from 'rxjs';
+import {
+  Observable,
+  BehaviorSubject,
+  take,
+  Subscription,
+  map,
+  mergeMap,
+  toArray,
+  from,
+} from 'rxjs';
 import { ImplementationDto } from 'api-nisq/models/implementation-dto';
-import { ImplementationService, SdksService } from 'generated/api-nisq/services';
+import {
+  ImplementationService,
+  SdksService,
+} from 'generated/api-nisq/services';
 import { SdkDto } from 'generated/api-nisq/models';
 import { PlanqkPlatformLoginService } from '../services/planqk-platform-login.service';
 import {
   PlanqkPlatformImplementationDto,
   PlanqkPlatformService,
-  AlgortihmDto as PlanqkAlgorithmDto
+  AlgortihmDto as PlanqkAlgorithmDto,
 } from '../services/planqk-platform.service';
 
 export interface AlgorithmDto {
@@ -20,11 +32,12 @@ export interface AlgorithmDto {
   providedIn: 'root',
 })
 export class AlgorithmsService implements OnDestroy {
-
   private currentImplementationList: ImplementationDto[] = []; // TODO remove?
-  private implementationListSubject: BehaviorSubject<ImplementationDto[]> = new BehaviorSubject([]);
+  private implementationListSubject: BehaviorSubject<ImplementationDto[]> =
+    new BehaviorSubject([]);
   private currentAlgorithmList: AlgorithmDto[] = []; // TODO remove?
-  private algorithmListSubject: BehaviorSubject<AlgorithmDto[]> = new BehaviorSubject([]);
+  private algorithmListSubject: BehaviorSubject<AlgorithmDto[]> =
+    new BehaviorSubject([]);
 
   private implementationListSubscription: Subscription | null = null;
   private algorithmListSubscription: Subscription | null = null;
@@ -35,8 +48,14 @@ export class AlgorithmsService implements OnDestroy {
     private nisqImplementations: ImplementationService,
     private sdkService: SdksService
   ) {
-    this.implementationListSubject.asObservable().subscribe((implementations) => this.onImplementationListUpdate(implementations));
-    this.algorithmListSubject.asObservable().subscribe((algorithms) => this.onAlgorithmListUpdate(algorithms));
+    this.implementationListSubject
+      .asObservable()
+      .subscribe((implementations) =>
+        this.onImplementationListUpdate(implementations)
+      );
+    this.algorithmListSubject
+      .asObservable()
+      .subscribe((algorithms) => this.onAlgorithmListUpdate(algorithms));
   }
 
   ngOnDestroy(): void {
@@ -51,8 +70,12 @@ export class AlgorithmsService implements OnDestroy {
   }
 
   public getImplementation(implementationId: string) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.implementationListSubject.asObservable().pipe(map(impls => impls.find((i => i.id === implementationId))));
+    return (
+      this.implementationListSubject
+        .asObservable()
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        .pipe(map((impls) => impls.find((i) => i.id === implementationId)))
+    );
   }
 
   public getAlgorithmList() {
@@ -69,7 +92,9 @@ export class AlgorithmsService implements OnDestroy {
     });
   }
 
-  private onImplementationListUpdate(implementations: ImplementationDto[]): void {
+  private onImplementationListUpdate(
+    implementations: ImplementationDto[]
+  ): void {
     this.currentImplementationList = implementations;
 
     // helper map
@@ -119,7 +144,10 @@ export class AlgorithmsService implements OnDestroy {
       });
   }
 
-  private mapPlanqImplToAlgorithmImplementation(impl: PlanqkPlatformImplementationDto, algo: PlanqkAlgorithmDto | null): Observable<ImplementationDto> {
+  private mapPlanqImplToAlgorithmImplementation(
+    impl: PlanqkPlatformImplementationDto,
+    algo: PlanqkAlgorithmDto | null
+  ): Observable<ImplementationDto> {
     return this.planqkPlatform
       .getImplementationFileIdOfPlanqkPlatform(
         impl.implementedAlgorithmId,
@@ -127,7 +155,7 @@ export class AlgorithmsService implements OnDestroy {
       )
       .pipe(
         map((files) => {
-          const fileIdsList = (files.content ?? []).map(file => file.id);
+          const fileIdsList = (files.content ?? []).map((file) => file.id);
           let fileLocation: string = '';
           if (fileIdsList.length > 1) {
             // TODO: currently assuming first file is the one to be analyzed and executed
@@ -149,7 +177,7 @@ export class AlgorithmsService implements OnDestroy {
           };
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return implDto;
-        }),
+        })
       );
   }
 
@@ -158,8 +186,9 @@ export class AlgorithmsService implements OnDestroy {
       .getImplementationsOfPlanqkPlatform()
       .pipe(
         take(1),
-        map(result => {
-          const planqkImplList: PlanqkPlatformImplementationDto[] = result.content ?? [];
+        map((result) => {
+          const planqkImplList: PlanqkPlatformImplementationDto[] =
+            result.content ?? [];
           planqkImplList.forEach((planqkImpl) => {
             if (planqkImpl.technology?.toLowerCase().includes('qiskit')) {
               planqkImpl.technology = 'Qiskit';
@@ -167,45 +196,56 @@ export class AlgorithmsService implements OnDestroy {
           });
           return planqkImplList;
         }),
-        mergeMap(planqkImpls => {
+        mergeMap((planqkImpls) =>
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-          return this.sdkService.getSdks().pipe(map((sdks) => {
-            const available = new Set<string>();
-            (sdks.sdkDtos ?? []).forEach(sdk => available.add(sdk.name.toLowerCase()));
-            planqkImpls.forEach((impl) => {
-              if (!available.has(impl.technology?.toLowerCase() ?? '') && impl.technology) {
-                const sdkBody: SdkDto = {
-                  id: null,
-                  name: impl.technology,
-                };
-                this.sdkService.createSdk({ body: sdkBody }).subscribe();
-              }
-            });
+          this.sdkService.getSdks().pipe(
+            map((sdks) => {
+              const available = new Set<string>();
+              (sdks.sdkDtos ?? []).forEach((sdk) =>
+                available.add(sdk.name.toLowerCase())
+              );
+              planqkImpls.forEach((impl) => {
+                if (
+                  !available.has(impl.technology?.toLowerCase() ?? '') &&
+                  impl.technology
+                ) {
+                  const sdkBody: SdkDto = {
+                    id: null,
+                    name: impl.technology,
+                  };
+                  this.sdkService.createSdk({ body: sdkBody }).subscribe();
+                }
+              });
 
-            // return planq impl list as is from closure
-            return planqkImpls;
-          }));
-        }),
-        mergeMap(planqkImpls => {
-          return this.planqkPlatform
-            .getAlgorithmsOfPlanqkPlatform()
-            .pipe(mergeMap(planqkAlgos => {
+              // return planq impl list as is from closure
+              return planqkImpls;
+            })
+          )
+        ),
+        mergeMap((planqkImpls) =>
+          this.planqkPlatform.getAlgorithmsOfPlanqkPlatform().pipe(
+            mergeMap((planqkAlgos) => {
               const algos = planqkAlgos.content ?? [];
               const algoMap = new Map<string, PlanqkAlgorithmDto>();
-              algos.forEach(algo => algoMap.set(algo.id, algo));
+              algos.forEach((algo) => algoMap.set(algo.id, algo));
 
-              return from(planqkImpls.map(impl => {
-                return this.mapPlanqImplToAlgorithmImplementation(impl, algoMap.get(impl.implementedAlgorithmId));
-              }));
-            }));
-        }),
-        mergeMap(implObservable => implObservable),
+              return from(
+                planqkImpls.map((impl) =>
+                  this.mapPlanqImplToAlgorithmImplementation(
+                    impl,
+                    algoMap.get(impl.implementedAlgorithmId)
+                  )
+                )
+              );
+            })
+          )
+        ),
+        mergeMap((implObservable) => implObservable),
         toArray(),
-        take(1),
+        take(1)
       )
       .subscribe((implementations) => {
         this.implementationListSubject.next(implementations);
       });
   }
-
 }
