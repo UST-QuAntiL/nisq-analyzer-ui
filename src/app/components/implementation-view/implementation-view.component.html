@@ -1,21 +1,21 @@
-<mat-tab-group *ngIf="impl">
+<mat-tab-group *ngIf="impl | async">
     <mat-tab label="Selection-Criteria">
         <div>
             <app-implementation-selection-criteria
-                    [impl]="impl"
+                    [impl]="impl | async"
             >
             </app-implementation-selection-criteria>
         </div>
     </mat-tab>
     <mat-tab label="QPU-Selection">
         <app-qpu-selection
-                [impl]="impl"
+                [impl]="impl | async"
         >
         </app-qpu-selection>
     </mat-tab>
 </mat-tab-group>
 <div
-        *ngIf="!impl"
+        *ngIf="!(impl | async)"
         class="d-flex align-content-center justify-content-center"
 >
     <mat-spinner></mat-spinner>

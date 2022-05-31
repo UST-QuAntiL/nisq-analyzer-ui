@@ -1,25 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ImplementationDto } from 'api-nisq/models/implementation-dto';
-import { ImplementationService } from 'api-nisq/services/implementation.service';
-import { UtilService } from '../util/util.service';
+import { mergeMap, Observable } from 'rxjs';
+import { AlgorithmsService } from '../util/algorithms.service';
 
 @Component({
   templateUrl: './implementation-view.component.html',
   styleUrls: ['./implementation-view.component.scss'],
 })
 export class ImplementationViewComponent implements OnInit {
-  impl: ImplementationDto;
+  impl: Observable<ImplementationDto>;
   implId: string;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private implementationService: ImplementationService,
-    private utilSerice: UtilService
+    private algorithms: AlgorithmsService
   ) {}
 
   ngOnInit() {
-    this.impl = this.utilSerice.getImplementationFromComponent();
+    this.algorithms.updateAlgorithms(); // TODO optimize this better
+    this.impl = this.activatedRoute.params.pipe(
+      mergeMap((params) => this.algorithms.getImplementation(params.implId))
+    );
   }
 }
