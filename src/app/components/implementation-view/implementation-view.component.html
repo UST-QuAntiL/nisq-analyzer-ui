@@ -1,3 +1,11 @@
+<div class="header">
+  <a mat-icon-button [routerLink]="['/algorithms']" aria-label="Algorithms">
+    <mat-icon aria-hidden="true">home</mat-icon>
+  </a>
+  <mat-icon aria-hidden="true">arrow_right</mat-icon>
+  <h2 class="header-text">{{(algo | async).name}} / {{(impl | async).name}}</h2>
+</div>
+<mat-divider></mat-divider>
 <mat-tab-group *ngIf="impl | async">
     <mat-tab label="Selection-Criteria">
         <div>

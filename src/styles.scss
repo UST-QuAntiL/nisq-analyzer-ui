@@ -1,6 +1,9 @@
 @use '@angular/material' as mat;
 
 @include mat.core();
+@import 'material-icons/iconfont/material-icons.scss';
+@import '@fontsource/roboto/scss/mixins.scss';
+
 
 /* PlanQK Red based on #E12D32 */
 

@@ -24,7 +24,7 @@
                     </mat-form-field>
                 </div>
                 <div class="col-lg-6 col-md-12">
-                    <div class="row">
+                    <div class="row sdk-select-group">
                         <div class="sdkselect">
                             <mat-form-field *ngIf="isLoggedIn; else selectableSdk">
                                 <mat-label class="input-label">Technology (SDK)</mat-label>
@@ -71,6 +71,7 @@
                         />
                     </mat-form-field>
                     <ng-template #selectableLanguage>
+                      <mat-form-field>
                         <mat-label class="input-label">Language</mat-label>
                         <mat-select [disabled]="isLoggedIn" [(ngModel)]="nisqImpl.language"
                                     (ngModelChange)="implementationChanged()">
@@ -78,18 +79,21 @@
                                 language.label
                                 }}</mat-option>
                         </mat-select>
+                      </mat-form-field>
                     </ng-template>
                 </div>
             </div>
         </mat-card>
     </div>
 
-    <button
-            class="master-save-button"
-            *ngIf="inputChanged && !isLoggedIn"
-            mat-fab
-            (click)="saveImplementation()"
-    >
-        <mat-icon class="master-save-icon">save</mat-icon>
+    <div class="footer">
+      <button
+      class="master-save-button"
+      *ngIf="inputChanged && !isLoggedIn"
+      mat-fab
+      (click)="saveImplementation()"
+      >
+      <mat-icon class="master-save-icon">save</mat-icon>
     </button>
+  </div>
 </div>

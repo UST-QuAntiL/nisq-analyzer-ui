@@ -1,3 +1,7 @@
+.footer {
+  padding: 1rem;
+}
+
 .mat-table {
   display: block;
   width: 100%;
@@ -6,7 +10,7 @@
 }
 
 // table column width helper for mat-tables
-@for $index from 0 through 200 {
+@for $index from 0 through 200 { // FIXME this creates very large css files!
   $size: $index * 2;
 
   .table-column-#{$size} {
