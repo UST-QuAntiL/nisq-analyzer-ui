@@ -4,6 +4,7 @@ RUN apk add --no-cache git gettext
 WORKDIR /app
 
 COPY . .
+RUN apk add --no-cache python3
 
 RUN npm install && npm run build --prod
 
