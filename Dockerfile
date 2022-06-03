@@ -5,6 +5,8 @@ WORKDIR /app
 
 COPY . .
 RUN apk add --no-cache python3
+RUN apk add --no-cache make
+RUN apk add --no-cache g++
 
 RUN npm install && npm run build --prod
 
