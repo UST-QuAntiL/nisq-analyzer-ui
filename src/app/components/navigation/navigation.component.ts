@@ -21,7 +21,9 @@ export class NavigationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (!this.plugin.isPlugin) {
+    if (this.plugin.isPlugin) {
+      this.plugin.initializePlugin();
+    } else {
       this.planqkPlatformLoginService
         .isLoggedIn()
         .subscribe((loggedIn: boolean) => {
