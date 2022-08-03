@@ -1,16 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+interface MicroFrontendState {
+  href: string;
+  height: number;
+  heightUnchangedCount: number;
+  preventSubmit: false;
+  initialized: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class QhanaPluginService {
   isPlugin: boolean = false;
 
-  // TODO: add type v
-  qhanaFrontendState = {
+  qhanaFrontendState: MicroFrontendState = {
     href: window.location.href,
-    lastHeight: 0,
+    height: 0,
     heightUnchangedCount: 0,
     preventSubmit: false,
     initialized: false,
@@ -41,8 +48,7 @@ export class QhanaPluginService {
    * @param {{type: 'load-css', urls: string[]}} data
    * @param {{lastHeight: number, heightUnchangedCount: number}} state
    */
-  onLoadCssMessage(data, state) {
-    // TODO: add types ^
+  onLoadCssMessage(data: { urls: string[] }, state: MicroFrontendState) {
     const head = document.querySelector('head');
     data.urls.forEach((url) => {
       const styleLink = document.createElement('link');
@@ -74,10 +80,9 @@ export class QhanaPluginService {
   /**
    * Monitor height changes for a certain time and inform the parent window if the height has changed.
    *
-   * @param {{lastHeight: number, heightUnchangedCount: number}} state
+   * @param {MicroFrontendState} state
    */
-  monitorHeightChanges(state) {
-    // TODO: add types ^
+  monitorHeightChanges(state: MicroFrontendState) {
     const newHeight = this.notifyParentWindowOnHeightChange(state.height);
     if (state.height === newHeight) {
       // allow for 60*50ms for height to settle
