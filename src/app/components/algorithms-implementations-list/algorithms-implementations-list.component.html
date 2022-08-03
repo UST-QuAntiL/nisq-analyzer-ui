@@ -2,7 +2,7 @@
   <div class="header">
     <h2 class="heading">Algorithm Implementations</h2>
     <div class="button-group">
-      <button class="add-btn" mat-button (click)="onCreateImplementation()" *ngIf="!isLoggedIn">
+      <button class="add-btn" mat-button (click)="onCreateImplementation()" *ngIf="!isLoggedIn && !plugin.isPlugin">
         Add Implementation
         <mat-icon aria-hidden="true">add</mat-icon>
       </button>

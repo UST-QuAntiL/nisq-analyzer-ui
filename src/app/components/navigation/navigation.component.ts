@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { from, Observable } from 'rxjs';
 import { PlanqkPlatformLoginService } from '../services/planqk-platform-login.service';
+import { QhanaPluginService } from '../services/qhana-plugin.service';
 import { UtilService } from '../util/util.service';
 
 @Component({
@@ -15,7 +16,8 @@ export class NavigationComponent implements OnInit {
   constructor(
     private router: Router,
     private planqkPlatformLoginService: PlanqkPlatformLoginService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    public plugin: QhanaPluginService
   ) {}
 
   ngOnInit(): void {

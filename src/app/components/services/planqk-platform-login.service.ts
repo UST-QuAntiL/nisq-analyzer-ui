@@ -9,7 +9,7 @@ export class PlanqkPlatformLoginService {
   constructor(private readonly keycloak: KeycloakService) {}
 
   public loginToPlanqkPlatform(): void {
-    this.keycloak.login();
+    void this.keycloak.login();
   }
 
   public isLoggedIn(): Observable<boolean> {
@@ -25,7 +25,7 @@ export class PlanqkPlatformLoginService {
   }
 
   public logoutFromPlanqkPlatform(): void {
-    this.keycloak.logout();
+    void this.keycloak.logout();
   }
 
   public getUserSub(): string {

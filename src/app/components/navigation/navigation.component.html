@@ -7,16 +7,18 @@
         </a>
         <span (click)="goToHome()" style="margin-left: 1rem; cursor: pointer">NISQ Analyzer</span>
         <span class="spacer"></span>
-        <a mat-stroked-button href="https://platform.planqk.de/my-content">Back to the PlanQK platform</a>
-        <button
-                class="settings-button"
-                mat-icon-button
-                type="Login"
-                (click)="login()"
-        >
-            <mat-icon *ngIf="!bearerTokenSet">account_box</mat-icon>
-            <mat-icon *ngIf="bearerTokenSet">logout</mat-icon>
-        </button>
+        <div *ngIf="!plugin.isPlugin">
+            <a mat-stroked-button href="https://platform.planqk.de/my-content">Back to the PlanQK platform</a>
+            <button
+                    class="settings-button"
+                    mat-icon-button
+                    type="Login"
+                    (click)="login()"
+            >
+                <mat-icon *ngIf="!bearerTokenSet">account_box</mat-icon>
+                <mat-icon *ngIf="bearerTokenSet">logout</mat-icon>
+            </button>
+        </div>
     </mat-toolbar>
     <router-outlet></router-outlet>
 </div>

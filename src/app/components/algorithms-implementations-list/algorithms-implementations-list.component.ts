@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { UtilService } from '../util/util.service';
 import { PlanqkPlatformLoginService } from '../services/planqk-platform-login.service';
 import { AlgorithmDto, AlgorithmsService } from '../util/algorithms.service';
+import { QhanaPluginService } from '../services/qhana-plugin.service';
 import {
   AddImplementationDialogComponent,
   DialogData,
@@ -30,7 +31,8 @@ export class AlgorithmsImplementationsListComponent implements OnInit {
     private router: Router,
     private utilService: UtilService,
     private algorithms: AlgorithmsService,
-    private planqkPlatformLoginService: PlanqkPlatformLoginService
+    private planqkPlatformLoginService: PlanqkPlatformLoginService,
+    public plugin: QhanaPluginService
   ) {}
 
   ngOnInit(): void {
