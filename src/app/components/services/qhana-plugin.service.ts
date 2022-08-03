@@ -7,6 +7,15 @@ import { Injectable } from '@angular/core';
 export class QhanaPluginService {
   isPlugin: boolean = false;
 
+  // TODO: add type v
+  qhanaFrontendState = {
+    href: window.location.href,
+    lastHeight: 0,
+    heightUnchangedCount: 0,
+    preventSubmit: false,
+    initialized: false,
+  };
+
   constructor(private http: HttpClient) {
     this.isPlugin = window.top !== window.self;
   }
@@ -20,8 +29,7 @@ export class QhanaPluginService {
       const data = event.data;
       if (typeof data !== 'string') {
         if (data != null && data.type === 'load-css') {
-          // @ts-expect-error _qhana_microfrontend_state does not exist
-          this.onLoadCssMessage(data, window._qhana_microfrontend_state);
+          this.onLoadCssMessage(data, this.qhanaFrontendState);
         }
       }
     });
@@ -113,15 +121,7 @@ export class QhanaPluginService {
 
   initializePlugin() {
     // prevent double execution if script is already loaded in the current window
-    // @ts-expect-error _qhana_microfrontend_state does not exist
-    if (window._qhana_microfrontend_state == null) {
-      // @ts-expect-error _qhana_microfrontend_state does not exist
-      window._qhana_microfrontend_state = {
-        href: window.location.href,
-        lastHeight: 0,
-        heightUnchangedCount: 0,
-        preventSubmit: false,
-      };
+    if (!this.qhanaFrontendState.initialized) {
       this.registerMessageListener();
       this.notifyParentWindowOnLoad();
     }
