@@ -1,6 +1,9 @@
 <div>
     <mat-toolbar color="primary" id="pa_header">
-        <a href="https://platform.planqk.de/my-content">
+        <a
+            [attr.href]="plugin.isPlugin ? null : 'https://platform.planqk.de/my-content'"
+            [class.disabled]="plugin.isPlugin" 
+        >
             <img src="https://platform.planqk.de/img/PlanQK_Logo_Weiss_Beta_Version.5b689144.svg" alt="PlanQK Logo"
                  width="250"
                  style="max-width: 7rem; margin-top: 1rem"/>

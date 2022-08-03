@@ -21,19 +21,23 @@ export class NavigationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.planqkPlatformLoginService
-      .isLoggedIn()
-      .subscribe((loggedIn: boolean) => {
-        if (loggedIn) {
-          this.bearerTokenSet = true;
-          this.reloadStartPage();
-          this.utilService.callSnackBar(
-            'Successfully logged into the PlanQK platform.'
-          );
-        } else {
-          this.utilService.callSnackBar('Not logged into the PlanQK platform.');
-        }
-      });
+    if (!this.plugin.isPlugin) {
+      this.planqkPlatformLoginService
+        .isLoggedIn()
+        .subscribe((loggedIn: boolean) => {
+          if (loggedIn) {
+            this.bearerTokenSet = true;
+            this.reloadStartPage();
+            this.utilService.callSnackBar(
+              'Successfully logged into the PlanQK platform.'
+            );
+          } else {
+            this.utilService.callSnackBar(
+              'Not logged into the PlanQK platform.'
+            );
+          }
+        });
+    }
   }
 
   goToHome(): void {
