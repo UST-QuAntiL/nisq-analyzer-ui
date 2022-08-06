@@ -32,7 +32,7 @@ export class QhanaPluginService {
       const data = event.data;
       if (typeof data !== 'string') {
         if (data != null && data.type === 'load-css') {
-          this.onLoadCssMessage(data, this.qhanaFrontendState);
+          this.onLoadCssMessage(data);
         }
       }
     });
@@ -42,9 +42,8 @@ export class QhanaPluginService {
    * Handle css load messages that request the micro frontend to load additional css files.
    *
    * @param {{type: 'load-css', urls: string[]}} data
-   * @param {{lastHeight: number, heightUnchangedCount: number}} state
    */
-  onLoadCssMessage(data: { urls: string[] }, state: MicroFrontendState) {
+  onLoadCssMessage(data: { urls: string[] }) {
     const head = document.querySelector('head');
     data.urls.forEach((url) => {
       const styleLink = document.createElement('link');

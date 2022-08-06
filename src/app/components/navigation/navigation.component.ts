@@ -41,9 +41,9 @@ export class NavigationComponent implements OnInit {
         });
     }
   }
-  
+
   ngAfterViewChecked(): void {
-    this.plugin.notifyParentWindowOnHeightChange()
+    this.plugin.notifyParentWindowOnHeightChange();
   }
 
   goToHome(): void {
