@@ -4,8 +4,6 @@ import { Injectable } from '@angular/core';
 interface MicroFrontendState {
   href: string;
   height: number;
-  heightUnchangedCount: number;
-  preventSubmit: false;
   initialized: boolean;
 }
 
@@ -18,8 +16,6 @@ export class QhanaPluginService {
   qhanaFrontendState: MicroFrontendState = {
     href: window.location.href,
     height: 0,
-    heightUnchangedCount: 0,
-    preventSubmit: false,
     initialized: false,
   };
 
@@ -56,9 +52,7 @@ export class QhanaPluginService {
       styleLink.rel = 'stylesheet';
       head.appendChild(styleLink);
     });
-    state.heightUnchangedCount = 0;
     document.body.style.background = 'transparent';
-    this.monitorHeightChanges(state);
   }
 
   /**
@@ -78,57 +72,25 @@ export class QhanaPluginService {
   }
 
   /**
-   * Monitor height changes for a certain time and inform the parent window if the height has changed.
-   *
-   * @param {MicroFrontendState} state
+   * Measure the current height and inform the parent window if the height has changed.
    */
-  monitorHeightChanges(state: MicroFrontendState) {
-    const newHeight = this.notifyParentWindowOnHeightChange(state.height);
-    if (state.height === newHeight) {
-      // allow for 60*50ms for height to settle
-      if (state.heightUnchangedCount > 60) {
-        return;
+  notifyParentWindowOnHeightChange(): void {
+    if (this.isPlugin) {
+      const height = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight
+      );
+      if (height !== this.qhanaFrontendState.height) {
+        this.sendMessage({ type: 'ui-resize', height });
       }
-      state.heightUnchangedCount = (state.heightUnchangedCount || 0) + 1;
-    } else {
-      state.heightUnchangedCount = 0;
-      state.height = newHeight;
     }
-    window.setTimeout(() => this.monitorHeightChanges(state), 50);
   }
 
-  /**
-   * Measure the current height and inform the parent window if the height has changed compared to `lastHeight`.
-   *
-   * @param {number} lastHeight the last measured height returned by this method (default: 0)
-   * @returns the current measured height
-   */
-  notifyParentWindowOnHeightChange(lastHeight: number = 0) {
-    const height = Math.max(
-      document.body.scrollHeight,
-      document.documentElement.scrollHeight
-    );
-    if (height !== lastHeight) {
-      this.sendMessage({ type: 'ui-resize', height });
-    }
-    return height;
-  }
-
-  /**
-   * Notify the parent window that a micro frontend was successfully loaded and is available to receive messages.
-   *
-   * Must be called **after** the message listener was attached to the window!
-   */
-  notifyParentWindowOnLoad() {
-    this.sendMessage('ui-loaded');
-    this.notifyParentWindowOnHeightChange();
-  }
-
-  initializePlugin() {
+  initializePlugin(): void {
     // prevent double execution if script is already loaded in the current window
     if (!this.qhanaFrontendState.initialized) {
       this.registerMessageListener();
-      this.notifyParentWindowOnLoad();
+      this.sendMessage('ui-loaded');
     }
   }
 }

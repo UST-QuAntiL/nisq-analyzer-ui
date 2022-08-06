@@ -41,6 +41,10 @@ export class NavigationComponent implements OnInit {
         });
     }
   }
+  
+  ngAfterViewChecked(): void {
+    this.plugin.notifyParentWindowOnHeightChange()
+  }
 
   goToHome(): void {
     void this.router.navigate(['/']);
