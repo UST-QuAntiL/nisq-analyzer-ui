@@ -21,6 +21,7 @@ import {
   PlanqkPlatformService,
   AlgortihmDto as PlanqkAlgorithmDto,
 } from '../services/planqk-platform.service';
+import { QhanaPluginService } from '../services/qhana-plugin.service';
 
 export interface AlgorithmDto {
   name: string;
@@ -46,7 +47,8 @@ export class AlgorithmsService implements OnDestroy {
     private planqkLogin: PlanqkPlatformLoginService,
     private planqkPlatform: PlanqkPlatformService,
     private nisqImplementations: ImplementationService,
-    private sdkService: SdksService
+    private sdkService: SdksService,
+    private pluginService: QhanaPluginService,
   ) {
     this.implementationListSubject
       .asObservable()
@@ -97,6 +99,8 @@ export class AlgorithmsService implements OnDestroy {
     this.planqkLogin.isLoggedIn().subscribe((isLoggedIn) => {
       if (isLoggedIn) {
         this.fetchPlanqkImplementations();
+      } else if (this.pluginService.isPlugin) {
+        this.pluginService.fetchImplementations();
       } else {
         this.fetchNisqAnalyzerImplementations();
       }

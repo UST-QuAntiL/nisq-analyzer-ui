@@ -7,6 +7,11 @@ interface MicroFrontendState {
   initialized: boolean;
 }
 
+interface ImplementationItem {
+  name: string;
+  download: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -33,6 +38,8 @@ export class QhanaPluginService {
       if (typeof data !== 'string') {
         if (data != null && data.type === 'load-css') {
           this.onLoadCssMessage(data);
+        } else if (data != null && data.type === 'implementations-response') {
+          this.onImplementationsResponse(data);
         }
       }
     });
@@ -52,6 +59,15 @@ export class QhanaPluginService {
       head.appendChild(styleLink);
     });
     document.body.style.background = 'transparent';
+  }
+
+  /**
+   * Handle implementation messages that send links to quantum circuit implementations
+   *
+   * @param {{type: 'implementations-response', implementations: ImplementationItem[]}} data
+   */
+  onImplementationsResponse(data: { implementations: ImplementationItem[] }) {
+    data.implementations.forEach((impl) => console.log(impl.name));
   }
 
   /**
@@ -91,5 +107,9 @@ export class QhanaPluginService {
       this.registerMessageListener();
       this.sendMessage('ui-loaded');
     }
+  }
+
+  fetchImplementations(): void {
+    this.sendMessage('implementations-request');
   }
 }
