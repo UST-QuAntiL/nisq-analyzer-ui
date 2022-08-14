@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { v4 as uuidv4 } from 'uuid';
+import { ImplementationDto } from 'api-nisq/models/implementation-dto';
 
 interface MicroFrontendState {
   href: string;
@@ -17,6 +19,8 @@ interface ImplementationItem {
 })
 export class QhanaPluginService {
   isPlugin: boolean = false;
+  arrayImplDto: ImplementationDto[] = [];
+  arrayImplNames: string[] = [];
 
   qhanaFrontendState: MicroFrontendState = {
     href: window.location.href,
@@ -66,9 +70,25 @@ export class QhanaPluginService {
    *
    * @param {{type: 'implementations-response', implementations: ImplementationItem[]}} data
    */
-  onImplementationsResponse(data: { implementations: ImplementationItem[] }) {
-    data.implementations.forEach((impl) => console.log(impl.name));
-  }
+  onImplementationsResponse(data: { implementations: ImplementationItem[] }): void {
+    data.implementations.forEach((impl) => {
+        console.log(impl.name);
+        if(!this.arrayImplNames.includes(impl.name)){
+            let algoId = uuidv4();
+            let implId = uuidv4();
+            this.arrayImplDto.push({
+                id: algoId,
+                algorithmName: impl.name,
+                implementedAlgorithm: implId,
+                name: impl.name,
+                language: "OpenQASM",
+                sdk: "Qiskit",
+                fileLocation: impl.download
+            });
+            this.arrayImplNames.push(impl.name);
+        }
+    });
+ }
 
   /**
    * Send a message to the parent window.
@@ -111,5 +131,10 @@ export class QhanaPluginService {
 
   fetchImplementations(): void {
     this.sendMessage('implementations-request');
+  }
+
+  getImpls(): ImplementationDto[] {
+    console.log("getImpls()");
+    return this.arrayImplDto;
   }
 }

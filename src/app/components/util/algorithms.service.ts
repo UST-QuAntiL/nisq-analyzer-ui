@@ -101,6 +101,7 @@ export class AlgorithmsService implements OnDestroy {
         this.fetchPlanqkImplementations();
       } else if (this.pluginService.isPlugin) {
         this.pluginService.fetchImplementations();
+        this.implementationListSubject.next(this.pluginService.getImpls());
       } else {
         this.fetchNisqAnalyzerImplementations();
       }
