@@ -83,7 +83,8 @@ export class QhanaPluginService {
                 name: impl.name,
                 language: "OpenQASM",
                 sdk: "Qiskit",
-                fileLocation: impl.download
+                fileLocation: impl.download,
+                selectionRule: '',
             });
             this.arrayImplNames.push(impl.name);
         }
@@ -133,8 +134,7 @@ export class QhanaPluginService {
     this.sendMessage('implementations-request');
   }
 
-  getImpls(): ImplementationDto[] {
-    console.log("getImpls()");
+  get implementationDtos(): ImplementationDto[] {
     return this.arrayImplDto;
   }
 }
