@@ -48,7 +48,7 @@ export class AlgorithmsService implements OnDestroy {
     private planqkPlatform: PlanqkPlatformService,
     private nisqImplementations: ImplementationService,
     private sdkService: SdksService,
-    private pluginService: QhanaPluginService,
+    private pluginService: QhanaPluginService
   ) {
     this.implementationListSubject
       .asObservable()
@@ -101,7 +101,10 @@ export class AlgorithmsService implements OnDestroy {
         this.fetchPlanqkImplementations();
       } else if (this.pluginService.isPlugin) {
         this.pluginService.fetchImplementations();
-        this.implementationListSubject.next(this.pluginService.implementationDtos);
+        this.pluginService.implementationDtoSubject.subscribe(
+          (implementationsDto) =>
+            this.implementationListSubject.next(implementationsDto)
+        );
       } else {
         this.fetchNisqAnalyzerImplementations();
       }

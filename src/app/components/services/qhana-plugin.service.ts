@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { ImplementationDto } from 'api-nisq/models/implementation-dto';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 interface MicroFrontendState {
   href: string;
@@ -19,7 +20,8 @@ interface ImplementationItem {
 })
 export class QhanaPluginService {
   isPlugin: boolean = false;
-  arrayImplDto: ImplementationDto[] = [];
+  implementationDtoSubject: BehaviorSubject<ImplementationDto[]> =
+    new BehaviorSubject([]);
   arrayImplNames: string[] = [];
 
   qhanaFrontendState: MicroFrontendState = {
@@ -70,26 +72,30 @@ export class QhanaPluginService {
    *
    * @param {{type: 'implementations-response', implementations: ImplementationItem[]}} data
    */
-  onImplementationsResponse(data: { implementations: ImplementationItem[] }): void {
-    data.implementations.forEach((impl) => {
-        console.log(impl.name);
-        if(!this.arrayImplNames.includes(impl.name)){
-            let algoId = uuidv4();
-            let implId = uuidv4();
-            this.arrayImplDto.push({
-                id: algoId,
-                algorithmName: impl.name,
-                implementedAlgorithm: implId,
-                name: impl.name,
-                language: "OpenQASM",
-                sdk: "Qiskit",
-                fileLocation: impl.download,
-                selectionRule: '',
-            });
-            this.arrayImplNames.push(impl.name);
-        }
+  onImplementationsResponse(data: {
+    implementations: ImplementationItem[];
+  }): void {
+    const implementationsDto = data.implementations.map((impl) => {
+      console.log(impl.name);
+      if (!this.arrayImplNames.includes(impl.name)) {
+        const algoId = uuidv4();
+        const implId = uuidv4();
+        this.arrayImplNames.push(impl.name);
+        return {
+          id: algoId,
+          algorithmName: impl.name,
+          implementedAlgorithm: implId,
+          name: impl.name,
+          language: 'OpenQASM',
+          sdk: 'Qiskit',
+          fileLocation: impl.download,
+          selectionRule: '',
+        };
+      }
     });
- }
+
+    this.implementationDtoSubject.next(implementationsDto);
+  }
 
   /**
    * Send a message to the parent window.
@@ -132,9 +138,5 @@ export class QhanaPluginService {
 
   fetchImplementations(): void {
     this.sendMessage('implementations-request');
-  }
-
-  get implementationDtos(): ImplementationDto[] {
-    return this.arrayImplDto;
   }
 }
