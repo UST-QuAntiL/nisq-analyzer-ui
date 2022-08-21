@@ -76,22 +76,19 @@ export class QhanaPluginService {
     implementations: ImplementationItem[];
   }): void {
     const implementationsDto = data.implementations.map((impl) => {
-      console.log(impl.name);
-      if (!this.arrayImplNames.includes(impl.name)) {
-        const algoId = uuidv4();
-        const implId = uuidv4();
-        this.arrayImplNames.push(impl.name);
-        return {
-          id: algoId,
-          algorithmName: impl.name,
-          implementedAlgorithm: implId,
-          name: impl.name,
-          language: 'OpenQASM',
-          sdk: 'Qiskit',
-          fileLocation: impl.download,
-          selectionRule: '',
-        };
-      }
+      const algoId = uuidv4();
+      const implId = uuidv4();
+      this.arrayImplNames.push(impl.name);
+      return {
+        id: algoId,
+        algorithmName: impl.name,
+        implementedAlgorithm: implId,
+        name: impl.name,
+        language: 'OpenQASM',
+        sdk: 'Qiskit',
+        fileLocation: impl.download,
+        selectionRule: '',
+      };
     });
 
     this.implementationDtoSubject.next(implementationsDto);
