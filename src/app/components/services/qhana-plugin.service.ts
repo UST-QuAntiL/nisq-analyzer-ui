@@ -13,6 +13,8 @@ interface MicroFrontendState {
 interface ImplementationItem {
   name: string;
   download: string;
+  version: number;
+  type: string;
 }
 
 @Injectable({
@@ -22,7 +24,6 @@ export class QhanaPluginService {
   isPlugin: boolean = false;
   implementationDtoSubject: BehaviorSubject<ImplementationDto[]> =
     new BehaviorSubject([]);
-  arrayImplNames: string[] = [];
 
   qhanaFrontendState: MicroFrontendState = {
     href: window.location.href,
@@ -78,13 +79,20 @@ export class QhanaPluginService {
     const implementationsDto = data.implementations.map((impl) => {
       const algoId = uuidv4();
       const implId = uuidv4();
-      this.arrayImplNames.push(impl.name);
+      let type = '';
+      console.log(impl.name + ', Version: ' + impl.version);
+      if(impl.type === 'qasm'){
+        type = 'OpenQASM';
+      } else {
+        type = 'Qiskit';
+      }
+
       return {
         id: algoId,
         algorithmName: impl.name,
         implementedAlgorithm: implId,
         name: impl.name,
-        language: 'OpenQASM',
+        language: type,
         sdk: 'Qiskit',
         fileLocation: impl.download,
         selectionRule: '',
