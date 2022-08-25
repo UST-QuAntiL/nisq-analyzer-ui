@@ -77,8 +77,8 @@ export class QhanaPluginService {
     implementations: ImplementationItem[];
   }): void {
     const implementationsDto = data.implementations.map((impl) => {
-      const algoId = uuidv4();
-      const implId = uuidv4();
+      const algoId = `algo-${impl.name}-${impl.version}`;
+      const implId = `impl-${impl.name}-${impl.version}`;
       let type = '';
       console.log(impl.name + ', Version: ' + impl.version);
       if(impl.type === 'qasm'){
