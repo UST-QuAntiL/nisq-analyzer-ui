@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { ImplementationDto } from 'api-nisq/models/implementation-dto';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 interface MicroFrontendState {
   href: string;
@@ -30,6 +30,9 @@ export class QhanaPluginService {
     height: 0,
     initialized: false,
   };
+  
+  algoUUIDs = new Map<string, string>();
+  implUUIDs = new Map<string, string>();
 
   constructor(private http: HttpClient) {
     this.isPlugin = window.top !== window.self;
@@ -67,6 +70,27 @@ export class QhanaPluginService {
     });
     document.body.style.background = 'transparent';
   }
+  
+  getUUID(impl: ImplementationItem, uuids: Map<string, string>): string {
+    const implID = `${impl.name} ver: ${impl.version} (${impl.download} ${impl.type})`
+
+    const res = uuids.get(implID);
+    if (res != null) {
+      return res;
+    }
+    
+    const newUUID = uuidv4();
+    uuids.set(implID, newUUID);
+    return newUUID;
+  }
+  
+  getAlgoUUID(impl: ImplementationItem): string {
+    return this.getUUID(impl, this.algoUUIDs);
+  }
+
+  getImplUUID(impl: ImplementationItem): string {
+    return this.getUUID(impl, this.implUUIDs);
+  }
 
   /**
    * Handle implementation messages that send links to quantum circuit implementations
@@ -77,24 +101,26 @@ export class QhanaPluginService {
     implementations: ImplementationItem[];
   }): void {
     const implementationsDto = data.implementations.map((impl) => {
-      const algoId = `algo-${impl.name}-${impl.version}`;
-      const implId = `impl-${impl.name}-${impl.version}`;
-      let type = '';
-      console.log(impl.name + ', Version: ' + impl.version);
+      const algoId = this.getAlgoUUID(impl);
+      const implId = this.getImplUUID(impl);
+
+      let language: string
       if(impl.type === 'qasm'){
-        type = 'OpenQASM';
+        language = 'OpenQASM';
       } else {
-        type = 'Qiskit';
+        language = 'Qiskit';
       }
+      
+      const fileLocation = impl.download.replace("localhost", "host.docker.internal"); // TODO: move to nisq-analyzer per ENV-VAR?
 
       return {
         id: algoId,
         algorithmName: impl.name,
         implementedAlgorithm: implId,
         name: impl.name,
-        language: type,
+        language,
         sdk: 'Qiskit',
-        fileLocation: impl.download,
+        fileLocation,
         selectionRule: '',
       };
     });
