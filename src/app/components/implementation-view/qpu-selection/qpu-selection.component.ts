@@ -225,7 +225,11 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   }
 
   onAddAnalysis(): void {
-    this.refreshNisqImpl();
+    if (this.impl) { // TODO: Properly check wheather this.impl comes from qhana plugin
+      this.nisqImpl = this.impl;
+    } else {
+      this.refreshNisqImpl();
+    }
     let refreshToken = '';
     this.utilService
       .createDialog(QpuSelectionDialogComponent, {

@@ -117,7 +117,7 @@ export class QhanaPluginService {
         id: algoId,
         algorithmName: impl.name,
         implementedAlgorithm: implId,
-        name: impl.name,
+        name: `${impl.name} (v${impl.version})`,
         language,
         sdk: 'Qiskit',
         fileLocation,
