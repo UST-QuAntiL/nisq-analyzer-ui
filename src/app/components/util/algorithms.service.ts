@@ -21,6 +21,7 @@ import {
   PlanqkPlatformService,
   AlgortihmDto as PlanqkAlgorithmDto,
 } from '../services/planqk-platform.service';
+import { QhanaPluginService } from '../services/qhana-plugin.service';
 
 export interface AlgorithmDto {
   name: string;
@@ -46,7 +47,8 @@ export class AlgorithmsService implements OnDestroy {
     private planqkLogin: PlanqkPlatformLoginService,
     private planqkPlatform: PlanqkPlatformService,
     private nisqImplementations: ImplementationService,
-    private sdkService: SdksService
+    private sdkService: SdksService,
+    private pluginService: QhanaPluginService
   ) {
     this.implementationListSubject
       .asObservable()
@@ -88,6 +90,12 @@ export class AlgorithmsService implements OnDestroy {
     return (
       this.algorithmListSubject
         .asObservable()
+        .pipe(map(algos => {
+          console.log(`srch: ${algorithmId}`)
+          algos.forEach(algo => console.log(`av: ${algo.id}`))
+            
+          return algos;
+        }))
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         .pipe(map((algos) => algos.find((a) => a.id === algorithmId)))
     );
@@ -97,6 +105,12 @@ export class AlgorithmsService implements OnDestroy {
     this.planqkLogin.isLoggedIn().subscribe((isLoggedIn) => {
       if (isLoggedIn) {
         this.fetchPlanqkImplementations();
+      } else if (this.pluginService.isPlugin) {
+        this.pluginService.fetchImplementations();
+        this.pluginService.implementationDtoSubject.subscribe(
+          (implementationsDto) =>
+            this.implementationListSubject.next(implementationsDto)
+        );
       } else {
         this.fetchNisqAnalyzerImplementations();
       }
