@@ -90,12 +90,6 @@ export class AlgorithmsService implements OnDestroy {
     return (
       this.algorithmListSubject
         .asObservable()
-        .pipe(map(algos => {
-          console.log(`srch: ${algorithmId}`)
-          algos.forEach(algo => console.log(`av: ${algo.id}`))
-            
-          return algos;
-        }))
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         .pipe(map((algos) => algos.find((a) => a.id === algorithmId)))
     );
