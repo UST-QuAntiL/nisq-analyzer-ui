@@ -115,7 +115,7 @@ export class QhanaPluginService {
 
       return {
         id: algoId,
-        algorithmName: impl.name,
+        algorithmName: `${impl.name} (v${impl.version})`,
         implementedAlgorithm: implId,
         name: `${impl.name} (v${impl.version})`,
         language,
