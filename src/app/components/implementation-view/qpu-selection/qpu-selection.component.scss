@@ -41,11 +41,11 @@ tr.detail-row {
 }
 
 tr.element-row:not(.expanded-row):hover {
-  background: whitesmoke;
+  background: rgba(245, 245, 245, 0.50);
 }
 
 tr.element-row:not(.expanded-row):active {
-  background: #efefef;
+  background: rgba(245, 245, 245, 0.50);
 }
 
 .element-row td {
