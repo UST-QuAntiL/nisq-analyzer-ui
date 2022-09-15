@@ -100,11 +100,7 @@ export class AlgorithmsService implements OnDestroy {
       if (isLoggedIn) {
         this.fetchPlanqkImplementations();
       } else if (this.pluginService.isPlugin) {
-        this.pluginService.fetchImplementations();
-        this.pluginService.implementationDtoSubject.subscribe(
-          (implementationsDto) =>
-            this.implementationListSubject.next(implementationsDto)
-        );
+        this.fetchQHanaImplementations();
       } else {
         this.fetchNisqAnalyzerImplementations();
       }
@@ -267,4 +263,29 @@ export class AlgorithmsService implements OnDestroy {
         this.implementationListSubject.next(implementations);
       });
   }
+
+  private fetchQHanaImplementations() {
+    this.pluginService.fetchImplementations();
+    this.pluginService.implementationDtoSubject.subscribe(
+      (implementationsDto) => {
+        this.sdkService.getSdks().subscribe(sdks => {
+          const available = new Set<string>();
+          (sdks.sdkDtos ?? []).forEach((sdk) =>
+            available.add(sdk.name.toLowerCase())
+          );
+
+          implementationsDto.forEach(implementation => {
+              if (!available.has(implementation.sdk?.toLocaleLowerCase()) && implementation.sdk) {
+                const sdkBody: SdkDto = { id: null, name: implementation.sdk };
+                this.sdkService.createSdk({ body: sdkBody }).subscribe();
+              }
+            }
+          );
+        })
+
+        this.implementationListSubject.next(implementationsDto);
+      }
+    );
+  }
+
 }
