@@ -41,7 +41,7 @@ export class QhanaPluginService {
   /**
    * Register the main message event listener on the current window.
    */
-  registerMessageListener() {
+  registerMessageListener(): void {
     // main event listener, delegates events to dedicated listeners
     window.addEventListener('message', (event) => {
       const data = event.data;
@@ -60,7 +60,7 @@ export class QhanaPluginService {
    *
    * @param {{type: 'load-css', urls: string[]}} data
    */
-  onLoadCssMessage(data: { urls: string[] }) {
+  onLoadCssMessage(data: { urls: string[] }): void {
     const head = document.querySelector('head');
     data.urls.forEach((url) => {
       const styleLink = document.createElement('link');
@@ -111,7 +111,7 @@ export class QhanaPluginService {
         language = 'Qiskit';
       }
       
-      const fileLocation = impl.download.replace("localhost", "host.docker.internal"); // TODO: move to nisq-analyzer per ENV-VAR?
+      const fileLocation = impl.download.replace("localhost", "host.docker.internal"); // TODO: remove when qhana-backend is updated
 
       return {
         id: algoId,
@@ -133,7 +133,7 @@ export class QhanaPluginService {
    *
    * @param {string|object} message the data attribute of the created message event
    */
-  sendMessage(message: string | object) {
+  sendMessage(message: string | object): void {
     const targetWindow = window.opener || window.parent;
     if (targetWindow) {
       targetWindow.postMessage(message, '*');

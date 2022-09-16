@@ -150,7 +150,7 @@ export class AlgorithmsService implements OnDestroy {
     this.currentAlgorithmList = algorithms;
   }
 
-  private fetchNisqAnalyzerImplementations() {
+  private fetchNisqAnalyzerImplementations(): void {
     this.nisqImplementations
       .getImplementations()
       .pipe(take(1))
@@ -196,7 +196,7 @@ export class AlgorithmsService implements OnDestroy {
       );
   }
 
-  private fetchPlanqkImplementations() {
+  private fetchPlanqkImplementations(): void {
     this.planqkPlatform
       .getImplementationsOfPlanqkPlatform()
       .pipe(
@@ -264,7 +264,7 @@ export class AlgorithmsService implements OnDestroy {
       });
   }
 
-  private fetchQHanaImplementations() {
+  private fetchQHanaImplementations(): void {
     this.pluginService.fetchImplementations();
     this.pluginService.implementationDtoSubject.subscribe(
       (implementationsDto) => {
