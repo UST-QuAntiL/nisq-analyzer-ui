@@ -111,8 +111,6 @@ export class QhanaPluginService {
         language = 'Qiskit';
       }
       
-      const fileLocation = impl.download.replace("localhost", "host.docker.internal"); // TODO: remove when qhana-backend is updated
-
       return {
         id: algoId,
         algorithmName: `${impl.name} (v${impl.version})`,
@@ -120,7 +118,7 @@ export class QhanaPluginService {
         name: `${impl.name} (v${impl.version})`,
         language,
         sdk: 'Qiskit',
-        fileLocation,
+        fileLocation: impl.download,
         selectionRule: '',
       };
     });
