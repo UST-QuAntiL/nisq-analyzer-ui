@@ -17,12 +17,12 @@ export class NavigationComponent implements OnInit {
     private router: Router,
     private planqkPlatformLoginService: PlanqkPlatformLoginService,
     private utilService: UtilService,
-    public plugin: QhanaPluginService
+    public qhanaService: QhanaPluginService
   ) {}
 
   ngOnInit(): void {
-    if (this.plugin.isPlugin) {
-      this.plugin.initializePlugin();
+    if (this.qhanaService.isPlugin) {
+      this.qhanaService.initializePlugin();
     } else {
       this.planqkPlatformLoginService
         .isLoggedIn()
@@ -43,7 +43,7 @@ export class NavigationComponent implements OnInit {
   }
 
   ngAfterViewChecked(): void {
-    this.plugin.notifyParentWindowOnHeightChange();
+    this.qhanaService.notifyParentWindowOnHeightChange();
   }
 
   goToHome(): void {

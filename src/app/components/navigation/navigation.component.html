@@ -1,13 +1,13 @@
 <div>
-    <mat-toolbar color="primary" id="pa_header">
-        <a *ngIf="!plugin.isPlugin" href="https://platform.planqk.de/my-content">
+    <mat-toolbar color="primary" [id]="qhanaService.isPlugin ? 'pa_header' : 'pa_header_pqk'">
+        <a *ngIf="!qhanaService.isPlugin" href="https://platform.planqk.de/my-content">
             <img src="https://platform.planqk.de/img/PlanQK_Logo_Weiss_Beta_Version.5b689144.svg" alt="PlanQK Logo"
                  width="250"
                  style="max-width: 7rem; margin-top: 1rem"/>
         </a>
         <span (click)="goToHome()" style="margin-left: 1rem; cursor: pointer">NISQ Analyzer</span>
         <span class="spacer"></span>
-        <div *ngIf="!plugin.isPlugin">
+        <div *ngIf="!qhanaService.isPlugin">
             <a mat-stroked-button href="https://platform.planqk.de/my-content">Back to the PlanQK platform</a>
             <button
                     class="settings-button"

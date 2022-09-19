@@ -41,7 +41,7 @@ export class QhanaPluginService {
   /**
    * Register the main message event listener on the current window.
    */
-  registerMessageListener(): void {
+  private registerMessageListener(): void {
     // main event listener, delegates events to dedicated listeners
     window.addEventListener('message', (event) => {
       const data = event.data;
@@ -60,7 +60,7 @@ export class QhanaPluginService {
    *
    * @param {{type: 'load-css', urls: string[]}} data
    */
-  onLoadCssMessage(data: { urls: string[] }): void {
+  private onLoadCssMessage(data: { urls: string[] }): void {
     const head = document.querySelector('head');
     data.urls.forEach((url) => {
       const styleLink = document.createElement('link');
@@ -71,7 +71,7 @@ export class QhanaPluginService {
     document.body.style.background = 'transparent';
   }
   
-  getUUID(impl: ImplementationItem, uuids: Map<string, string>): string {
+  private getUUID(impl: ImplementationItem, uuids: Map<string, string>): string {
     const implID = `${impl.name} ver: ${impl.version} (${impl.download} ${impl.type})`
 
     const res = uuids.get(implID);
@@ -84,11 +84,11 @@ export class QhanaPluginService {
     return newUUID;
   }
   
-  getAlgoUUID(impl: ImplementationItem): string {
+  private getAlgoUUID(impl: ImplementationItem): string {
     return this.getUUID(impl, this.algoUUIDs);
   }
 
-  getImplUUID(impl: ImplementationItem): string {
+  private getImplUUID(impl: ImplementationItem): string {
     return this.getUUID(impl, this.implUUIDs);
   }
 
@@ -97,7 +97,7 @@ export class QhanaPluginService {
    *
    * @param {{type: 'implementations-response', implementations: ImplementationItem[]}} data
    */
-  onImplementationsResponse(data: {
+  private onImplementationsResponse(data: {
     implementations: ImplementationItem[];
   }): void {
     const implementationsDto = data.implementations.map((impl) => {
@@ -131,7 +131,7 @@ export class QhanaPluginService {
    *
    * @param {string|object} message the data attribute of the created message event
    */
-  sendMessage(message: string | object): void {
+  private sendMessage(message: string | object): void {
     const targetWindow = window.opener || window.parent;
     if (targetWindow) {
       targetWindow.postMessage(message, '*');
@@ -151,9 +151,7 @@ export class QhanaPluginService {
         document.body.scrollHeight,
         document.documentElement.scrollHeight
       );
-      if (height !== this.qhanaFrontendState.height) {
-        this.sendMessage({ type: 'ui-resize', height });
-      }
+      this.sendMessage({ type: 'ui-resize', height });
     }
   }
 
@@ -162,6 +160,7 @@ export class QhanaPluginService {
     if (!this.qhanaFrontendState.initialized) {
       this.registerMessageListener();
       this.sendMessage('ui-loaded');
+      this.qhanaFrontendState.initialized = true
     }
   }
 
