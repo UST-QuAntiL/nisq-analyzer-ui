@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { from, Observable } from 'rxjs';
 import { PlanqkPlatformLoginService } from '../services/planqk-platform-login.service';
+import { QhanaPluginService } from '../services/qhana-plugin.service';
 import { UtilService } from '../util/util.service';
 
 @Component({
@@ -15,23 +16,34 @@ export class NavigationComponent implements OnInit {
   constructor(
     private router: Router,
     private planqkPlatformLoginService: PlanqkPlatformLoginService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    public qhanaService: QhanaPluginService
   ) {}
 
   ngOnInit(): void {
-    this.planqkPlatformLoginService
-      .isLoggedIn()
-      .subscribe((loggedIn: boolean) => {
-        if (loggedIn) {
-          this.bearerTokenSet = true;
-          this.reloadStartPage();
-          this.utilService.callSnackBar(
-            'Successfully logged into the PlanQK platform.'
-          );
-        } else {
-          this.utilService.callSnackBar('Not logged into the PlanQK platform.');
-        }
-      });
+    if (this.qhanaService.isPlugin) {
+      this.qhanaService.initializePlugin();
+    } else {
+      this.planqkPlatformLoginService
+        .isLoggedIn()
+        .subscribe((loggedIn: boolean) => {
+          if (loggedIn) {
+            this.bearerTokenSet = true;
+            this.reloadStartPage();
+            this.utilService.callSnackBar(
+              'Successfully logged into the PlanQK platform.'
+            );
+          } else {
+            this.utilService.callSnackBar(
+              'Not logged into the PlanQK platform.'
+            );
+          }
+        });
+    }
+  }
+
+  ngAfterViewChecked(): void {
+    this.qhanaService.notifyParentWindowOnHeightChange();
   }
 
   goToHome(): void {

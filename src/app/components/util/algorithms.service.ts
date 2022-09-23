@@ -21,6 +21,7 @@ import {
   PlanqkPlatformService,
   AlgortihmDto as PlanqkAlgorithmDto,
 } from '../services/planqk-platform.service';
+import { QhanaPluginService } from '../services/qhana-plugin.service';
 
 export interface AlgorithmDto {
   name: string;
@@ -46,7 +47,8 @@ export class AlgorithmsService implements OnDestroy {
     private planqkLogin: PlanqkPlatformLoginService,
     private planqkPlatform: PlanqkPlatformService,
     private nisqImplementations: ImplementationService,
-    private sdkService: SdksService
+    private sdkService: SdksService,
+    private pluginService: QhanaPluginService
   ) {
     this.implementationListSubject
       .asObservable()
@@ -97,6 +99,8 @@ export class AlgorithmsService implements OnDestroy {
     this.planqkLogin.isLoggedIn().subscribe((isLoggedIn) => {
       if (isLoggedIn) {
         this.fetchPlanqkImplementations();
+      } else if (this.pluginService.isPlugin) {
+        this.fetchQHanaImplementations();
       } else {
         this.fetchNisqAnalyzerImplementations();
       }
@@ -146,7 +150,7 @@ export class AlgorithmsService implements OnDestroy {
     this.currentAlgorithmList = algorithms;
   }
 
-  private fetchNisqAnalyzerImplementations() {
+  private fetchNisqAnalyzerImplementations(): void {
     this.nisqImplementations
       .getImplementations()
       .pipe(take(1))
@@ -192,7 +196,7 @@ export class AlgorithmsService implements OnDestroy {
       );
   }
 
-  private fetchPlanqkImplementations() {
+  private fetchPlanqkImplementations(): void {
     this.planqkPlatform
       .getImplementationsOfPlanqkPlatform()
       .pipe(
@@ -259,4 +263,29 @@ export class AlgorithmsService implements OnDestroy {
         this.implementationListSubject.next(implementations);
       });
   }
+
+  private fetchQHanaImplementations(): void {
+    this.pluginService.fetchImplementations();
+    this.pluginService.implementationDtoSubject.subscribe(
+      (implementationsDto) => {
+        this.sdkService.getSdks().subscribe(sdks => {
+          const available = new Set<string>();
+          (sdks.sdkDtos ?? []).forEach((sdk) =>
+            available.add(sdk.name.toLowerCase())
+          );
+
+          implementationsDto.forEach(implementation => {
+              if (!available.has(implementation.sdk?.toLocaleLowerCase()) && implementation.sdk) {
+                const sdkBody: SdkDto = { id: null, name: implementation.sdk };
+                this.sdkService.createSdk({ body: sdkBody }).subscribe();
+              }
+            }
+          );
+        })
+
+        this.implementationListSubject.next(implementationsDto);
+      }
+    );
+  }
+
 }

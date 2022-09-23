@@ -40,12 +40,24 @@ tr.detail-row {
   height: 0;
 }
 
-tr.element-row:not(.expanded-row):hover {
-  background: whitesmoke;
+@media (prefers-color-scheme: light) {
+  tr.element-row:not(.expanded-row):hover {
+    background: whitesmoke;
+  }
+
+  tr.element-row:not(.expanded-row):active {
+    background: #fefefe;
+  }
 }
 
-tr.element-row:not(.expanded-row):active {
-  background: #efefef;
+@media (prefers-color-scheme: dark) {
+  tr.element-row:not(.expanded-row):hover {
+    background: #4a4a4a;
+  }
+
+  tr.element-row:not(.expanded-row):active {
+    background: #484848;
+  }
 }
 
 .element-row td {

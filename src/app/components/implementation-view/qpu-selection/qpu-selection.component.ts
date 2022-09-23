@@ -48,6 +48,7 @@ import {
   QpuSelectionPrioritizationDialogComponent,
 } from './dialogs/qpu-selection-prioritization-dialog/qpu-selection-prioritization-dialog.component';
 import { QpuSelectionExecutionDialogComponent } from './dialogs/qpu-selection-execution-dialog/qpu-selection-execution-dialog.component';
+import { QhanaPluginService } from '../../services/qhana-plugin.service';
 
 @Component({
   selector: 'app-qpu-selection',
@@ -148,7 +149,8 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
     private http: HttpClient,
     private nisqAnalyzerRootService: RootService,
     private planqkService: PlanqkPlatformLoginService,
-    private mcdaService: XmcdaCriteriaService
+    private mcdaService: XmcdaCriteriaService,
+    private qhanaService: QhanaPluginService
   ) {}
 
   ngOnInit(): void {
@@ -225,7 +227,11 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   }
 
   onAddAnalysis(): void {
-    this.refreshNisqImpl();
+    if (this.qhanaService.isPlugin) {
+      this.nisqImpl = this.impl;
+    } else {
+      this.refreshNisqImpl();
+    }
     let refreshToken = '';
     this.utilService
       .createDialog(QpuSelectionDialogComponent, {

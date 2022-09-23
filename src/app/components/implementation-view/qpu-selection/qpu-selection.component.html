@@ -166,7 +166,7 @@
                     <ng-container *ngIf="jobReady && analyzerResults && analyzerResults.length !== 0">
                         <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onMatSortChange()"
                                multiTemplateDataRows matSortDisableClear>
-                            <ng-container matColumnDef="rank" sticky>
+                            <ng-container matColumnDef="rank" {{!qhanaService.isPlugin ? sticky}}>
                                 <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     Rank
                                 </th>
@@ -174,7 +174,7 @@
                                     {{ getRankOfResult(element) }}
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="score" sticky>
+                            <ng-container matColumnDef="score" {{!qhanaService.isPlugin ? sticky}}>
                                 <th class="score-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     Score
                                 </th>
@@ -192,7 +192,7 @@
                                 </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="provider" sticky>
+                            <ng-container matColumnDef="provider" {{!qhanaService.isPlugin ? sticky}}>
                                 <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     Provider
                                 </th>
@@ -201,7 +201,7 @@
                                 </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="compiler" sticky>
+                            <ng-container matColumnDef="compiler" {{!qhanaService.isPlugin ? sticky}}>
                                 <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     SDK
                                 </th>

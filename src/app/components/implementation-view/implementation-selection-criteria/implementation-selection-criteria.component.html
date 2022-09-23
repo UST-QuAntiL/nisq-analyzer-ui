@@ -89,7 +89,7 @@
     <div class="footer">
       <button
       class="master-save-button"
-      *ngIf="inputChanged && !isLoggedIn"
+      *ngIf="inputChanged && !isLoggedIn && !qhanaService.isPlugin"
       mat-fab
       (click)="saveImplementation()"
       >

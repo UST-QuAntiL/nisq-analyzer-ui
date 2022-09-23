@@ -9,6 +9,7 @@ import { SdkDto } from 'api-nisq/models/sdk-dto';
 import { UtilService } from '../../util/util.service';
 import { PlanqkPlatformLoginService } from '../../services/planqk-platform-login.service';
 import { CreateSdkDialogComponent } from './dialogs/create-sdk-dialog/create-sdk-dialog.component';
+import { QhanaPluginService } from '../../services/qhana-plugin.service';
 
 @Component({
   selector: 'app-implementation-selection-criteria',
@@ -33,7 +34,8 @@ export class ImplementationSelectionCriteriaComponent implements OnInit {
     private readonly sdkService: SdksService,
     private route: ActivatedRoute,
     private utilService: UtilService,
-    private planqkLoginService: PlanqkPlatformLoginService
+    private planqkLoginService: PlanqkPlatformLoginService,
+    public qhanaService: QhanaPluginService
   ) {}
 
   ngOnInit(): void {
