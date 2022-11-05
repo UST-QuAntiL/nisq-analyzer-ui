@@ -168,8 +168,8 @@ export class QhanaPluginService {
     this.sendMessage('implementations-request');
   }
 
-  notifyParentOnSaveResults(circuitName: string, responseURL: string): void {
-    let resultData = { 'circuitName': circuitName, 'responseURL': responseURL };
+  notifyParentOnSaveResults(circuitURL: string, responseURL: string): void {
+    let resultData = { 'circuitURL': circuitURL, 'responseURL': responseURL };
     this.sendMessage({ type: 'nisq-analyzer-result', resultData })
   }
 }
