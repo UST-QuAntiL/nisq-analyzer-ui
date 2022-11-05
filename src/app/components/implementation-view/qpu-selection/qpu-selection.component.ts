@@ -758,7 +758,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
       "method": "POST",
       "mode": "cors",
       "credentials": "omit"
-    }).then(response=>this.qhanaService.notifyParentOnSaveResults(this.analyzerJob.circuitName, response.url));
+    }).then(response=>this.qhanaService.notifyParentOnSaveResults(this.nisqImpl.fileLocation, response.url));
   }
 
   //
