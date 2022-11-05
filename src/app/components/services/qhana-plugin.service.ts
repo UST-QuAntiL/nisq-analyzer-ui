@@ -30,7 +30,7 @@ export class QhanaPluginService {
     height: 0,
     initialized: false,
   };
-  
+
   algoUUIDs = new Map<string, string>();
   implUUIDs = new Map<string, string>();
 
@@ -70,7 +70,7 @@ export class QhanaPluginService {
     });
     document.body.style.background = 'transparent';
   }
-  
+
   private getUUID(impl: ImplementationItem, uuids: Map<string, string>): string {
     const implID = `${impl.name} ver: ${impl.version} (${impl.download} ${impl.type})`
 
@@ -78,12 +78,12 @@ export class QhanaPluginService {
     if (res != null) {
       return res;
     }
-    
+
     const newUUID = uuidv4();
     uuids.set(implID, newUUID);
     return newUUID;
   }
-  
+
   private getAlgoUUID(impl: ImplementationItem): string {
     return this.getUUID(impl, this.algoUUIDs);
   }
@@ -105,12 +105,12 @@ export class QhanaPluginService {
       const implId = this.getImplUUID(impl);
 
       let language: string
-      if(impl.type === 'qasm'){
+      if (impl.type === 'qasm') {
         language = 'OpenQASM';
       } else {
         language = 'Qiskit';
       }
-      
+
       return {
         id: algoId,
         algorithmName: `${impl.name} (v${impl.version})`,
@@ -166,5 +166,10 @@ export class QhanaPluginService {
 
   fetchImplementations(): void {
     this.sendMessage('implementations-request');
+  }
+
+  notifyParentOnSaveResults(circuitName: string, responseURL: string): void {
+    let resultData = { 'circuitName': circuitName, 'responseURL': responseURL };
+    this.sendMessage({ type: 'nisq-analyzer-result', resultData })
   }
 }
