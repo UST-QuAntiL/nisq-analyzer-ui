@@ -227,11 +227,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   }
 
   onAddAnalysis(): void {
-    if (this.qhanaService.isPlugin) {
-      this.nisqImpl = this.impl;
-    } else {
-      this.refreshNisqImpl();
-    }
+    this.refreshNisqImpl();
     let refreshToken = '';
     this.utilService
       .createDialog(QpuSelectionDialogComponent, {
@@ -423,23 +419,27 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   }
 
   refreshNisqImpl(): void {
-    this.planqkService.isLoggedIn().subscribe((isLoggedIn) => {
-      this.isLoggedIn = isLoggedIn;
-      if (isLoggedIn) {
-        this.nisqImpl = this.impl;
-        this.userId = this.planqkService.getUserSub();
-      } else {
-        this.implementationService
-          .getImplementations({ algoId: this.impl.implementedAlgorithm })
-          .subscribe((impls) => {
-            const foundImpl = impls.implementationDtos.find(
-              (i) => i.name === this.impl.name
-            );
-            this.nisqImpl = foundImpl;
-            this.userId = null;
-          });
-      }
-    });
+    if (this.qhanaService.isPlugin) {
+      this.nisqImpl = this.impl;
+    } else {
+      this.planqkService.isLoggedIn().subscribe((isLoggedIn) => {
+        this.isLoggedIn = isLoggedIn;
+        if (isLoggedIn) {
+          this.nisqImpl = this.impl;
+          this.userId = this.planqkService.getUserSub();
+        } else {
+          this.implementationService
+            .getImplementations({ algoId: this.impl.implementedAlgorithm })
+            .subscribe((impls) => {
+              const foundImpl = impls.implementationDtos.find(
+                (i) => i.name === this.impl.name
+              );
+              this.nisqImpl = foundImpl;
+              this.userId = null;
+            });
+        }
+      });
+    }
   }
 
   prioritize(): void {
@@ -735,8 +735,9 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   }
 
   saveResultsToQhana() : void {
+    this.refreshNisqImpl();
     let results = JSON.stringify(this.analyzerResults);
- 
+    
     //this.http.post<string>('http://localhost:5005/plugins/nisq-analyzer%40v0-1-0/process/', {'input_str': results}).subscribe(resp => console.log('local', resp));
     fetch("http://localhost:5005/plugins/nisq-analyzer%40v0-1-0/process/", {
       "headers": {
@@ -758,7 +759,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
       "method": "POST",
       "mode": "cors",
       "credentials": "omit"
-    }).then(response=>this.qhanaService.notifyParentOnSaveResults(this.nisqImpl.fileLocation, response.url));
+    }).then(response => this.qhanaService.notifyParentOnSaveResults(this.nisqImpl.fileLocation, response.url));
   }
 
   //
