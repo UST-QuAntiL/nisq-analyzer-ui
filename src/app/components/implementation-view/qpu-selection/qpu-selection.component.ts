@@ -735,31 +735,19 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   }
 
   saveResultsToQhana() : void {
-    this.refreshNisqImpl();
-    let results = JSON.stringify(this.analyzerResults);
+    const request = new XMLHttpRequest();
+    const form = new FormData();
     
-    //this.http.post<string>('http://localhost:5005/plugins/nisq-analyzer%40v0-1-0/process/', {'input_str': results}).subscribe(resp => console.log('local', resp));
-    fetch("http://localhost:5005/plugins/nisq-analyzer%40v0-1-0/process/", {
-      "headers": {
-        "accept": "*/*",
-        "accept-language": "en-US,en;q=0.9",
-        "cache-control": "no-cache",
-        "content-type": "multipart/form-data; boundary=----WebKitFormBoundaryAK0e8e8opIMt4Ffk",
-        "pragma": "no-cache",
-        "sec-ch-ua": "\"Google Chrome\";v=\"107\", \"Chromium\";v=\"107\", \"Not=A?Brand\";v=\"24\"",
-        "sec-ch-ua-mobile": "?0",
-        "sec-ch-ua-platform": "\"Windows\"",
-        "sec-fetch-dest": "empty",
-        "sec-fetch-mode": "cors",
-        "sec-fetch-site": "same-origin"
-      },
-      "referrer": "http://localhost:5005/plugins/hello-world%40v0-1-0/ui/",
-      "referrerPolicy": "strict-origin-when-cross-origin",
-      "body": `------WebKitFormBoundaryAK0e8e8opIMt4Ffk\r\nContent-Disposition: form-data; name=\"inputStr\"\r\n\r\n${results}\r\n------WebKitFormBoundaryAK0e8e8opIMt4Ffk--\r\n`,
-      "method": "POST",
-      "mode": "cors",
-      "credentials": "omit"
-    }).then(response => this.qhanaService.notifyParentOnSaveResults(this.nisqImpl.fileLocation, response.url));
+    let results = JSON.stringify(this.analyzerResults);
+    form.append('results', results);
+    
+    this.refreshNisqImpl();
+    request.addEventListener('load', (event) => {
+      this.qhanaService.notifyParentOnSaveResults(this.nisqImpl.fileLocation, event.currentTarget['responseURL'])
+    });
+
+    request.open('POST', 'http://localhost:5005/plugins/nisq-analyzer%40v0-1-0/process/');
+    request.send(form);
   }
 
   //

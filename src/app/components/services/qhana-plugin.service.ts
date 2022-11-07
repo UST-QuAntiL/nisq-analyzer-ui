@@ -160,7 +160,7 @@ export class QhanaPluginService {
     if (!this.qhanaFrontendState.initialized) {
       this.registerMessageListener();
       this.sendMessage('ui-loaded');
-      this.qhanaFrontendState.initialized = true
+      this.qhanaFrontendState.initialized = true;
     }
   }
 
@@ -170,6 +170,6 @@ export class QhanaPluginService {
 
   notifyParentOnSaveResults(circuitURL: string, responseURL: string): void {
     let resultData = { 'circuitURL': circuitURL, 'responseURL': responseURL };
-    this.sendMessage({ type: 'nisq-analyzer-result', resultData })
+    this.sendMessage({ type: 'nisq-analyzer-result', resultData });
   }
 }
