@@ -735,19 +735,28 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   }
 
   saveResultsToQhana() : void {
-    const request = new XMLHttpRequest();
-    const form = new FormData();
-    
-    let results = JSON.stringify(this.analyzerResults);
-    form.append('results', results);
-    
     this.refreshNisqImpl();
-    request.addEventListener('load', (event) => {
-      this.qhanaService.notifyParentOnSaveResults(this.nisqImpl.fileLocation, event.currentTarget['responseURL'])
+    const body =JSON.stringify({
+      results: JSON.stringify(this.analyzerResults)
     });
 
-    request.open('POST', `${this.qhanaService.pluginURL}/process/`);
-    request.send(form);
+    fetch(
+      new URL('process/', this.qhanaService.pluginURL).href,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: body,
+      }
+    ).then(
+      response => {
+        this.qhanaService.notifyParentOnSaveResults(
+          this.nisqImpl.fileLocation,
+          response.url
+        )
+      }
+    )
   }
 
   //
