@@ -746,7 +746,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
       this.qhanaService.notifyParentOnSaveResults(this.nisqImpl.fileLocation, event.currentTarget['responseURL'])
     });
 
-    request.open('POST', 'http://localhost:5005/plugins/nisq-analyzer%40v0-1-0/process/');
+    request.open('POST', `${this.qhanaService.pluginURL}/process/`);
     request.send(form);
   }
 

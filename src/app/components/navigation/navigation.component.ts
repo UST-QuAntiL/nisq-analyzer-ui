@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { from, Observable } from 'rxjs';
 import { PlanqkPlatformLoginService } from '../services/planqk-platform-login.service';
 import { QhanaPluginService } from '../services/qhana-plugin.service';
@@ -15,6 +15,7 @@ export class NavigationComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private planqkPlatformLoginService: PlanqkPlatformLoginService,
     private utilService: UtilService,
     public qhanaService: QhanaPluginService
@@ -22,7 +23,7 @@ export class NavigationComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.qhanaService.isPlugin) {
-      this.qhanaService.initializePlugin();
+      this.qhanaService.initializePlugin(this.route);
     } else {
       this.planqkPlatformLoginService
         .isLoggedIn()
