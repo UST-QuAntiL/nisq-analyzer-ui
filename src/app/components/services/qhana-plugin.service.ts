@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { ImplementationDto } from 'api-nisq/models/implementation-dto';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 interface MicroFrontendState {
@@ -183,7 +183,13 @@ export class QhanaPluginService {
   }
 
   notifyParentOnSaveResults(circuitURL: string, responseURL: string): void {
-    let resultData = { 'circuitURL': circuitURL, 'responseURL': responseURL };
-    this.sendMessage({ type: 'nisq-analyzer-result', resultData });
+    this.sendMessage({
+      type: 'form-submit',
+      formData: '',
+      formDataType: '',
+      dataInputs: [circuitURL],
+      submitUrl: '',
+      resultUrl: responseURL,
+    })
   }
 }
