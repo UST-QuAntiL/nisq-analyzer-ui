@@ -421,25 +421,26 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   refreshNisqImpl(): void {
     if (this.qhanaService.isPlugin) {
       this.nisqImpl = this.impl;
-    } else {
-      this.planqkService.isLoggedIn().subscribe((isLoggedIn) => {
-        this.isLoggedIn = isLoggedIn;
-        if (isLoggedIn) {
-          this.nisqImpl = this.impl;
-          this.userId = this.planqkService.getUserSub();
-        } else {
-          this.implementationService
-            .getImplementations({ algoId: this.impl.implementedAlgorithm })
-            .subscribe((impls) => {
-              const foundImpl = impls.implementationDtos.find(
-                (i) => i.name === this.impl.name
-              );
-              this.nisqImpl = foundImpl;
-              this.userId = null;
-            });
-        }
-      });
+      return;
     }
+
+    this.planqkService.isLoggedIn().subscribe((isLoggedIn) => {
+      this.isLoggedIn = isLoggedIn;
+      if (isLoggedIn) {
+        this.nisqImpl = this.impl;
+        this.userId = this.planqkService.getUserSub();
+      } else {
+        this.implementationService
+          .getImplementations({ algoId: this.impl.implementedAlgorithm })
+          .subscribe((impls) => {
+            const foundImpl = impls.implementationDtos.find(
+              (i) => i.name === this.impl.name
+            );
+            this.nisqImpl = foundImpl;
+            this.userId = null;
+          });
+      }
+    });
   }
 
   prioritize(): void {
