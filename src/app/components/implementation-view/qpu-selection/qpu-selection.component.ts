@@ -737,9 +737,9 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
 
   saveResultsToQhana() : void {
     this.refreshNisqImpl();
-    const body =JSON.stringify({
-      results: JSON.stringify(this.analyzerResults)
-    });
+    const body = JSON.stringify({
+      results: this.analyzerResults
+    })
 
     fetch(
       new URL('process/', this.qhanaService.pluginURL).href,
