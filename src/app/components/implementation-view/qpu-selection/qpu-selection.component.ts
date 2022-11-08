@@ -739,7 +739,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
     this.refreshNisqImpl();
     const body = JSON.stringify({
       results: this.analyzerResults
-    })
+    });
 
     fetch(
       new URL('process/', this.qhanaService.pluginURL).href,
@@ -757,7 +757,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
           response.url
         )
       }
-    )
+    );
   }
 
   //
