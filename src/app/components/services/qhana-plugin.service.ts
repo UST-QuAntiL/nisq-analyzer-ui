@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { ImplementationDto } from 'api-nisq/models/implementation-dto';
 import { BehaviorSubject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 interface MicroFrontendState {
   href: string;
@@ -30,12 +31,24 @@ export class QhanaPluginService {
     height: 0,
     initialized: false,
   };
-  
+
   algoUUIDs = new Map<string, string>();
   implUUIDs = new Map<string, string>();
+  
+  pluginURL: string | null = null
 
   constructor(private http: HttpClient) {
     this.isPlugin = window.top !== window.self;
+  }
+  
+  registerRouteListener(route: ActivatedRoute): void {
+    route.queryParams.subscribe(
+      params => {
+        if (params['plugin-endpoint-url'] != null) {
+          this.pluginURL = params['plugin-endpoint-url'];
+        }
+      }
+    );
   }
 
   /**
@@ -70,7 +83,7 @@ export class QhanaPluginService {
     });
     document.body.style.background = 'transparent';
   }
-  
+
   private getUUID(impl: ImplementationItem, uuids: Map<string, string>): string {
     const implID = `${impl.name} ver: ${impl.version} (${impl.download} ${impl.type})`
 
@@ -78,12 +91,12 @@ export class QhanaPluginService {
     if (res != null) {
       return res;
     }
-    
+
     const newUUID = uuidv4();
     uuids.set(implID, newUUID);
     return newUUID;
   }
-  
+
   private getAlgoUUID(impl: ImplementationItem): string {
     return this.getUUID(impl, this.algoUUIDs);
   }
@@ -105,12 +118,12 @@ export class QhanaPluginService {
       const implId = this.getImplUUID(impl);
 
       let language: string
-      if(impl.type === 'qasm'){
+      if (impl.type === 'qasm') {
         language = 'OpenQASM';
       } else {
         language = 'Qiskit';
       }
-      
+
       return {
         id: algoId,
         algorithmName: `${impl.name} (v${impl.version})`,
@@ -155,16 +168,28 @@ export class QhanaPluginService {
     }
   }
 
-  initializePlugin(): void {
+  initializePlugin(route: ActivatedRoute): void {
     // prevent double execution if script is already loaded in the current window
     if (!this.qhanaFrontendState.initialized) {
+      this.registerRouteListener(route);
       this.registerMessageListener();
       this.sendMessage('ui-loaded');
-      this.qhanaFrontendState.initialized = true
+      this.qhanaFrontendState.initialized = true;
     }
   }
 
   fetchImplementations(): void {
     this.sendMessage('implementations-request');
+  }
+
+  notifyParentOnSaveResults(circuitURL: string, responseURL: string): void {
+    this.sendMessage({
+      type: 'form-submit',
+      formData: '',
+      formDataType: '',
+      dataInputs: [circuitURL],
+      submitUrl: '',
+      resultUrl: responseURL,
+    })
   }
 }

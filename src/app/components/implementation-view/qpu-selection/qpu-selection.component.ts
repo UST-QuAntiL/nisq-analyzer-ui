@@ -150,7 +150,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
     private nisqAnalyzerRootService: RootService,
     private planqkService: PlanqkPlatformLoginService,
     private mcdaService: XmcdaCriteriaService,
-    private qhanaService: QhanaPluginService
+    public qhanaService: QhanaPluginService
   ) {}
 
   ngOnInit(): void {
@@ -227,11 +227,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   }
 
   onAddAnalysis(): void {
-    if (this.qhanaService.isPlugin) {
-      this.nisqImpl = this.impl;
-    } else {
-      this.refreshNisqImpl();
-    }
+    this.refreshNisqImpl();
     let refreshToken = '';
     this.utilService
       .createDialog(QpuSelectionDialogComponent, {
@@ -423,6 +419,11 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   }
 
   refreshNisqImpl(): void {
+    if (this.qhanaService.isPlugin) {
+      this.nisqImpl = this.impl;
+      return;
+    }
+
     this.planqkService.isLoggedIn().subscribe((isLoggedIn) => {
       this.isLoggedIn = isLoggedIn;
       if (isLoggedIn) {
@@ -732,6 +733,31 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
       .subscribe((data) => {
         this.queueLengths[analysisResult.qpu] = data.lengthQueue;
       });
+  }
+
+  saveResultsToQhana() : void {
+    this.refreshNisqImpl();
+    const body = JSON.stringify({
+      results: this.analyzerResults
+    });
+
+    fetch(
+      new URL('process/', this.qhanaService.pluginURL).href,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: body,
+      }
+    ).then(
+      response => {
+        this.qhanaService.notifyParentOnSaveResults(
+          this.nisqImpl.fileLocation,
+          response.url
+        )
+      }
+    );
   }
 
   //
