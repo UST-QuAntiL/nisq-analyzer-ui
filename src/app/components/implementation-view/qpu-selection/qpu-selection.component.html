@@ -354,6 +354,15 @@
                                 </td>
                             </ng-container>
 
+                            <ng-container matColumnDef="estimatedHistogramIntersectionValue">
+                                <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    Est. Histogram Intersection Value
+                                </th>
+                                <td class="value-column" mat-cell *matCellDef="let element">
+                                    {{ element.estimatedHistogramIntersectionValue === null ? '-' : element.estimatedHistogramIntersectionValue }}
+                                </td>
+                            </ng-container>
+
                             <ng-container matColumnDef="execution">
                                 <th class="value-column" mat-header-cell *matHeaderCellDef>Execution Result</th>
                                 <td style="text-align: center" mat-cell *matCellDef="let element">

@@ -47,7 +47,29 @@
                                 </mat-select>
                             </mat-form-field>
                         </mat-expansion-panel>
+                        <br *ngIf="shortWaitingTimeEnabled && stableExecutionResultsEnabled">
+                        <span *ngIf="shortWaitingTimeEnabled && stableExecutionResultsEnabled">Select Importance Ratio:</span>
+                        <br>
                     </p>
+                    <div *ngIf="shortWaitingTimeEnabled && stableExecutionResultsEnabled" class="center">
+                        <span class="aligned-with-slider">Short Waiting</span>
+                        <mat-slider
+                                color="primary"
+                                formControlName="queueImportanceRatio"
+                                class="lift-slider"
+                                style="width: auto"
+                                thumbLabel
+                                [displayWith]="formatLabel"
+                                tickInterval="10"
+                                step="10"
+                                min="0"
+                                max="100"
+                                aria-label="units"
+                                (change)="setQueueImportanceRatio($event)"
+                        >
+                        </mat-slider>
+                        <span class="aligned-with-slider">Stable Results</span>
+                    </div>
                     <button
                             mat-button
                             color="primary"

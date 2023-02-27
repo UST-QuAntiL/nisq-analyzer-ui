@@ -13,6 +13,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSliderModule } from '@angular/material/slider';
 import { MatSortModule } from '@angular/material/sort';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
@@ -62,6 +63,7 @@ import { QpuSelectionDialogComponent } from './qpu-selection/dialogs/qpu-selecti
     ReactiveFormsModule,
     MatProgressSpinnerModule,
     RouterModule,
+    MatSliderModule,
   ],
   exports: [
     ImplementationViewComponent,

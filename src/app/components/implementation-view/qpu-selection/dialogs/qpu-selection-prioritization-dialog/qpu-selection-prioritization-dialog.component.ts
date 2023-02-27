@@ -32,6 +32,7 @@ export class QpuSelectionPrioritizationDialogComponent implements OnInit {
   mcdaMethodPredefinedPreferences = 'topsis';
   weightLearningMethodPredefinedPreferences = 'cobyla';
   pollingWeightLearningJobData: Subscription;
+  queueImportanceRatioDialog = 0;
 
   constructor(
     public dialogRef: MatDialogRef<QpuSelectionPrioritizationDialogComponent>,
@@ -86,6 +87,10 @@ export class QpuSelectionPrioritizationDialogComponent implements OnInit {
           Validators.required,
         ]
       ),
+      queueImportanceRatio: new FormControl(this.data.queueImportanceRatio, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+      ]),
     });
     this.preferenceMcdaMethod.setValue('topsis');
     this.weightLearningMethod.setValue('cobyla');
@@ -179,6 +184,7 @@ export class QpuSelectionPrioritizationDialogComponent implements OnInit {
                 this.data.shortWaitingTime = this.shortWaitingTime.value;
                 this.data.stableExecutionResults =
                   this.stableExecutionResults.value;
+                this.data.queueImportanceRatio = this.queueImportanceRatioDialog;  
                 this.criteriaNamesAndValues.forEach((criterionVal) => {
                   if (
                     this.shortWaitingTime.value &&
@@ -216,6 +222,17 @@ export class QpuSelectionPrioritizationDialogComponent implements OnInit {
     this.matHorizontalStepper.selectedIndex = index;
     return true;
   }
+
+  setQueueImportanceRatio(event): void {
+    this.queueImportanceRatioDialog = event.value / 100;
+  }
+
+  formatLabel(value: number): number | string {
+    if (value >= 0) {
+      return Math.round(value) + ':' + Math.round(100 - value);
+    }
+    return value;
+  }
 }
 
 export interface DialogData {
@@ -224,6 +241,7 @@ export interface DialogData {
   weightLearningMethod: string;
   shortWaitingTime: boolean;
   stableExecutionResults: boolean;
+  queueImportanceRatio: number;
   criteriaAndValues: Criterion[];
 }
 

@@ -21,3 +21,19 @@ mat-expansion-panel.advancedSettings {
   align-items: center;
 }
 
+::ng-deep .mat-slider-wrapper {
+
+  .mat-slider-thumb-container {
+      .mat-slider-thumb-label {
+          width: 40px;
+          height: 40px;
+          top: -55px;
+          right: -23px;
+      }
+  }
+}
+
+.lift-slider{
+  min-width: 95px;
+}
+

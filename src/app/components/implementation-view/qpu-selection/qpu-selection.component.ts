@@ -90,6 +90,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
     't1',
     't2',
     'lengthQueue',
+    'estimatedHistogramIntersectionValue',
     'execution',
   ];
   jobColumns = ['time', 'ready'];
@@ -123,6 +124,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   rankings: Ranking[] = [];
   dataSource = new MatTableDataSource(this.analyzerResults);
   bordaCountEnabled: boolean;
+  queueImportanceRatio: number;
   usedMcdaMethod: string;
   usedLearningMethod: string;
   sensitivityAnalysisJob: EntityModelMcdaSensitivityAnalysisJob;
@@ -248,18 +250,23 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
           }
 
           const qpuSelectionDto: QpuSelectionDto = {
-            simulatorsAllowed: dialogResult.simulatorAllowed,
             allowedProviders: [dialogResult.vendor],
             circuitLanguage: this.nisqImpl.language,
             circuitUrl: this.nisqImpl.fileLocation,
             tokens: providerTokens,
             refreshToken,
             circuitName: this.nisqImpl.name,
+            preciseResultsPreference: dialogResult.stableExecutionResults,
+            shortWaitingTimesPreference: dialogResult.shortWaitingTime,
+            queueImportanceRatio: dialogResult.queueImportanceRatio,
+            maxNumberOfCompiledCircuits:
+              dialogResult.maxNumberOfCompiledCircuits,
+            predictionAlgorithm: dialogResult.predictionAlgorithm,
+            metaOptimizer: dialogResult.metaOptimizer,
             userId: this.userId,
           };
           this.nisqAnalyzerRootService
             .selectQpuForCircuitFile1$Json({
-              simulatorsAllowed: dialogResult.simulatorAllowed,
               circuitLanguage: this.nisqImpl.language,
               circuitName: this.nisqImpl.name,
               allowedProviders: [dialogResult.vendor],
@@ -456,6 +463,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
           this.usedLearningMethod = dialogResult.weightLearningMethod;
           this.usedShortWaitingTime = dialogResult.shortWaitingTime;
           this.usedStableExecutionResults = dialogResult.stableExecutionResults;
+          this.queueImportanceRatio = dialogResult.queueImportanceRatio;
           if (dialogResult.stableExecutionResults) {
             this.loadingLearnWeights = true;
             this.mcdaService
@@ -568,6 +576,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
                   methodName: dialogResult.mcdaMethod,
                   jobId: this.analyzerJob.id,
                   useBordaCount: this.bordaCountEnabled,
+                  queueImportanceRatio: this.queueImportanceRatio,
                 })
                 .subscribe((job) => {
                   this.rankings = [];
@@ -679,6 +688,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
               upperBound: dialogResult.upperBound,
               lowerBound: dialogResult.lowerBound,
               useBordaCount: this.bordaCountEnabled,
+              queueImportanceRatio: this.queueImportanceRatio,
             })
             .subscribe(
               (job) => {

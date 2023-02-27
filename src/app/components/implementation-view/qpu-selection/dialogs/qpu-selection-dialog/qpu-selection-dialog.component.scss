@@ -1,3 +1,31 @@
 ::ng-deep .mat-checkbox-label {
   padding-right: 10px;
+
+}
+
+.aligned-with-slider{
+  position: relative;
+  margin-top: 5px;
+  margin-left: 5px; /* optional */
+}
+
+.center{
+  display: flex;
+  justify-content: center;
+}
+
+.lift-slider{
+  bottom: 7px;
+}
+
+::ng-deep .mat-slider-wrapper {
+
+  .mat-slider-thumb-container {
+    .mat-slider-thumb-label {
+      width: 40px;
+      height: 40px;
+      top: -55px;
+      right: -23px;
+    }
+  }
 }

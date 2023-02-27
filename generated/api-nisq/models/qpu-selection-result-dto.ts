@@ -29,5 +29,7 @@ export type QpuSelectionResultDto = {
   circuitName?: string;
   qpuSelectionJobId?: string;
   userId?: string;
+  originalCircuitId?: string;
+  estimatedHistogramIntersectionValue?: number;
   _links?: Links;
 };
