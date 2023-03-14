@@ -11,11 +11,11 @@
                         <mat-checkbox color="primary" [checked]="shortWaitingTimeEnabled"
                                       (change)="setWaitingTimeEnabled($event.checked)">Short waiting time
                         </mat-checkbox>
-                        <mat-checkbox color="primary" [checked]="stableExecutionResultsEnabled"
-                                      (change)="setStableExecutionResultsEnabled($event.checked)">Stable execution
+                        <mat-checkbox color="primary" [checked]="preciseExecutionResultsEnabled"
+                                      (change)="setPreciseExecutionResultsEnabled($event.checked)">Precise execution
                             results
                         </mat-checkbox>
-                        <mat-expansion-panel *ngIf="shortWaitingTimeEnabled || stableExecutionResultsEnabled"
+                        <mat-expansion-panel *ngIf="shortWaitingTimeEnabled || preciseExecutionResultsEnabled"
                                              (opened)="advancedSettingsOpen = true"
                                              (closed)="advancedSettingsOpen = false"
                                              class="advancedSettings">
@@ -31,12 +31,12 @@
                                     <mat-option [value]="'topsis'">TOPSIS</mat-option>
                                     <mat-option [value]="'promethee-II'">PROMETHEE II</mat-option>
                                     <mat-option [value]="'electre-III'"
-                                                *ngIf="shortWaitingTimeEnabled && !stableExecutionResultsEnabled">
+                                                *ngIf="shortWaitingTimeEnabled && !preciseExecutionResultsEnabled">
                                         ELECTRE III
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
-                            <mat-form-field class="input-field" *ngIf="stableExecutionResultsEnabled">
+                            <mat-form-field class="input-field" *ngIf="preciseExecutionResultsEnabled">
                                 <mat-label>Weight Learning Method</mat-label>
                                 <mat-select formControlName="weightLearningMethod"
                                             (selectionChange)="setWeightLearningMethodPredefinedPreferences($event.value)">
@@ -47,11 +47,11 @@
                                 </mat-select>
                             </mat-form-field>
                         </mat-expansion-panel>
-                        <br *ngIf="shortWaitingTimeEnabled && stableExecutionResultsEnabled">
-                        <span *ngIf="shortWaitingTimeEnabled && stableExecutionResultsEnabled">Select Importance Ratio:</span>
+                        <br *ngIf="shortWaitingTimeEnabled && preciseExecutionResultsEnabled">
+                        <span *ngIf="shortWaitingTimeEnabled && preciseExecutionResultsEnabled">Select Importance Ratio:</span>
                         <br>
                     </p>
-                    <div *ngIf="shortWaitingTimeEnabled && stableExecutionResultsEnabled" class="center">
+                    <div *ngIf="shortWaitingTimeEnabled && preciseExecutionResultsEnabled" class="center">
                         <span class="aligned-with-slider">Short Waiting</span>
                         <mat-slider
                                 color="primary"
@@ -68,7 +68,7 @@
                                 (change)="setQueueImportanceRatio($event)"
                         >
                         </mat-slider>
-                        <span class="aligned-with-slider">Stable Results</span>
+                        <span class="aligned-with-slider">Precise Results</span>
                     </div>
                     <button
                             mat-button
@@ -81,7 +81,7 @@
                     </button>
                     <div mat-dialog-actions>
                         <button mat-button (click)="onNoClick()">Cancel</button>
-                        <div *ngIf="shortWaitingTimeEnabled && !stableExecutionResultsEnabled; else learnWeights">
+                        <div *ngIf="shortWaitingTimeEnabled && !preciseExecutionResultsEnabled; else learnWeights">
                             <button mat-button
                                     [mat-dialog-close]="data"
                             >Ok
@@ -89,7 +89,7 @@
                         </div>
                         <ng-template #learnWeights>
                             <button mat-button [mat-dialog-close]="data"
-                                    [disabled]="!shortWaitingTimeEnabled && !stableExecutionResultsEnabled">Ok
+                                    [disabled]="!shortWaitingTimeEnabled && !preciseExecutionResultsEnabled">Ok
                             </button>
                         </ng-template>
                     </div>

@@ -139,7 +139,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   pollingWeightLearningJobData: Subscription;
   learnedWeightsReady = false;
   usedShortWaitingTime: boolean;
-  usedStableExecutionResults: boolean;
+  usedPreciseExecutionResults: boolean;
   userId: string;
   isLoggedIn = false;
 
@@ -256,7 +256,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
             tokens: providerTokens,
             refreshToken,
             circuitName: this.nisqImpl.name,
-            preciseResultsPreference: dialogResult.stableExecutionResults,
+            preciseResultsPreference: dialogResult.preciseExecutionResults,
             shortWaitingTimesPreference: dialogResult.shortWaitingTime,
             queueImportanceRatio: dialogResult.queueImportanceRatio,
             maxNumberOfCompiledCircuits:
@@ -462,9 +462,9 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
           this.usedMcdaMethod = dialogResult.mcdaMethod;
           this.usedLearningMethod = dialogResult.weightLearningMethod;
           this.usedShortWaitingTime = dialogResult.shortWaitingTime;
-          this.usedStableExecutionResults = dialogResult.stableExecutionResults;
+          this.usedPreciseExecutionResults = dialogResult.preciseExecutionResults;
           this.queueImportanceRatio = dialogResult.queueImportanceRatio;
-          if (dialogResult.stableExecutionResults) {
+          if (dialogResult.preciseExecutionResults) {
             this.loadingLearnWeights = true;
             this.mcdaService
               .learnWeightsForCompiledCircuitsOfJob({
@@ -536,9 +536,9 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
     let totalSum = 0;
     let criteria = dialogResult.criteriaAndValues;
     this.bordaCountEnabled = !!(
-      this.usedStableExecutionResults && this.usedShortWaitingTime
+      this.usedPreciseExecutionResults && this.usedShortWaitingTime
     );
-    if (this.usedStableExecutionResults) {
+    if (this.usedPreciseExecutionResults) {
       criteria = dialogResult.criteriaAndValues;
     } else {
       // calculate SMART with new assigned points

@@ -9,17 +9,17 @@
         </mat-form-field>
         <mat-form-field class="input-field">
             <mat-label>Token</mat-label>
-            <input id="token" formControlName="token" matInput>
+            <input type="password" id="token" formControlName="token" matInput>
         </mat-form-field>
         <span>Select preferences:</span><br>
         <mat-checkbox color="primary" [checked]="shortWaitingTimeEnabled"
                       (change)="setWaitingTimeEnabled($event.checked)">Short Waiting Time
         </mat-checkbox>
-        <mat-checkbox color="primary" [checked]="stableExecutionResultsEnabled"
-                      (change)="setStableExecutionResultsEnabled($event.checked)">Stable Execution
+        <mat-checkbox color="primary" [checked]="preciseExecutionResultsEnabled"
+                      (change)="setPreciseExecutionResultsEnabled($event.checked)">Precise Execution
             Results
         </mat-checkbox>
-        <mat-expansion-panel *ngIf="stableExecutionResultsEnabled"
+        <mat-expansion-panel *ngIf="preciseExecutionResultsEnabled"
                              (opened)="advancedSettingsOpen = true"
                              (closed)="advancedSettingsOpen = false"
                              class="advancedSettings">
@@ -55,10 +55,10 @@
                 </mat-select>
             </mat-form-field>
         </mat-expansion-panel>
-        <br *ngIf="shortWaitingTimeEnabled && stableExecutionResultsEnabled">
-        <span *ngIf="shortWaitingTimeEnabled && stableExecutionResultsEnabled">Select Importance Ratio:</span>
+        <br *ngIf="shortWaitingTimeEnabled && preciseExecutionResultsEnabled">
+        <span *ngIf="shortWaitingTimeEnabled && preciseExecutionResultsEnabled">Select Importance Ratio:</span>
         <br>
-        <div *ngIf="shortWaitingTimeEnabled && stableExecutionResultsEnabled" class="center">
+        <div *ngIf="shortWaitingTimeEnabled && preciseExecutionResultsEnabled" class="center">
             <span class="aligned-with-slider">Short Waiting</span>
             <mat-slider
                     color="primary"
@@ -74,23 +74,30 @@
                     (change)="setQueueImportanceRatio($event)"
             >
             </mat-slider>
-            <span class="aligned-with-slider">Stable Results</span>
+            <span class="aligned-with-slider">Precise Results</span>
         </div>
 
 
-        <mat-form-field class="input-field" *ngIf="shortWaitingTimeEnabled || stableExecutionResultsEnabled">
-            <mat-label>Maximum number of compilation results:</mat-label>
-            <input
-                    matInput
-                    type="number"
-                    min="1"
-                    [placeholder]="'Maximum number'"
-                    formControlName="maxNumberOfCompiledCircuits"
-                    [ngModel]="maxNumberOfCompiledCircuitsDialog"
-                    (ngModelChange)="setMaxNumberOfCompiledCircuits($event)"
-            />
-            <mat-error>Please enter a value between 0 and 50</mat-error>
-        </mat-form-field>
+        <div *ngIf="shortWaitingTimeEnabled || preciseExecutionResultsEnabled">
+            <span>Select the number of compilation results:</span><br>
+            <div *ngIf="!disableDefiningMaximumNumberOfCircuits">
+                <mat-form-field class="input-field">
+                    <input
+                            matInput
+                            type="number"
+                            min="1"
+                            [placeholder]="'Maximum number of compilation results'"
+                            formControlName="maxNumberOfCompiledCircuits"
+                            [ngModel]="maxNumberOfCompiledCircuitsDialog"
+                            (ngModelChange)="setMaxNumberOfCompiledCircuits($event)"
+                            [disabled]="disableDefiningMaximumNumberOfCircuits"
+                    />
+                </mat-form-field>
+            </div>
+            <mat-checkbox color="primary" [checked]="disableDefiningMaximumNumberOfCircuits"
+                          (change)="setMaximumNumberofCompilationResultsSelected($event.checked)">Or compute <b>all</b> possible compilation results
+            </mat-checkbox>
+        </div>
 
 
         <br>

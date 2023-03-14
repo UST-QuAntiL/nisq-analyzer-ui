@@ -26,13 +26,14 @@ export class QpuSelectionDialogComponent implements OnInit {
   selectedCompilers: string[] = [];
 
   shortWaitingTimeEnabled = false;
-  stableExecutionResultsEnabled = false;
+  preciseExecutionResultsEnabled = false;
   predictionAlgorithmInDialog = 'extra_trees_regressor';
   metaOptimizerInDialog = 'ada_boost_regressor';
   advancedSettingsOpen: boolean;
   queueImportanceRatioDialog = 0;
   inputChanged = false;
   maxNumberOfCompiledCircuitsDialog = 5;
+  disableDefiningMaximumNumberOfCircuits = false;
 
   constructor(
     public dialogRef: MatDialogRef<QpuSelectionDialogComponent>,
@@ -58,8 +59,8 @@ export class QpuSelectionDialogComponent implements OnInit {
     return this.qpuSelectionFrom.get('shortWaitingTime');
   }
 
-  get stableExecutionResults(): AbstractControl | null {
-    return this.qpuSelectionFrom.get('stableExecutionResults');
+  get preciseExecutionResults(): AbstractControl | null {
+    return this.qpuSelectionFrom.get('preciseExecutionResults');
   }
 
   get predictionAlgorithm(): AbstractControl | null {
@@ -109,8 +110,8 @@ export class QpuSelectionDialogComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      stableExecutionResults: new FormControl(
-        this.data.stableExecutionResults,
+      preciseExecutionResults: new FormControl(
+        this.data.preciseExecutionResults,
         [
           // eslint-disable-next-line @typescript-eslint/unbound-method
           Validators.required,
@@ -124,7 +125,7 @@ export class QpuSelectionDialogComponent implements OnInit {
     this.predictionAlgorithm.setValue('extra_trees_regressor');
     this.metaOptimizer.setValue('ada_boost_regressor');
     this.maxNumberOfCompiledCircuits.setValue(5);
-    this.stableExecutionResults.setValue(false);
+    this.preciseExecutionResults.setValue(false);
     this.shortWaitingTime.setValue(false);
 
     this.dialogRef.beforeClosed().subscribe(() => {
@@ -135,7 +136,7 @@ export class QpuSelectionDialogComponent implements OnInit {
       this.data.predictionAlgorithm = this.predictionAlgorithmInDialog;
       this.data.queueImportanceRatio = this.queueImportanceRatioDialog;
       this.data.shortWaitingTime = this.shortWaitingTimeEnabled;
-      this.data.stableExecutionResults = this.stableExecutionResultsEnabled;
+      this.data.preciseExecutionResults = this.preciseExecutionResultsEnabled;
       if (this.data.isLoggedIn) {
         this.data.selectedCompilers = ['qiskit'];
       } else {
@@ -202,8 +203,17 @@ export class QpuSelectionDialogComponent implements OnInit {
     this.shortWaitingTimeEnabled = enabled;
   }
 
-  setStableExecutionResultsEnabled(enabled: boolean): void {
-    this.stableExecutionResultsEnabled = enabled;
+  setPreciseExecutionResultsEnabled(enabled: boolean): void {
+    this.preciseExecutionResultsEnabled = enabled;
+  }
+
+  setMaximumNumberofCompilationResultsSelected(enabled: boolean): void {
+    this.disableDefiningMaximumNumberOfCircuits = enabled;
+    if (enabled) {
+      this.maxNumberOfCompiledCircuitsDialog = 0;
+    } else {
+      this.maxNumberOfCompiledCircuitsDialog = 5;
+    }
   }
 
   setPredictionAlgorithm(predictionAlgorithm: string): void {
@@ -240,6 +250,6 @@ interface DialogData {
   metaOptimizer: string;
   queueImportanceRatio: number;
   maxNumberOfCompiledCircuits: number;
-  stableExecutionResults: boolean;
+  preciseExecutionResults: boolean;
   shortWaitingTime: boolean;
 }

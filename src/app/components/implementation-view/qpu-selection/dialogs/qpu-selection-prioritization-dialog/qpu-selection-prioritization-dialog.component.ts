@@ -27,7 +27,7 @@ export class QpuSelectionPrioritizationDialogComponent implements OnInit {
   criteriaNamesAndValues: Criterion[] = [];
   inputChanged = false;
   shortWaitingTimeEnabled = false;
-  stableExecutionResultsEnabled = false;
+  preciseExecutionResultsEnabled = false;
   advancedSettingsOpen: boolean;
   mcdaMethodPredefinedPreferences = 'topsis';
   weightLearningMethodPredefinedPreferences = 'cobyla';
@@ -54,8 +54,8 @@ export class QpuSelectionPrioritizationDialogComponent implements OnInit {
     return this.preferenceForm.get('shortWaitingTime');
   }
 
-  get stableExecutionResults(): AbstractControl | null {
-    return this.preferenceForm.get('stableExecutionResults');
+  get preciseExecutionResults(): AbstractControl | null {
+    return this.preferenceForm.get('preciseExecutionResults');
   }
 
   get mcdaMethod(): AbstractControl | null {
@@ -80,8 +80,8 @@ export class QpuSelectionPrioritizationDialogComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      stableExecutionResults: new FormControl(
-        this.data.stableExecutionResults,
+      preciseExecutionResults: new FormControl(
+        this.data.preciseExecutionResults,
         [
           // eslint-disable-next-line @typescript-eslint/unbound-method
           Validators.required,
@@ -94,7 +94,7 @@ export class QpuSelectionPrioritizationDialogComponent implements OnInit {
     });
     this.preferenceMcdaMethod.setValue('topsis');
     this.weightLearningMethod.setValue('cobyla');
-    this.stableExecutionResults.setValue(false);
+    this.preciseExecutionResults.setValue(false);
     this.shortWaitingTime.setValue(false);
 
     this.onMcdaMethodChanged('topsis');
@@ -109,9 +109,9 @@ export class QpuSelectionPrioritizationDialogComponent implements OnInit {
     this.shortWaitingTime.setValue(this.shortWaitingTimeEnabled);
   }
 
-  setStableExecutionResultsEnabled(enabled: boolean): void {
-    this.stableExecutionResultsEnabled = enabled;
-    this.stableExecutionResults.setValue(this.stableExecutionResultsEnabled);
+  setPreciseExecutionResultsEnabled(enabled: boolean): void {
+    this.preciseExecutionResultsEnabled = enabled;
+    this.preciseExecutionResults.setValue(this.preciseExecutionResultsEnabled);
   }
 
   setMcdaMethodPredefinedPreferences(selectedMcdaMethod: string): void {
@@ -127,7 +127,7 @@ export class QpuSelectionPrioritizationDialogComponent implements OnInit {
 
   resetPredefinedPreferences(): boolean {
     this.setWaitingTimeEnabled(false);
-    this.setStableExecutionResultsEnabled(false);
+    this.setPreciseExecutionResultsEnabled(false);
     return true;
   }
 
@@ -173,7 +173,7 @@ export class QpuSelectionPrioritizationDialogComponent implements OnInit {
               this.dialogRef.beforeClosed().subscribe(() => {
                 if (
                   this.shortWaitingTime.value ||
-                  this.stableExecutionResults.value
+                  this.preciseExecutionResults.value
                 ) {
                   this.data.mcdaMethod = this.preferenceMcdaMethod.value;
                 } else {
@@ -182,19 +182,19 @@ export class QpuSelectionPrioritizationDialogComponent implements OnInit {
                 this.data.weightLearningMethod =
                   this.weightLearningMethod.value;
                 this.data.shortWaitingTime = this.shortWaitingTime.value;
-                this.data.stableExecutionResults =
-                  this.stableExecutionResults.value;
+                this.data.preciseExecutionResults =
+                  this.preciseExecutionResults.value;
                 this.data.queueImportanceRatio = this.queueImportanceRatioDialog;  
                 this.criteriaNamesAndValues.forEach((criterionVal) => {
                   if (
                     this.shortWaitingTime.value &&
-                    !this.stableExecutionResults.value &&
+                    !this.preciseExecutionResults.value &&
                     criterionVal.name === 'queue-size'
                   ) {
                     criterionVal.points = 100;
                   } else if (
                     this.shortWaitingTime.value &&
-                    !this.stableExecutionResults.value &&
+                    !this.preciseExecutionResults.value &&
                     criterionVal.name !== 'queue-size'
                   ) {
                     criterionVal.points = 0;
@@ -240,7 +240,7 @@ export interface DialogData {
   mcdaMethod: string;
   weightLearningMethod: string;
   shortWaitingTime: boolean;
-  stableExecutionResults: boolean;
+  preciseExecutionResults: boolean;
   queueImportanceRatio: number;
   criteriaAndValues: Criterion[];
 }
