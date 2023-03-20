@@ -5,9 +5,9 @@ export const initializeKeycloak =
     keycloak
       .init({
         config: {
-          url: 'https://platform.planqk.de/auth',
+          url: 'https://login.planqk.de/',
           realm: 'planqk',
-          clientId: 'vue-frontend',
+          clientId: 'planqk-login',
         },
         initOptions: {
           checkLoginIframe: false,
