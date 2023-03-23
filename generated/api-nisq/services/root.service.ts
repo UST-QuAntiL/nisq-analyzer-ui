@@ -355,12 +355,17 @@ export class RootService extends BaseService {
    * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
   selectQpuForCircuitFile1$FormData$Response(params: {
-    simulatorsAllowed: boolean;
     allowedProviders: Array<string>;
     circuitLanguage: string;
     tokens: {};
     circuitName?: string;
     userId?: string;
+    preciseResultsPreference?: boolean;
+    shortWaitingTimesPreference?: boolean;
+    queueImportanceRatio?: number;
+    maxNumberOfCompiledCircuits?: number;
+    predictionAlgorithm?: string;
+    metaOptimizer?: string;
     compilers?: Array<string>;
     body: { circuit?: Blob };
   }): Observable<StrictHttpResponse<QpuSelectionJobDto>> {
@@ -370,12 +375,25 @@ export class RootService extends BaseService {
       'post'
     );
     if (params) {
-      rb.query('simulatorsAllowed', params.simulatorsAllowed, {});
       rb.query('allowedProviders', params.allowedProviders, {});
       rb.query('circuitLanguage', params.circuitLanguage, {});
       rb.query('tokens', params.tokens, {});
       rb.query('circuitName', params.circuitName, {});
       rb.query('userId', params.userId, {});
+      rb.query('preciseResultsPreference', params.preciseResultsPreference, {});
+      rb.query(
+        'shortWaitingTimesPreference',
+        params.shortWaitingTimesPreference,
+        {}
+      );
+      rb.query('queueImportanceRatio', params.queueImportanceRatio, {});
+      rb.query(
+        'maxNumberOfCompiledCircuits',
+        params.maxNumberOfCompiledCircuits,
+        {}
+      );
+      rb.query('predictionAlgorithm', params.predictionAlgorithm, {});
+      rb.query('metaOptimizer', params.metaOptimizer, {});
       rb.query('compilers', params.compilers, {});
 
       rb.body(params.body, 'multipart/form-data');
@@ -404,12 +422,17 @@ export class RootService extends BaseService {
    * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
   selectQpuForCircuitFile1$FormData(params: {
-    simulatorsAllowed: boolean;
     allowedProviders: Array<string>;
     circuitLanguage: string;
     tokens: {};
     circuitName?: string;
     userId?: string;
+    preciseResultsPreference?: boolean;
+    shortWaitingTimesPreference?: boolean;
+    queueImportanceRatio?: number;
+    maxNumberOfCompiledCircuits?: number;
+    predictionAlgorithm?: string;
+    metaOptimizer?: string;
     compilers?: Array<string>;
     body: { circuit?: Blob };
   }): Observable<QpuSelectionJobDto> {
@@ -430,12 +453,17 @@ export class RootService extends BaseService {
    * This method sends `application/xml` and handles request body of type `application/xml`.
    */
   selectQpuForCircuitFile1$Xml$Response(params: {
-    simulatorsAllowed: boolean;
     allowedProviders: Array<string>;
     circuitLanguage: string;
     tokens: {};
     circuitName?: string;
     userId?: string;
+    preciseResultsPreference?: boolean;
+    shortWaitingTimesPreference?: boolean;
+    queueImportanceRatio?: number;
+    maxNumberOfCompiledCircuits?: number;
+    predictionAlgorithm?: string;
+    metaOptimizer?: string;
     compilers?: Array<string>;
     body: QpuSelectionDto;
   }): Observable<StrictHttpResponse<QpuSelectionJobDto>> {
@@ -445,12 +473,25 @@ export class RootService extends BaseService {
       'post'
     );
     if (params) {
-      rb.query('simulatorsAllowed', params.simulatorsAllowed, {});
       rb.query('allowedProviders', params.allowedProviders, {});
       rb.query('circuitLanguage', params.circuitLanguage, {});
       rb.query('tokens', params.tokens, {});
       rb.query('circuitName', params.circuitName, {});
       rb.query('userId', params.userId, {});
+      rb.query('preciseResultsPreference', params.preciseResultsPreference, {});
+      rb.query(
+        'shortWaitingTimesPreference',
+        params.shortWaitingTimesPreference,
+        {}
+      );
+      rb.query('queueImportanceRatio', params.queueImportanceRatio, {});
+      rb.query(
+        'maxNumberOfCompiledCircuits',
+        params.maxNumberOfCompiledCircuits,
+        {}
+      );
+      rb.query('predictionAlgorithm', params.predictionAlgorithm, {});
+      rb.query('metaOptimizer', params.metaOptimizer, {});
       rb.query('compilers', params.compilers, {});
 
       rb.body(params.body, 'application/xml');
@@ -479,12 +520,17 @@ export class RootService extends BaseService {
    * This method sends `application/xml` and handles request body of type `application/xml`.
    */
   selectQpuForCircuitFile1$Xml(params: {
-    simulatorsAllowed: boolean;
     allowedProviders: Array<string>;
     circuitLanguage: string;
     tokens: {};
     circuitName?: string;
     userId?: string;
+    preciseResultsPreference?: boolean;
+    shortWaitingTimesPreference?: boolean;
+    queueImportanceRatio?: number;
+    maxNumberOfCompiledCircuits?: number;
+    predictionAlgorithm?: string;
+    metaOptimizer?: string;
     compilers?: Array<string>;
     body: QpuSelectionDto;
   }): Observable<QpuSelectionJobDto> {
@@ -505,12 +551,17 @@ export class RootService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   selectQpuForCircuitFile1$Json$Response(params: {
-    simulatorsAllowed: boolean;
     allowedProviders: Array<string>;
     circuitLanguage: string;
     tokens: {};
     circuitName?: string;
     userId?: string;
+    preciseResultsPreference?: boolean;
+    shortWaitingTimesPreference?: boolean;
+    queueImportanceRatio?: number;
+    maxNumberOfCompiledCircuits?: number;
+    predictionAlgorithm?: string;
+    metaOptimizer?: string;
     compilers?: Array<string>;
     body: QpuSelectionDto;
   }): Observable<StrictHttpResponse<QpuSelectionJobDto>> {
@@ -520,12 +571,25 @@ export class RootService extends BaseService {
       'post'
     );
     if (params) {
-      rb.query('simulatorsAllowed', params.simulatorsAllowed, {});
       rb.query('allowedProviders', params.allowedProviders, {});
       rb.query('circuitLanguage', params.circuitLanguage, {});
       rb.query('tokens', params.tokens, {});
       rb.query('circuitName', params.circuitName, {});
       rb.query('userId', params.userId, {});
+      rb.query('preciseResultsPreference', params.preciseResultsPreference, {});
+      rb.query(
+        'shortWaitingTimesPreference',
+        params.shortWaitingTimesPreference,
+        {}
+      );
+      rb.query('queueImportanceRatio', params.queueImportanceRatio, {});
+      rb.query(
+        'maxNumberOfCompiledCircuits',
+        params.maxNumberOfCompiledCircuits,
+        {}
+      );
+      rb.query('predictionAlgorithm', params.predictionAlgorithm, {});
+      rb.query('metaOptimizer', params.metaOptimizer, {});
       rb.query('compilers', params.compilers, {});
 
       rb.body(params.body, 'application/json');
@@ -554,12 +618,17 @@ export class RootService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   selectQpuForCircuitFile1$Json(params: {
-    simulatorsAllowed: boolean;
     allowedProviders: Array<string>;
     circuitLanguage: string;
     tokens: {};
     circuitName?: string;
     userId?: string;
+    preciseResultsPreference?: boolean;
+    shortWaitingTimesPreference?: boolean;
+    queueImportanceRatio?: number;
+    maxNumberOfCompiledCircuits?: number;
+    predictionAlgorithm?: string;
+    metaOptimizer?: string;
     compilers?: Array<string>;
     body: QpuSelectionDto;
   }): Observable<QpuSelectionJobDto> {

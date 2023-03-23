@@ -524,6 +524,7 @@ export class XmcdaCriteriaService extends BaseService {
     methodName: string;
     jobId: string;
     useBordaCount: boolean;
+    queueImportanceRatio: number;
   }): Observable<StrictHttpResponse<EntityModelMcdaJob>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -534,6 +535,7 @@ export class XmcdaCriteriaService extends BaseService {
       rb.path('methodName', params.methodName, {});
       rb.query('jobId', params.jobId, {});
       rb.query('useBordaCount', params.useBordaCount, {});
+      rb.query('queueImportanceRatio', params.queueImportanceRatio, {});
     }
     return this.http
       .request(
@@ -562,6 +564,7 @@ export class XmcdaCriteriaService extends BaseService {
     methodName: string;
     jobId: string;
     useBordaCount: boolean;
+    queueImportanceRatio: number;
   }): Observable<EntityModelMcdaJob> {
     return this.prioritizeCompiledCircuitsOfJob$Response(params).pipe(
       map(
@@ -592,6 +595,7 @@ export class XmcdaCriteriaService extends BaseService {
     upperBound: number;
     lowerBound: number;
     useBordaCount: boolean;
+    queueImportanceRatio: number;
   }): Observable<StrictHttpResponse<EntityModelMcdaSensitivityAnalysisJob>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -605,6 +609,7 @@ export class XmcdaCriteriaService extends BaseService {
       rb.query('upperBound', params.upperBound, {});
       rb.query('lowerBound', params.lowerBound, {});
       rb.query('useBordaCount', params.useBordaCount, {});
+      rb.query('queueImportanceRatio', params.queueImportanceRatio, {});
     }
     return this.http
       .request(
@@ -636,6 +641,7 @@ export class XmcdaCriteriaService extends BaseService {
     upperBound: number;
     lowerBound: number;
     useBordaCount: boolean;
+    queueImportanceRatio: number;
   }): Observable<EntityModelMcdaSensitivityAnalysisJob> {
     return this.analyzeSensitivityOfCompiledCircuitsOfJob$Response(params).pipe(
       map(

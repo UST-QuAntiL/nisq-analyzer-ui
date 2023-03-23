@@ -90,6 +90,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
     't1',
     't2',
     'lengthQueue',
+    'estimatedHistogramIntersectionValue',
     'execution',
   ];
   jobColumns = ['time', 'ready'];
@@ -123,6 +124,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   rankings: Ranking[] = [];
   dataSource = new MatTableDataSource(this.analyzerResults);
   bordaCountEnabled: boolean;
+  queueImportanceRatio: number;
   usedMcdaMethod: string;
   usedLearningMethod: string;
   sensitivityAnalysisJob: EntityModelMcdaSensitivityAnalysisJob;
@@ -137,7 +139,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
   pollingWeightLearningJobData: Subscription;
   learnedWeightsReady = false;
   usedShortWaitingTime: boolean;
-  usedStableExecutionResults: boolean;
+  usedPreciseExecutionResults: boolean;
   userId: string;
   isLoggedIn = false;
 
@@ -248,18 +250,23 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
           }
 
           const qpuSelectionDto: QpuSelectionDto = {
-            simulatorsAllowed: dialogResult.simulatorAllowed,
             allowedProviders: [dialogResult.vendor],
             circuitLanguage: this.nisqImpl.language,
             circuitUrl: this.nisqImpl.fileLocation,
             tokens: providerTokens,
             refreshToken,
             circuitName: this.nisqImpl.name,
+            preciseResultsPreference: dialogResult.preciseExecutionResults,
+            shortWaitingTimesPreference: dialogResult.shortWaitingTime,
+            queueImportanceRatio: dialogResult.queueImportanceRatio,
+            maxNumberOfCompiledCircuits:
+              dialogResult.maxNumberOfCompiledCircuits,
+            predictionAlgorithm: dialogResult.predictionAlgorithm,
+            metaOptimizer: dialogResult.metaOptimizer,
             userId: this.userId,
           };
           this.nisqAnalyzerRootService
             .selectQpuForCircuitFile1$Json({
-              simulatorsAllowed: dialogResult.simulatorAllowed,
               circuitLanguage: this.nisqImpl.language,
               circuitName: this.nisqImpl.name,
               allowedProviders: [dialogResult.vendor],
@@ -455,8 +462,9 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
           this.usedMcdaMethod = dialogResult.mcdaMethod;
           this.usedLearningMethod = dialogResult.weightLearningMethod;
           this.usedShortWaitingTime = dialogResult.shortWaitingTime;
-          this.usedStableExecutionResults = dialogResult.stableExecutionResults;
-          if (dialogResult.stableExecutionResults) {
+          this.usedPreciseExecutionResults = dialogResult.preciseExecutionResults;
+          this.queueImportanceRatio = dialogResult.queueImportanceRatio;
+          if (dialogResult.preciseExecutionResults) {
             this.loadingLearnWeights = true;
             this.mcdaService
               .learnWeightsForCompiledCircuitsOfJob({
@@ -528,9 +536,9 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
     let totalSum = 0;
     let criteria = dialogResult.criteriaAndValues;
     this.bordaCountEnabled = !!(
-      this.usedStableExecutionResults && this.usedShortWaitingTime
+      this.usedPreciseExecutionResults && this.usedShortWaitingTime
     );
-    if (this.usedStableExecutionResults) {
+    if (this.usedPreciseExecutionResults) {
       criteria = dialogResult.criteriaAndValues;
     } else {
       // calculate SMART with new assigned points
@@ -568,6 +576,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
                   methodName: dialogResult.mcdaMethod,
                   jobId: this.analyzerJob.id,
                   useBordaCount: this.bordaCountEnabled,
+                  queueImportanceRatio: this.queueImportanceRatio,
                 })
                 .subscribe((job) => {
                   this.rankings = [];
@@ -679,6 +688,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
               upperBound: dialogResult.upperBound,
               lowerBound: dialogResult.lowerBound,
               useBordaCount: this.bordaCountEnabled,
+              queueImportanceRatio: this.queueImportanceRatio,
             })
             .subscribe(
               (job) => {

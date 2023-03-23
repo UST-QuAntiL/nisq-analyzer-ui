@@ -8,6 +8,7 @@ export type EntityModelMcdaSensitivityAnalysisJob = {
   method?: string;
   state?: string;
   useBordaCount?: boolean;
+  bordaCountWeights?: Map<string, number>;
   jobId?: string;
   jobType?: 'ANALYSIS' | 'COMPILATION' | 'QPU_SELECTION' | 'MCDA';
   stepSize?: number;
