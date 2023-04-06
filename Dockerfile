@@ -1,5 +1,5 @@
 FROM node:lts-alpine AS builder
-RUN apk add --no-cache git gettext
+RUN apk add --no-cache git gettext python3 build-base
 
 WORKDIR /app
 
