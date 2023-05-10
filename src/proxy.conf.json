@@ -13,5 +13,9 @@
     "target": "https://api.quantum-computing.ibm.com",
     "secure": false,
     "changeOrigin": true
+  },
+  "/nisq-analyzer": {
+    "target": "http://localhost:5010/nisq-analyzer",
+    "secure": false
   }
 }
