@@ -179,6 +179,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
           't1',
           't2',
           'lengthQueue',
+          'estimatedHistogramIntersectionValue',
         ];
       } else {
         this.userId = null;
@@ -255,6 +256,7 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
             circuitUrl: this.nisqImpl.fileLocation,
             tokens: providerTokens,
             refreshToken,
+            compilers: dialogResult.selectedCompilers,
             circuitName: this.nisqImpl.name,
             preciseResultsPreference: dialogResult.preciseExecutionResults,
             shortWaitingTimesPreference: dialogResult.shortWaitingTime,
@@ -272,7 +274,6 @@ export class QpuSelectionComponent implements OnInit, AfterViewInit {
               allowedProviders: [dialogResult.vendor],
               tokens: providerTokens,
               body: qpuSelectionDto,
-              compilers: dialogResult.selectedCompilers,
               userId: this.userId,
             })
             .subscribe((job) => {

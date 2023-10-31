@@ -5,6 +5,7 @@ export type CompilerSelectionDto = {
   circuitLanguage?: string;
   circuitName?: string;
   circuitUrl?: string;
+  qasmCode?: string;
   token?: string;
   refreshToken?: string;
 };
