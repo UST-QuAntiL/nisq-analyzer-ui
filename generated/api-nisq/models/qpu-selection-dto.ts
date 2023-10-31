@@ -1,9 +1,9 @@
 /* tslint:disable */
 export type QpuSelectionDto = {
-  simulatorsAllowed?: boolean;
   allowedProviders?: Array<string>;
   circuitLanguage?: string;
   circuitUrl?: string;
+  qasmCode?: string;
   tokens?: {};
   refreshToken?: string;
   circuitName?: string;
@@ -14,4 +14,5 @@ export type QpuSelectionDto = {
   predictionAlgorithm?: string;
   metaOptimizer?: string;
   userId?: string;
+  compilers?: Array<string>;
 };
